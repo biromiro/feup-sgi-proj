@@ -230,7 +230,23 @@ export class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
-        this.onXMLMinorError("To do: Parse views and create cameras.");
+        // this.onXMLMinorError("To do: Parse views and create cameras.");
+        let children = viewsNode.children;
+
+        for (view in children) {
+            if (view.nodeName !== "perspective" && view.nodeName !== "ortho") {
+                this.onXMLMinorError("unknown tag <" + view.nodeName + ">");
+                continue;
+            }
+            
+            let id = this.reader.getString(view, 'id');
+            if (id == null)
+                return "no ID defined for view";
+            
+            if (this.views[id] != null)
+                return "ID must be unique for each view (conflict: ID = " + id + ")";
+
+        }
 
         return null;
     }
