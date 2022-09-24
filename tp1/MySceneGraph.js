@@ -1,6 +1,7 @@
 import { CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './MyRectangle.js';
 import { XMLCamera } from './xmlObjects/XMLCamera.js';
+import { XMLTexture } from './xmlObjects/XMLTexture.js';
 
 const DEGREE_TO_RAD = Math.PI / 180;
 
@@ -235,10 +236,13 @@ export class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
-        // this.onXMLMinorError("To do: Parse views and create cameras.");
 
         this.views = {};
         const children = viewsNode.children;
+
+        if (children.length == 0) 
+            return "at least one view must be defined";
+
         let defaultNode = viewsNode.attributes.default.value;
         
         if (!defaultNode)
@@ -266,31 +270,19 @@ export class MySceneGraph {
             const sliders = view.children;
 
             for (const slider of sliders) {
-                const sliderAttributes = slider.attributes;
-
-                if (sliderAttributes.x == null)
-                    return "'x' attribute not defined for slider '" + slider.nodeName + "' for view " + attributes.id.value
-
-                if (sliderAttributes.y == null)
-                    return "'y' attribute not defined for slider '" + slider.nodeName + "' for view " + attributes.id.value
-
-                if (sliderAttributes.z == null)
-                    return "'z' attribute not defined for slider '" + slider.nodeName + "' for view " + attributes.id.value
                 
-                const sliderCoords = {
-                    x: sliderAttributes.x.value,
-                    y: sliderAttributes.y.value,
-                    z: sliderAttributes.z.value
-                }
+                const sliderCoords = this.parseCoordinates3D(slider, slider.nodeName + ' for view ' + attributes.id.value);
 
                 if (slider.nodeName === "from")
                     attributes.from = sliderCoords
                 
-                if (slider.nodeName === "to")
+                else if (slider.nodeName === "to")
                     attributes.to = sliderCoords
                 
-                if (slider.nodeName === "up")
+                else if (slider.nodeName === "up")
                     attributes.up = sliderCoords
+                
+                else this.onXMLMinorError("unknown tag <" + slider.nodeName + ">");
             }
 
             if (attributes.from == null || attributes.to == null) 
@@ -308,7 +300,8 @@ export class MySceneGraph {
             this.views[attributes.id.value] = new XMLCamera(attributes, view.nodeName, attributes.id.value === defaultNode);
 
         }
-        console.log(this.views);
+
+        console.log(this.views)
         return null;
     }
 
@@ -471,8 +464,48 @@ export class MySceneGraph {
      */
     parseTextures(texturesNode) {
 
-        //For each texture in textures block, check ID and file URL
-        this.onXMLMinorError("To do: Parse textures.");
+        const textures = texturesNode.children;
+
+        this.textures = {};
+        
+        const acceptedImageTypes = ['image/jpeg', 'image/jpg', 'image/png']
+
+        for (const texture of textures) {
+            if (texture.nodeName !== "texture") {
+                this.onXMLMinorError("unknown tag <" + texture.nodeName + ">");
+                continue;
+            }
+            
+            const attributes = texture.attributes;
+            if (attributes.id.value == null)
+                return "no ID defined for texture";
+            
+            if (this.textures[attributes.id.value] != null)
+                return "ID must be unique for each texture (conflict: ID = " + attributes.id.value + ")";
+            
+            if (attributes.file == null)
+                return "'file' attribute not defined for texture " + attributes.id.value
+
+            const img = new Image();
+
+            // get the image
+            img.src = attributes.file.value;
+            img.scene = this;
+            img.texture = new XMLTexture(attributes, img)
+            img.texID = attributes.id.value;
+            // get height and width
+            img.onload = function() {
+                if (Math.log2(this.width * this.height) % 1 !== 0)
+                    this.scene.onXMLMinorError("img dimensions are not power of 2 in texture" + this.texID);
+                
+                img.scene.textures[img.texID] = img.texture;
+            }
+
+            img.onerror = function() {
+                this.scene.onXMLMinorError("'file' does not exist or has invalid extension (only .jpg or .png allowed) in texture" + this.texID);
+            }
+        }
+
         return null;
     }
 
