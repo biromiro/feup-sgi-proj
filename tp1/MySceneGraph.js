@@ -1,5 +1,6 @@
 import { CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './primitives/MyRectangle.js';
+import { MySphere } from './primitives/MySphere.js';
 import { MyTorus } from './primitives/MyTorus.js';
 import { SceneCamera } from './sceneObjects/SceneCamera.js';
 import { SceneTexture } from './sceneObjects/SceneTexture.js';
@@ -555,7 +556,7 @@ export class MySceneGraph {
     parseTransformations(transformationsNode) {
         const transformations = transformationsNode.children;
 
-        this.transformations = [];
+        this.transformations = {};
 
         // Any number of transformations.
         for (const transformation of transformations) {
@@ -598,7 +599,26 @@ export class MySceneGraph {
                         transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
                         break;
                     case 'rotate':
-                        this.onXMLMinorError("To do: Parse rotate transformations.");
+                        let rotateParams = this.parseRotate(type, transformationID);
+                        if (!Array.isArray(rotateParams))
+                            return rotateParams;
+                        
+                        const angle = rotateParams[0];
+                        const axis = rotateParams[1];
+
+                        switch (axis) {
+                            case 'x':
+                                transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle);
+                                break;
+                            case 'y':
+                                transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle);
+                                break;
+                            case 'z':
+                                transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle);
+                                break;
+                            default:
+                                break;
+                        }
 
                         break;
                 }
@@ -611,6 +631,7 @@ export class MySceneGraph {
         }
 
         this.log("Parsed transformations");
+        console.log(this.transformations);
         return null;
     }
 
@@ -621,7 +642,7 @@ export class MySceneGraph {
     parsePrimitives(primitivesNode) {
         const primitives = primitivesNode.children;
 
-        this.primitives = [];
+        this.primitives = {};
 
         // Any number of primitives.
         for (const primitive of primitives) {
@@ -699,11 +720,27 @@ export class MySceneGraph {
 
                 const torus = new MyTorus(this.scene, primitiveId, radius, innerRadius, slices, loops);
                 this.primitives[primitiveId] = torus;
-                console.log("torus!!!!");
-                //const torus = new MyTorus(this.scene, 5, 2, 10, 20);
-            } else {
-                console.warn("To do: Parse other primitives.");
-            }
+            } else if (typeName == 'sphere') {
+                
+                // radius
+                const radius = this.reader.getFloat(type, 'radius');
+                if (!(radius != null && !isNaN(radius)))
+                    return "unable to parse radius of the primitive for ID = " + primitiveId;
+
+                // slices
+                const slices = this.reader.getFloat(type, 'slices');
+                if (!(slices != null && !isNaN(slices)))
+                    return "unable to parse slices of the primitive for ID = " + primitiveId;
+                
+                // stacks
+                const stacks = this.reader.getFloat(type, 'stacks');
+                if (!(stacks != null && !isNaN(stacks)))
+                    return "unable to parse stacks of the primitive for ID = " + primitiveId;
+                
+                const sphere = new MySphere(this.scene, radius, slices, stacks);
+                this.primitives[primitiveId] = sphere;
+            } else console.warn("To do: Parse other primitives.");
+            
         }
 
         this.log("Parsed primitives");
@@ -842,6 +879,20 @@ export class MySceneGraph {
         return color;
     }
 
+    parseRotate(node, id) {
+        // angle
+        const angle = this.reader.getFloat(node, 'angle');
+        if (!(angle != null && !isNaN(angle)))
+            return "unable to parse angle component of the rotation for transformation with ID " + id;
+        
+        // axis
+        const axis = this.reader.getString(node, 'axis');
+        if (!(axis != null && (axis === "x" || axis === "y" || axis === "z")))
+            return "unable to parse axis component of the rotation for transformation with ID " + id;
+
+        return [angle*DEGREE_TO_RAD, axis];
+    }
+
     /*
      * Callback to be executed on any read error, showing an error on the console.
      * @param {string} message
@@ -874,6 +925,6 @@ export class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
 
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives['demoRectangle', 'demoTorus'].display();
+        this.primitives['demoRectangle', 'demoTorus', 'demoSphere'].display();
     }
 }
