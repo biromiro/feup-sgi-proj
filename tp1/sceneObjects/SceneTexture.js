@@ -1,8 +1,8 @@
 /**
-* XMLTexture class, containing texture information
+* SceneTexture class, containing texture information
 */
 
-export class XMLTexture {
+export class SceneTexture {
 
     constructor(attributes, img) {
         this.id = attributes.id.value;

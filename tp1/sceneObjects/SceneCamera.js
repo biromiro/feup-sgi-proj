@@ -1,13 +1,11 @@
 /**
-* XMLCamera class, containing camera information
+* SceneCamera class, containing camera information
 */
 
-export class XMLCamera {
-
-    constructor(attributes, type, isDefault = false) {
+export class SceneCamera {
+    constructor(attributes, type) {
         this.id = attributes.id.value;
         this.type = type;
-        this.isDefault = isDefault;
         this.near = attributes.near.value;
         this.far = attributes.far.value;
         this.from = attributes.from;

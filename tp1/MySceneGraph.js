@@ -1,10 +1,11 @@
 import { CGFXMLreader } from '../lib/CGF.js';
 import { MyCylinder } from './primitives/MyCylinder.js';
 import { MyRectangle } from './primitives/MyRectangle.js';
+import { MySphere } from './primitives/MySphere.js';
 import { MyTorus } from './primitives/MyTorus.js';
 import { MyTriangle } from './primitives/MyTriangle.js';
-import { XMLCamera } from './xmlObjects/XMLCamera.js';
-import { XMLTexture } from './xmlObjects/XMLTexture.js';
+import { SceneCamera } from './sceneObjects/SceneCamera.js';
+import { SceneTexture } from './sceneObjects/SceneTexture.js';
 
 const DEGREE_TO_RAD = Math.PI / 180;
 
@@ -20,7 +21,10 @@ const PRIMITIVES_INDEX = 7;
 const COMPONENTS_INDEX = 8;
 
 // Possible primitive types.
-const POSSIBLE_PRIMITIVES = ['rectangle', 'triangle', 'cylinder', 'sphere', 'torus']
+const POSSIBLE_PRIMITIVES = ['rectangle', 'triangle', 'cylinder', 'sphere', 'torus'];
+
+// Possible image types.
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -241,23 +245,20 @@ export class MySceneGraph {
     parseView(viewsNode) {
 
         this.views = {};
-        const children = viewsNode.children;
-
-        if (children.length == 0) 
-            return "at least one view must be defined";
-
-        let defaultNode = viewsNode.attributes.default.value;
+        const views = viewsNode.children;
+        this.defaultView = viewsNode.attributes.default.value;
         
-        if (!defaultNode)
-            defaultNode = children[0].attributes.id;
+        if (!this.defaultView)
+            this.defaultView = views[0].attributes.id;
 
-        for (const view of children) {
+        for (const view of views) {
             if (view.nodeName !== "perspective" && view.nodeName !== "ortho") {
                 this.onXMLMinorError("unknown tag <" + view.nodeName + ">");
                 continue;
             }
             
             const attributes = view.attributes;
+            
             if (attributes.id.value == null)
                 return "no ID defined for view";
             
@@ -270,22 +271,22 @@ export class MySceneGraph {
             if (attributes.far == null)
                 return "'far' attribute not defined for view " + attributes.id.value
             
-            const sliders = view.children;
+            const positions = view.children;
 
-            for (const slider of sliders) {
+            for (const position of positions) {
                 
-                const sliderCoords = this.parseCoordinates3D(slider, slider.nodeName + ' for view ' + attributes.id.value);
+                const coords = this.parseCoordinates3D(position, position.nodeName + ' for view ' + attributes.id.value);
 
-                if (slider.nodeName === "from")
-                    attributes.from = sliderCoords
+                if (position.nodeName === "from")
+                    attributes.from = coords
                 
-                else if (slider.nodeName === "to")
-                    attributes.to = sliderCoords
+                else if (position.nodeName === "to")
+                    attributes.to = coords
                 
-                else if (slider.nodeName === "up")
-                    attributes.up = sliderCoords
+                else if (position.nodeName === "up")
+                    attributes.up = coords
                 
-                else this.onXMLMinorError("unknown tag <" + slider.nodeName + ">");
+                else this.onXMLMinorError("unknown tag <" + position.nodeName + ">");
             }
 
             if (attributes.from == null || attributes.to == null) 
@@ -294,17 +295,24 @@ export class MySceneGraph {
             if (view.nodeName === "perspective") {
                 if (attributes.angle == null)
                     return "perspective view " + attributes.id + " does not have necessary 'angle' attribute"
-            } else {
+            }
+            else {
                 if (attributes.left == null || attributes.right == null || attributes.top == null || attributes.bottom == null)
                     return "ortho view " + attributes.id + " does not have necessary 'left', 'right', 'top' and 'bottom' attributes"
-               
             }
             
-            this.views[attributes.id.value] = new XMLCamera(attributes, view.nodeName, attributes.id.value === defaultNode);
+            this.views[attributes.id.value] = new SceneCamera(attributes, view.nodeName);
 
         }
 
-        console.log(this.views)
+        if (Object.keys(this.views).length === 0) {
+            return "at least one view must be defined";
+        }
+
+        console.log(this.views);
+        
+        this.log("Parsed views");
+        
         return null;
     }
 
@@ -470,8 +478,6 @@ export class MySceneGraph {
         const textures = texturesNode.children;
 
         this.textures = {};
-        
-        const acceptedImageTypes = ['image/jpeg', 'image/jpg', 'image/png']
 
         for (const texture of textures) {
             if (texture.nodeName !== "texture") {
@@ -494,7 +500,7 @@ export class MySceneGraph {
             // get the image
             img.src = attributes.file.value;
             img.scene = this;
-            img.texture = new XMLTexture(attributes, img)
+            img.texture = new SceneTexture(attributes, img)
             img.texID = attributes.id.value;
             // get height and width
             img.onload = function() {
@@ -552,7 +558,7 @@ export class MySceneGraph {
     parseTransformations(transformationsNode) {
         const transformations = transformationsNode.children;
 
-        this.transformations = [];
+        this.transformations = {};
 
         // Any number of transformations.
         for (const transformation of transformations) {
@@ -576,28 +582,58 @@ export class MySceneGraph {
 
             let transfMatrix = mat4.create();
 
+            let coordinates;
+
             for (const type of transfTypes) {
                 switch (type.nodeName) {
                     case 'translate':
-                        var coordinates = this.parseCoordinates3D(type, "translate transformation for ID " + transformationID);
+                        coordinates = this.parseCoordinates3D(type, "translate transformation for ID " + transformationID);
                         if (!Array.isArray(coordinates))
                             return coordinates;
 
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                         break;
                     case 'scale':                        
-                        this.onXMLMinorError("To do: Parse scale transformations.");
+                        coordinates = this.parseCoordinates3D(type, "scale transformation for ID " + transformationID);
+                        if (!Array.isArray(coordinates))
+                            return coordinates;
+                        
+                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
                         break;
                     case 'rotate':
-                        // angle
-                        this.onXMLMinorError("To do: Parse rotate transformations.");
+                        let rotateParams = this.parseRotate(type, transformationID);
+                        if (!Array.isArray(rotateParams))
+                            return rotateParams;
+                        
+                        const angle = rotateParams[0];
+                        const axis = rotateParams[1];
+
+                        switch (axis) {
+                            case 'x':
+                                transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle);
+                                break;
+                            case 'y':
+                                transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle);
+                                break;
+                            case 'z':
+                                transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle);
+                                break;
+                            default:
+                                break;
+                        }
+
                         break;
                 }
             }
             this.transformations[transformationID] = transfMatrix;
         }
 
+        if (Object.keys(this.transformations).length === 0) {
+            return "at least one transformation must be defined";
+        }
+
         this.log("Parsed transformations");
+        console.log(this.transformations);
         return null;
     }
 
@@ -608,7 +644,7 @@ export class MySceneGraph {
     parsePrimitives(primitivesNode) {
         const primitives = primitivesNode.children;
 
-        this.primitives = [];
+        this.primitives = {};
 
         // Any number of primitives.
         for (const primitive of primitives) {
@@ -763,10 +799,27 @@ export class MySceneGraph {
 
                 const torus = new MyTorus(this.scene, primitiveId, radius, innerRadius, slices, loops);
                 this.primitives[primitiveId] = torus;
-                //const torus = new MyTorus(this.scene, 5, 2, 10, 20);
-            } else {
-                console.warn("To do: Parse other primitives.");
-            }
+            } else if (typeName == 'sphere') {
+                
+                // radius
+                const radius = this.reader.getFloat(type, 'radius');
+                if (!(radius != null && !isNaN(radius)))
+                    return "unable to parse radius of the primitive for ID = " + primitiveId;
+
+                // slices
+                const slices = this.reader.getFloat(type, 'slices');
+                if (!(slices != null && !isNaN(slices)))
+                    return "unable to parse slices of the primitive for ID = " + primitiveId;
+                
+                // stacks
+                const stacks = this.reader.getFloat(type, 'stacks');
+                if (!(stacks != null && !isNaN(stacks)))
+                    return "unable to parse stacks of the primitive for ID = " + primitiveId;
+                
+                const sphere = new MySphere(this.scene, radius, slices, stacks);
+                this.primitives[primitiveId] = sphere;
+            } else console.warn("To do: Parse other primitives.");
+            
         }
 
         this.log("Parsed primitives");
@@ -905,6 +958,20 @@ export class MySceneGraph {
         return color;
     }
 
+    parseRotate(node, id) {
+        // angle
+        const angle = this.reader.getFloat(node, 'angle');
+        if (!(angle != null && !isNaN(angle)))
+            return "unable to parse angle component of the rotation for transformation with ID " + id;
+        
+        // axis
+        const axis = this.reader.getString(node, 'axis');
+        if (!(axis != null && (axis === "x" || axis === "y" || axis === "z")))
+            return "unable to parse axis component of the rotation for transformation with ID " + id;
+
+        return [angle*DEGREE_TO_RAD, axis];
+    }
+
     /*
      * Callback to be executed on any read error, showing an error on the console.
      * @param {string} message
@@ -937,6 +1004,6 @@ export class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
 
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives['demoTriangle'].display();
+        this.primitives['demoRectangle', 'demoTorus', 'demoSphere'].display();
     }
 }
