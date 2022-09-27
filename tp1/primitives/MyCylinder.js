@@ -16,25 +16,32 @@ export class MyCylinder extends CGFobject {
         this.normals = [];
         this.texCoords = [];
 
+        let radiusDiff = (this.upperRadius - this.baseRadius) / this.stacks;
+        let currentRadius = this.baseRadius;
+        console.log(radiusDiff, currentRadius)
         for (var stack = 0; stack < this.stacks; stack++) {
         
             var ang = 0;
             var alphaAng = 2 * Math.PI / this.slices;
+            const lowerStackBound = (2 * this.slices) * stack;
 
-            for (var i = 0; i <= this.slices; i++) {
+            const nextStackRadius = currentRadius + radiusDiff;
+
+            for (var i = 0; i < this.slices; i++) {
                 // All vertices have to be declared for a given face
                 // even if they are shared with others, as the normals 
                 // in each face will be different
     
                 var sa = Math.sin(ang);
                 var ca = Math.cos(ang);
+                var ta = Math.atan((this.baseRadius - this.upperRadius) / this.height)
     
-                this.vertices.push(ca, -sa, stack * (this.height / this.stacks));
-                this.vertices.push(ca, -sa, (stack + 1) * (this.height / this.stacks));
-    
+                this.vertices.push(currentRadius * ca, -currentRadius * sa, stack * (this.height / this.stacks));
+                this.vertices.push(nextStackRadius * ca, -nextStackRadius * sa, (stack + 1) * (this.height / this.stacks));
+                console.log("2 more vertices")
                 // triangle normal computed by cross product of two edges
                 var normal = [
-                    ca, -sa, 0
+                    ca, -sa, ta
                 ];
     
                 // normalization
@@ -51,22 +58,23 @@ export class MyCylinder extends CGFobject {
                 this.normals.push(...normal);
                 this.normals.push(...normal);
     
-                this.indices.push(0 + 2 * i + stack * this.slices, 1 + 2 * i + stack * this.slices, 2 + 2 * i + stack * this.slices)
-                this.indices.push(1 + 2 * i + stack * this.slices, 3 + 2 * i + stack * this.slices, 2 + 2 * i + stack * this.slices)
-    
                 this.texCoords.push(i / this.slices, 1)
                 this.texCoords.push(i / this.slices, 0)
+
+                if (i == this.slices - 1) continue;
+
+                this.indices.push(0 + 2 * i + lowerStackBound, 1 + 2 * i + lowerStackBound, 2 + 2 * i + lowerStackBound)
+                this.indices.push(1 + 2 * i + lowerStackBound, 3 + 2 * i + lowerStackBound, 2 + 2 * i + lowerStackBound)
     
                 ang += alphaAng;
 
             }
 
-            console.log(this.indices)
-        }
+            this.indices.push(2 * (this.slices - 1) + lowerStackBound, 1 + 2 * (this.slices - 1) + lowerStackBound, lowerStackBound)
+            this.indices.push(1 + 2 * (this.slices - 1) + lowerStackBound, 1 + lowerStackBound, lowerStackBound)
 
-        console.log(this.vertices)
-        console.log(this.normals)
-        console.log(this.indices)
+            currentRadius += radiusDiff;
+        }
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
