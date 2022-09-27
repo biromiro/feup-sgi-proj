@@ -43,15 +43,26 @@ export class MyTriangle extends CGFobject {
         const v2 = [this.x2 - this.x3, this.y2 - this.y3, this.z2 - this.z3]
         const normal =  [v1[1] * v2[2] - v1[2] * v2[1], v1[2] * v2[0] - v1[0] * v2[2], v1[0] * v2[1] - v1[1] * v2[0]]
 
+           // normalization
+        let nsize = Math.sqrt(
+            normal[0] * normal[0] +
+            normal[1] * normal[1] +
+            normal[2] * normal[2]
+        );
+
+        normal[0] /= nsize;
+        normal[1] /= nsize;
+        normal[2] /= nsize;
+
         const negNormal = normal.map((val) => -val);
-		//Facing Z positive
-		this.normals = [
-            normal,
-            normal,
-            normal,
-            negNormal,
-            negNormal,
-            negNormal
+
+        this.normals = [
+            ...normal,
+            ...normal,
+            ...normal,
+            ...negNormal,
+            ...negNormal,
+            ...negNormal
         ]
 		
 		/*

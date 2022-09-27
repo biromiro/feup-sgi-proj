@@ -55,6 +55,8 @@ export class MyRectangle extends CGFobject {
 			0, 0,
 			1, 0
 		]
+		this.enableNormalViz();
+		console.log(this.normals)
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
