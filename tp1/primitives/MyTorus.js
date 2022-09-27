@@ -6,6 +6,7 @@ export class MyTorus extends CGFobject {
         this.radius = radius
         this.innerRadius = innerRadius
         this.slices = slices;
+        this.loops = loops;
         this.initBuffers();
     }
     initBuffers() {
@@ -21,10 +22,10 @@ export class MyTorus extends CGFobject {
 
         let ang = 0, outerAng = 0;
         const alphaAng = 2 * Math.PI / this.slices;
-        const outerAlphaAng = 2 * Math.PI / this.slices;
+        const outerAlphaAng = 2 * Math.PI / this.loops;
 
-        for (let slice = 0; slice <= this.slices; ++slice) {
-            const s = slice / this.slices;
+        for (let loop = 0; loop <= this.loops; ++loop) {
+            const s = loop / this.loops;
             ang = 0
 
             for (let innerSlice = 0; innerSlice <= this.slices; ++innerSlice) {
@@ -58,20 +59,21 @@ export class MyTorus extends CGFobject {
                 this.texCoords.push(t);
                 this.texCoords.push(s);
 
-                if (slice != this.slices && innerSlice != this.slices) {
-                    this.indices.push(slice * (this.slices + 1) + innerSlice);
-                    this.indices.push(slice * (this.slices + 1) + innerSlice + 1);
-                    this.indices.push(((slice + 1) * (this.slices + 1) + innerSlice));
+                if (loop != this.loops && innerSlice != this.slices) {
+                    this.indices.push(loop * (this.slices + 1) + innerSlice);
+                    this.indices.push(loop * (this.slices + 1) + innerSlice + 1);
+                    this.indices.push(((loop + 1) * (this.slices + 1) + innerSlice));
 
-                    this.indices.push(((slice + 1) * (this.slices + 1) + innerSlice));
-                    this.indices.push(slice * (this.slices + 1) + innerSlice + 1);
-                    this.indices.push((slice + 1) * (this.slices + 1) + innerSlice + 1);
+                    this.indices.push(((loop + 1) * (this.slices + 1) + innerSlice));
+                    this.indices.push(loop * (this.slices + 1) + innerSlice + 1);
+                    this.indices.push((loop + 1) * (this.slices + 1) + innerSlice + 1);
                 }
 
                 ang += alphaAng
             }
             outerAng += outerAlphaAng
         }
+        
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }

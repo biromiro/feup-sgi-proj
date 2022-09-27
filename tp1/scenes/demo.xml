@@ -48,13 +48,13 @@
             <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
         </primitive>
         <primitive id="demoTorus">
-            <torus radius="2" innerRadius="0.5" slices="20" loops="20" />
+            <torus radius="1" innerRadius="0.2" slices="40" loops="10" />
         </primitive>
         <primitive id="demoRectangle2">
             <rectangle x1="2" y1="1.5" x2="3" y2="5" />
         </primitive>
         <primitive id="demoCylinder">
-            <cylinder baseRadius="1" upperRadius="0" height="2" slices="15" stacks="5"/>
+            <cylinder baseRadius="1" upperRadius="0" height="2" slices="5" stacks="5"/>
         </primitive>
     </primitives>
 
