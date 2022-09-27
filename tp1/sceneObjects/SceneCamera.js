@@ -3,10 +3,9 @@
 */
 
 export class SceneCamera {
-    constructor(attributes, type, isDefault = false) {
+    constructor(attributes, type) {
         this.id = attributes.id.value;
         this.type = type;
-        this.isDefault = isDefault;
         this.near = attributes.near.value;
         this.far = attributes.far.value;
         this.from = attributes.from;

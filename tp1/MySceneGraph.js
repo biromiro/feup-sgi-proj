@@ -18,7 +18,10 @@ const PRIMITIVES_INDEX = 7;
 const COMPONENTS_INDEX = 8;
 
 // Possible primitive types.
-const POSSIBLE_PRIMITIVES = ['rectangle', 'triangle', 'cylinder', 'sphere', 'torus']
+const POSSIBLE_PRIMITIVES = ['rectangle', 'triangle', 'cylinder', 'sphere', 'torus'];
+
+// Possible image types.
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -240,10 +243,10 @@ export class MySceneGraph {
 
         this.views = {};
         const views = viewsNode.children;
-        let defaultNode = viewsNode.attributes.default.value;
+        this.defaultView = viewsNode.attributes.default.value;
         
-        if (!defaultNode)
-            defaultNode = views[0].attributes.id;
+        if (!this.defaultView)
+            this.defaultView = views[0].attributes.id;
 
         for (const view of views) {
             if (view.nodeName !== "perspective" && view.nodeName !== "ortho") {
@@ -295,7 +298,7 @@ export class MySceneGraph {
                     return "ortho view " + attributes.id + " does not have necessary 'left', 'right', 'top' and 'bottom' attributes"
             }
             
-            this.views[attributes.id.value] = new SceneCamera(attributes, view.nodeName, attributes.id.value === defaultNode);
+            this.views[attributes.id.value] = new SceneCamera(attributes, view.nodeName);
 
         }
 
@@ -472,8 +475,6 @@ export class MySceneGraph {
         const textures = texturesNode.children;
 
         this.textures = {};
-        
-        const acceptedImageTypes = ['image/jpeg', 'image/jpg', 'image/png']
 
         for (const texture of textures) {
             if (texture.nodeName !== "texture") {
@@ -578,25 +579,35 @@ export class MySceneGraph {
 
             let transfMatrix = mat4.create();
 
+            let coordinates;
+
             for (const type of transfTypes) {
                 switch (type.nodeName) {
                     case 'translate':
-                        var coordinates = this.parseCoordinates3D(type, "translate transformation for ID " + transformationID);
+                        coordinates = this.parseCoordinates3D(type, "translate transformation for ID " + transformationID);
                         if (!Array.isArray(coordinates))
                             return coordinates;
 
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                         break;
                     case 'scale':                        
-                        this.onXMLMinorError("To do: Parse scale transformations.");
+                        coordinates = this.parseCoordinates3D(type, "scale transformation for ID " + transformationID);
+                        if (!Array.isArray(coordinates))
+                            return coordinates;
+                        
+                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
                         break;
                     case 'rotate':
-                        // angle
                         this.onXMLMinorError("To do: Parse rotate transformations.");
+
                         break;
                 }
             }
             this.transformations[transformationID] = transfMatrix;
+        }
+
+        if (Object.keys(this.transformations).length === 0) {
+            return "at least one transformation must be defined";
         }
 
         this.log("Parsed transformations");
