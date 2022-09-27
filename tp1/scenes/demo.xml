@@ -53,6 +53,9 @@
         <primitive id="demoRectangle2">
             <rectangle x1="2" y1="1.5" x2="3" y2="5" />
         </primitive>
+        <primitive id="demoCylinder">
+            <cylinder baseRadius="2" upperRadius="2" height="1" slices="3" stacks="2"/>
+        </primitive>
     </primitives>
 
     <components>

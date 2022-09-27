@@ -1,4 +1,5 @@
 import { CGFXMLreader } from '../lib/CGF.js';
+import { MyCylinder } from './primitives/MyCylinder.js';
 import { MyRectangle } from './primitives/MyRectangle.js';
 import { MyTorus } from './primitives/MyTorus.js';
 import { XMLCamera } from './xmlObjects/XMLCamera.js';
@@ -656,8 +657,36 @@ export class MySceneGraph {
 
                 const rect = new MyRectangle(this.scene, primitiveId, x1, x2, y1, y2);
                 this.primitives[primitiveId] = rect;
-            }
-            else if (typeName == 'torus') {
+            } else if (typeName == 'cylinder') {
+                // baseRadius
+                const baseRadius = this.reader.getFloat(type, 'baseRadius');
+                if (!(baseRadius != null && !isNaN(baseRadius)))
+                    return "unable to parse baseRadius of the primitive for ID = " + primitiveId;
+
+                // upperRadius
+                const upperRadius = this.reader.getFloat(type, 'upperRadius');
+                if (!(upperRadius != null && !isNaN(upperRadius)))
+                    return "unable to parse upperRadius of the primitive for ID = " + primitiveId;
+
+                // height
+                const height = this.reader.getFloat(type, 'height');
+                if (!(height != null && !isNaN(height)))
+                    return "unable to parse height of the primitive for ID = " + primitiveId;
+                    
+                // slices
+                const slices = this.reader.getFloat(type, 'slices');
+                if (!(slices != null && !isNaN(slices)))
+                    return "unable to parse slices of the primitive for ID = " + primitiveId;
+
+                // stacks
+                const stacks = this.reader.getFloat(type, 'stacks');
+                if (!(stacks != null && !isNaN(stacks)))
+                    return "unable to parse stacks of the primitive for ID = " + primitiveId;
+
+                const cylinder = new MyCylinder(this.scene, primitiveId, baseRadius, upperRadius, height, slices, stacks);
+                this.primitives[primitiveId] = cylinder;
+                //const torus = new MyTorus(this.scene, 5, 2, 10, 20);
+            } else if (typeName == 'torus') {
 
                 // radius
                 const radius = this.reader.getFloat(type, 'radius');
@@ -684,7 +713,6 @@ export class MySceneGraph {
 
                 const torus = new MyTorus(this.scene, primitiveId, radius, innerRadius, slices, loops);
                 this.primitives[primitiveId] = torus;
-                console.log("torus!!!!");
                 //const torus = new MyTorus(this.scene, 5, 2, 10, 20);
             } else {
                 console.warn("To do: Parse other primitives.");
@@ -859,6 +887,6 @@ export class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
 
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives['demoRectangle', 'demoTorus'].display();
+        this.primitives['demoCylinder'].display();
     }
 }
