@@ -2,6 +2,7 @@ import { CGFXMLreader } from '../lib/CGF.js';
 import { MyCylinder } from './primitives/MyCylinder.js';
 import { MyRectangle } from './primitives/MyRectangle.js';
 import { MyTorus } from './primitives/MyTorus.js';
+import { MyTriangle } from './primitives/MyTriangle.js';
 import { XMLCamera } from './xmlObjects/XMLCamera.js';
 import { XMLTexture } from './xmlObjects/XMLTexture.js';
 
@@ -657,6 +658,55 @@ export class MySceneGraph {
 
                 const rect = new MyRectangle(this.scene, primitiveId, x1, x2, y1, y2);
                 this.primitives[primitiveId] = rect;
+            } else if (typeName == 'triangle'){
+                // x1
+                const x1 = this.reader.getFloat(type, 'x1');
+                if (!(x1 != null && !isNaN(x1)))
+                    return "unable to parse x1 of the primitive coordinates for ID = " + primitiveId;
+
+                // x2
+                const x2 = this.reader.getFloat(type, 'x2');
+                if (!(x2 != null && !isNaN(x2)))
+                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+                
+                // x3
+                const x3 = this.reader.getFloat(type, 'x3');
+                if (!(x3 != null && !isNaN(x3)))
+                    return "unable to parse x3 of the primitive coordinates for ID = " + primitiveId;
+
+                // y1
+                const y1 = this.reader.getFloat(type, 'y1');
+                if (!(y1 != null && !isNaN(y1)))
+                    return "unable to parse y1 of the primitive coordinates for ID = " + primitiveId;
+
+                // y2
+                const y2 = this.reader.getFloat(type, 'y2');
+                if (!(y2 != null && !isNaN(y2)))
+                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
+                
+                // y3
+                const y3 = this.reader.getFloat(type, 'y3');
+                if (!(y3 != null && !isNaN(y3)))
+                    return "unable to parse y3 of the primitive coordinates for ID = " + primitiveId;
+
+                // z1
+                const z1 = this.reader.getFloat(type, 'z1');
+                if (!(z1 != null && !isNaN(z1)))
+                    return "unable to parse z1 of the primitive coordinates for ID = " + primitiveId;
+
+                // z2
+                const z2 = this.reader.getFloat(type, 'z2');
+                if (!(z2 != null && !isNaN(z2)))
+                    return "unable to parse z2 of the primitive coordinates for ID = " + primitiveId;
+                
+                // z3
+                const z3 = this.reader.getFloat(type, 'z3');
+                if (!(z3 != null && !isNaN(z3)))
+                    return "unable to parse z3 of the primitive coordinates for ID = " + primitiveId;
+                
+
+                const triangle = new MyTriangle(this.scene, primitiveId, x1, x2, x3, y1, y2, y3, z1, z2, z3);
+                this.primitives[primitiveId] = triangle;
             } else if (typeName == 'cylinder') {
                 // baseRadius
                 const baseRadius = this.reader.getFloat(type, 'baseRadius');
@@ -887,6 +937,6 @@ export class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
 
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives['demoTorus'].display();
+        this.primitives['demoTriangle'].display();
     }
 }
