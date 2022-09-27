@@ -1,6 +1,8 @@
 import { CGFXMLreader } from '../lib/CGF.js';
-import { MyRectangle } from './MyRectangle.js';
+import { MyRectangle } from './primitives/MyRectangle.js';
+import { MyTorus } from './primitives/MyTorus.js';
 import { SceneCamera } from './sceneObjects/SceneCamera.js';
+import { SceneTexture } from './sceneObjects/SceneTexture.js';
 
 const DEGREE_TO_RAD = Math.PI / 180;
 
@@ -235,7 +237,6 @@ export class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
-        // this.onXMLMinorError("To do: Parse views and create cameras.");
 
         this.views = {};
         const views = viewsNode.children;
@@ -267,31 +268,19 @@ export class MySceneGraph {
             const positions = view.children;
 
             for (const position of positions) {
-                const coordinates = position.attributes;
-
-                if (coordinates.x == null)
-                    return "'x' attribute not defined for position '" + position.nodeName + "' for view " + attributes.id.value
-
-                if (coordinates.y == null)
-                    return "'y' attribute not defined for position '" + position.nodeName + "' for view " + attributes.id.value
-
-                if (coordinates.z == null)
-                    return "'z' attribute not defined for position '" + position.nodeName + "' for view " + attributes.id.value
                 
-                const coords = {
-                    x: coordinates.x.value,
-                    y: coordinates.y.value,
-                    z: coordinates.z.value
-                }
+                const coords = this.parseCoordinates3D(position, position.nodeName + ' for view ' + attributes.id.value);
 
                 if (position.nodeName === "from")
                     attributes.from = coords
                 
-                if (position.nodeName === "to")
+                else if (position.nodeName === "to")
                     attributes.to = coords
                 
-                if (position.nodeName === "up")
+                else if (position.nodeName === "up")
                     attributes.up = coords
+                
+                else this.onXMLMinorError("unknown tag <" + position.nodeName + ">");
             }
 
             if (attributes.from == null || attributes.to == null) 
@@ -480,8 +469,48 @@ export class MySceneGraph {
      */
     parseTextures(texturesNode) {
 
-        //For each texture in textures block, check ID and file URL
-        this.onXMLMinorError("To do: Parse textures.");
+        const textures = texturesNode.children;
+
+        this.textures = {};
+        
+        const acceptedImageTypes = ['image/jpeg', 'image/jpg', 'image/png']
+
+        for (const texture of textures) {
+            if (texture.nodeName !== "texture") {
+                this.onXMLMinorError("unknown tag <" + texture.nodeName + ">");
+                continue;
+            }
+            
+            const attributes = texture.attributes;
+            if (attributes.id.value == null)
+                return "no ID defined for texture";
+            
+            if (this.textures[attributes.id.value] != null)
+                return "ID must be unique for each texture (conflict: ID = " + attributes.id.value + ")";
+            
+            if (attributes.file == null)
+                return "'file' attribute not defined for texture " + attributes.id.value
+
+            const img = new Image();
+
+            // get the image
+            img.src = attributes.file.value;
+            img.scene = this;
+            img.texture = new SceneTexture(attributes, img)
+            img.texID = attributes.id.value;
+            // get height and width
+            img.onload = function() {
+                if (Math.log2(this.width * this.height) % 1 !== 0)
+                    this.scene.onXMLMinorError("img dimensions are not power of 2 in texture" + this.texID);
+                
+                img.scene.textures[img.texID] = img.texture;
+            }
+
+            img.onerror = function() {
+                this.scene.onXMLMinorError("'file' does not exist or has invalid extension (only .jpg or .png allowed) in texture" + this.texID);
+            }
+        }
+
         return null;
     }
 
@@ -630,15 +659,44 @@ export class MySceneGraph {
                     return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
 
                 const rect = new MyRectangle(this.scene, primitiveId, x1, x2, y1, y2);
-
                 this.primitives[primitiveId] = rect;
             }
-            else {
+            else if (typeName == 'torus') {
+
+                // radius
+                const radius = this.reader.getFloat(type, 'radius');
+                if (!(radius != null && !isNaN(radius)))
+                    return "unable to parse radius of the primitive for ID = " + primitiveId;
+
+                // innerRadius
+                const innerRadius = this.reader.getFloat(type, 'innerRadius');
+                if (!(innerRadius != null && !isNaN(innerRadius)))
+                    return "unable to parse innerRadius of the primitive for ID = " + primitiveId;
+
+                if (innerRadius >= radius)
+                    return "innerRadius of primitive for ID = " + primitiveId + " cannot be equal to or greater than radius"
+
+                // slices
+                const slices = this.reader.getFloat(type, 'slices');
+                if (!(slices != null && !isNaN(slices)))
+                    return "unable to parse slices of the primitive for ID = " + primitiveId;
+
+                // loops
+                const loops = this.reader.getFloat(type, 'loops');
+                if (!(loops != null && !isNaN(loops)))
+                    return "unable to parse loops of the primitive for ID = " + primitiveId;
+
+                const torus = new MyTorus(this.scene, primitiveId, radius, innerRadius, slices, loops);
+                this.primitives[primitiveId] = torus;
+                console.log("torus!!!!");
+                //const torus = new MyTorus(this.scene, 5, 2, 10, 20);
+            } else {
                 console.warn("To do: Parse other primitives.");
             }
         }
 
         this.log("Parsed primitives");
+        console.log(this.primitives)
         return null;
     }
 
@@ -805,6 +863,6 @@ export class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
 
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives['demoRectangle'].display();
+        this.primitives['demoRectangle', 'demoTorus'].display();
     }
 }
