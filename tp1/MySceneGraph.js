@@ -1,6 +1,6 @@
 import { CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './MyRectangle.js';
-import { XMLCamera } from './xmlObjects/XMLCamera.js';
+import { SceneCamera } from './sceneObjects/SceneCamera.js';
 
 const DEGREE_TO_RAD = Math.PI / 180;
 
@@ -238,19 +238,20 @@ export class MySceneGraph {
         // this.onXMLMinorError("To do: Parse views and create cameras.");
 
         this.views = {};
-        const children = viewsNode.children;
+        const views = viewsNode.children;
         let defaultNode = viewsNode.attributes.default.value;
         
         if (!defaultNode)
-            defaultNode = children[0].attributes.id;
+            defaultNode = views[0].attributes.id;
 
-        for (const view of children) {
+        for (const view of views) {
             if (view.nodeName !== "perspective" && view.nodeName !== "ortho") {
                 this.onXMLMinorError("unknown tag <" + view.nodeName + ">");
                 continue;
             }
             
             const attributes = view.attributes;
+            
             if (attributes.id.value == null)
                 return "no ID defined for view";
             
@@ -263,34 +264,34 @@ export class MySceneGraph {
             if (attributes.far == null)
                 return "'far' attribute not defined for view " + attributes.id.value
             
-            const sliders = view.children;
+            const positions = view.children;
 
-            for (const slider of sliders) {
-                const sliderAttributes = slider.attributes;
+            for (const position of positions) {
+                const coordinates = position.attributes;
 
-                if (sliderAttributes.x == null)
-                    return "'x' attribute not defined for slider '" + slider.nodeName + "' for view " + attributes.id.value
+                if (coordinates.x == null)
+                    return "'x' attribute not defined for position '" + position.nodeName + "' for view " + attributes.id.value
 
-                if (sliderAttributes.y == null)
-                    return "'y' attribute not defined for slider '" + slider.nodeName + "' for view " + attributes.id.value
+                if (coordinates.y == null)
+                    return "'y' attribute not defined for position '" + position.nodeName + "' for view " + attributes.id.value
 
-                if (sliderAttributes.z == null)
-                    return "'z' attribute not defined for slider '" + slider.nodeName + "' for view " + attributes.id.value
+                if (coordinates.z == null)
+                    return "'z' attribute not defined for position '" + position.nodeName + "' for view " + attributes.id.value
                 
-                const sliderCoords = {
-                    x: sliderAttributes.x.value,
-                    y: sliderAttributes.y.value,
-                    z: sliderAttributes.z.value
+                const coords = {
+                    x: coordinates.x.value,
+                    y: coordinates.y.value,
+                    z: coordinates.z.value
                 }
 
-                if (slider.nodeName === "from")
-                    attributes.from = sliderCoords
+                if (position.nodeName === "from")
+                    attributes.from = coords
                 
-                if (slider.nodeName === "to")
-                    attributes.to = sliderCoords
+                if (position.nodeName === "to")
+                    attributes.to = coords
                 
-                if (slider.nodeName === "up")
-                    attributes.up = sliderCoords
+                if (position.nodeName === "up")
+                    attributes.up = coords
             }
 
             if (attributes.from == null || attributes.to == null) 
@@ -299,16 +300,24 @@ export class MySceneGraph {
             if (view.nodeName === "perspective") {
                 if (attributes.angle == null)
                     return "perspective view " + attributes.id + " does not have necessary 'angle' attribute"
-            } else {
+            }
+            else {
                 if (attributes.left == null || attributes.right == null || attributes.top == null || attributes.bottom == null)
                     return "ortho view " + attributes.id + " does not have necessary 'left', 'right', 'top' and 'bottom' attributes"
-               
             }
             
-            this.views[attributes.id.value] = new XMLCamera(attributes, view.nodeName, attributes.id.value === defaultNode);
+            this.views[attributes.id.value] = new SceneCamera(attributes, view.nodeName, attributes.id.value === defaultNode);
 
         }
+
+        if (Object.keys(this.views).length === 0) {
+            return "at least one view must be defined";
+        }
+
         console.log(this.views);
+        
+        this.log("Parsed views");
+        
         return null;
     }
 

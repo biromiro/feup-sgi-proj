@@ -1,9 +1,8 @@
 /**
-* XMLCamera class, containing camera information
+* SceneCamera class, containing camera information
 */
 
-export class XMLCamera {
-
+export class SceneCamera {
     constructor(attributes, type, isDefault = false) {
         this.id = attributes.id.value;
         this.type = type;
