@@ -5,6 +5,8 @@ import { MySphere } from './primitives/MySphere.js';
 import { MyTorus } from './primitives/MyTorus.js';
 import { MyTriangle } from './primitives/MyTriangle.js';
 import { SceneCamera } from './sceneObjects/SceneCamera.js';
+import { SceneComponent } from './sceneObjects/SceneComponent.js';
+import { SceneMaterial } from './sceneObjects/SceneMaterial.js';
 import { SceneTexture } from './sceneObjects/SceneTexture.js';
 
 const DEGREE_TO_RAD = Math.PI / 180;
@@ -360,7 +362,7 @@ export class MySceneGraph {
     parseLights(lightsNode) {
         const children = lightsNode.children;
 
-        this.lights = [];
+        this.lights = {};
         let numLights = 0;
 
         // Any number of lights.
@@ -500,19 +502,20 @@ export class MySceneGraph {
             // get the image
             img.src = attributes.file.value;
             img.scene = this;
-            img.texture = new SceneTexture(attributes, img)
             img.texID = attributes.id.value;
+            img.texture = new SceneTexture(img.texID, attributes, img)
             // get height and width
             img.onload = function() {
                 if (Math.log2(this.width * this.height) % 1 !== 0)
                     this.scene.onXMLMinorError("img dimensions are not power of 2 in texture" + this.texID);
-                
-                img.scene.textures[img.texID] = img.texture;
             }
 
             img.onerror = function() {
                 this.scene.onXMLMinorError("'file' does not exist or has invalid extension (only .jpg or .png allowed) in texture" + this.texID);
             }
+
+            this.textures[img.texID] = img.texture;
+
         }
 
         return null;
@@ -525,7 +528,7 @@ export class MySceneGraph {
     parseMaterials(materialsNode) {
         const materials = materialsNode.children;
 
-        this.materials = [];
+        this.materials = {};
 
         // Any number of materials.
         for (const material of materials) {
@@ -543,11 +546,36 @@ export class MySceneGraph {
             if (this.materials[materialID] != null)
                 return "ID must be unique for each light (conflict: ID = " + materialID + ")";
 
-            //Continue here
-            this.onXMLMinorError("To do: Parse materials.");
+            const attributes = material.attributes;
+            
+            if (attributes.shininess == null)
+                return "'shininess' attribute not defined for material " + materialID
+            
+            const attrs = material.children;
+            let emission, ambient, diffuse, specular;
+
+            for (const attr of attrs) {
+                const type = attr.nodeName;                    
+                const color = this.parseColor(attr, 'invalid colors for ' + type + ' in material with ID ' + materialID)
+                if (type == 'emission') emission = color;
+                else if (type == 'ambient') ambient = color;
+                else if (type == 'diffuse') diffuse = color;
+                else if (type == 'specular') specular = color;
+                else this.onXMLMinorError("unknown tag <" + type + ">");
+
+            }
+
+            if (emission == null || ambient == null || diffuse == null || specular == null) 
+                return "material " + materialID + " does not have necessary 'emission', 'ambient', 'diffuse' and 'specular' attributes"
+            
+            this.materials[materialID] = new SceneMaterial(materialID, emission, ambient, diffuse, specular);
         }
 
-        //this.log("Parsed materials");
+        console.log(this.materials)
+        if (this.materials.length == 0)
+            return "there must be at least one material in the materials block"
+
+        this.log("Parsed materials");
         return null;
     }
 
@@ -834,7 +862,7 @@ export class MySceneGraph {
     parseComponents(componentsNode) {
         const components = componentsNode.children;
 
-        this.components = [];
+        this.components = {};
 
         // Any number of components.
         for (const component of components) {
@@ -865,15 +893,102 @@ export class MySceneGraph {
             const textureIndex = nodeNames.indexOf("texture");
             const childrenIndex = nodeNames.indexOf("children");
 
-            this.onXMLMinorError("To do: Parse components.");
             // Transformations
 
+            if (transformationIndex == -1)
+                return "component with ID "+ componentID + " does not have mandatory transformation block"
+        
+            const sceneTransformations = []             // To do: fill in transformations
+        
             // Materials
+
+            if (materialsIndex == -1)
+                return "component with ID "+ componentID + " does not have mandatory materials block"
+
+            const materialsObj = component.children[materialsIndex].children;
+            const sceneMaterials = []
+
+            for (const material of materialsObj) {
+                const materialID = this.reader.getString(material, 'id');
+
+                if (materialID == "inherit") {
+                    sceneMaterials.push(new SceneMaterial(materialID));
+                    continue;
+                }
+
+                if (this.materials[materialID] == null)
+                    return "no such material with ID " + materialID + " on component " + componentID
+                
+                sceneMaterials.push(this.materials[materialID]);
+            }
+
+            if (sceneMaterials.length == 0)
+                return "no materials for component " + componentID
 
             // Texture
 
+            if (textureIndex == -1)
+                return "component with ID "+ componentID + " does not have mandatory texture block"
+
+            const texture = component.children[textureIndex];
+            let sceneTexture;
+
+            const textureID = this.reader.getString(texture, 'id');
+           
+
+            if (textureID == "inherit" || textureID == "none") {
+                sceneTexture = { 
+                    texture: new SceneTexture(textureID),
+                };
+
+            } else {
+                if (this.textures[textureID] == null)
+                    return "no such texture with ID " + textureID + " on component " + componentID
+
+                const length_u = this.reader.getString(texture, 'length_u');
+
+                const length_v = this.reader.getString(texture, 'length_v');
+
+                sceneTexture = { 
+                    texture: this.textures[textureID],
+                    length_u: length_u || 1,
+                    length_v: length_v || 1,
+                };
+
+            }
+
             // Children
 
+            if (childrenIndex == -1)
+                return "component with ID "+ componentID + " does not have mandatory children block"
+
+            const childrenObj = component.children[childrenIndex].children;
+            const childrenArr = []
+
+            for (const child of childrenObj) {
+                const childType = child.nodeName;
+                
+                if (!(childType == "componentref" || childType == "primitiveref")) {
+                    this.onXMLMinorError("unknown tag <" + childType + ">");
+                    continue;
+                }
+
+                const childID = this.reader.getString(child, 'id');
+
+                if (childType == "componentref") {
+                    if (this.components[childID] == null)
+                        return "no such component with ID " + childID + " to be child of component " + componentID
+                    
+                    childrenArr.push(this.components[childID])
+                } else {
+                    if (this.primitives[childID] == null)
+                        return "no such primitive with ID " + childID + " to be child of component " + componentID
+                    
+                    childrenArr.push(this.primitives[childID]);
+                }
+            }
+
+            this.components[componentID] = new SceneComponent(componentID, sceneTransformations, sceneMaterials, texture, childrenArr)
         }
     }
 

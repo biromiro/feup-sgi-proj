@@ -75,12 +75,21 @@ export class MyTriangle extends CGFobject {
         t
         */
 
-		/*this.texCoords = [
-			0, 1,
-			1, 1,
+        const a = Math.sqrt(Math.pow(this.x2 - this.x1, 2) + Math.pow(this.y2 - this.y1, 2) + Math.pow(this.z2 - this.z1, 2))
+        const b = Math.sqrt(Math.pow(this.x3 - this.x2, 2) + Math.pow(this.y3 - this.y2, 2) + Math.pow(this.z3 - this.z2, 2))
+        const c = Math.sqrt(Math.pow(this.x3 - this.x1, 2) + Math.pow(this.y3 - this.y1, 2) + Math.pow(this.z3 - this.z1, 2))
+
+        const cosalpha = (Math.pow(a,2) - Math.pow(b, 2) + Math.pow(c, 2)) / (2 * a * c);
+        const sinalpha = Math.sqrt(1 - Math.pow(cosalpha, 2));
+
+		this.texCoords = [
 			0, 0,
-			1, 0
-		]*/
+			a, 0,
+            c * cosalpha, c * sinalpha,
+            0, 0,
+            a, 0,
+            c * cosalpha, c * sinalpha
+		]
         this.enableNormalViz();
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();

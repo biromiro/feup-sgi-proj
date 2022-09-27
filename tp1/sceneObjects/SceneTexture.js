@@ -4,9 +4,9 @@
 
 export class SceneTexture {
 
-    constructor(attributes, img) {
-        this.id = attributes.id.value;
-        this.texPath =  attributes.file.value;
+    constructor(id, attributes = {}, img = undefined) {
+        this.id = id;
+        this.texPath =  attributes.file?.value;
         this.img = img;
     }
 }
