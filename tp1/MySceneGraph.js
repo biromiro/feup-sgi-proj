@@ -1,4 +1,4 @@
-import { CGFXMLreader } from '../lib/CGF.js';
+import { CGFappearance, CGFXMLreader } from '../lib/CGF.js';
 import { MyCylinder } from './primitives/MyCylinder.js';
 import { MyRectangle } from './primitives/MyRectangle.js';
 import { MySphere } from './primitives/MySphere.js';
@@ -224,6 +224,8 @@ export class MySceneGraph {
         if (root == null)
             return "no root defined for scene";
 
+        console.log("root: " + root);
+
         this.idRoot = root;
 
         // Get axis length        
@@ -308,10 +310,6 @@ export class MySceneGraph {
         if (Object.keys(this.views).length === 0) {
             return "at least one view must be defined";
         }
-
-        console.log(this.views);
-        
-        this.log("Parsed views");
         
         return null;
     }
@@ -569,11 +567,9 @@ export class MySceneGraph {
             this.materials[materialID] = new SceneMaterial(materialID, emission, ambient, diffuse, specular);
         }
 
-        console.log(this.materials)
         if (this.materials.length == 0)
             return "there must be at least one material in the materials block"
 
-        this.log("Parsed materials");
         return null;
     }
 
@@ -612,8 +608,6 @@ export class MySceneGraph {
             return "at least one transformation must be defined";
         }
 
-        this.log("Parsed transformations");
-        console.log(this.transformations);
         return null;
     }
 
@@ -632,7 +626,6 @@ export class MySceneGraph {
 
     parseTransformation(transformationNode) {
         const transfTypes = transformationNode.children;
-        console.log(transformationNode, transfTypes);
         
         let transfMatrix = mat4.create();
 
@@ -856,8 +849,6 @@ export class MySceneGraph {
             
         }
 
-        this.log("Parsed primitives");
-        console.log(this.primitives)
         return null;
     }
 
@@ -908,8 +899,11 @@ export class MySceneGraph {
             const transformationObj = transformationBlock.children;
             let sceneTransformation;
             
+
+            if (transformationObj.length == 0) {
+                sceneTransformation = mat4.create();
             // transformation by reference
-            if (transformationObj[0].nodeName === 'transformationref') {
+            } else if (transformationObj[0].nodeName === 'transformationref') {
                 const transformationID = this.reader.getString(transformationObj[0], 'id');
                 sceneTransformation = this.transformations[transformationID];
             }
@@ -997,17 +991,18 @@ export class MySceneGraph {
                     if (this.components[childID] == null)
                         return "no such component with ID " + childID + " to be child of component " + componentID
                     
-                    childrenArr.push(this.components[childID])
+                    childrenArr.push(childID);
                 } else {
                     if (this.primitives[childID] == null)
                         return "no such primitive with ID " + childID + " to be child of component " + componentID
                     
-                    childrenArr.push(this.primitives[childID]);
+                    childrenArr.push(childID);
                 }
             }
 
             this.components[componentID] = new SceneComponent(componentID, sceneTransformation, sceneMaterials, texture, childrenArr)
         }
+        console.log(this.components)
     }
 
 
@@ -1139,17 +1134,39 @@ export class MySceneGraph {
         this.displayComponent(this.idRoot, {});
 
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives['demoRectangle', 'demoTorus', 'demoSphere'].display();
+        // this.primitives['demoSphere'].display();
+        // this.primitives['demoCylinder'].display();
     }
 
     displayComponent(id, inheritance) {
         const component = this.components[id];
-        
-        let transfMatrix = inheritance.transfMatrix;
-        if (transfMatrix === null) {
-            transfMatrix = component.transfMatrix;
-        }
-        
+
+        if (component) {
+            this.scene.pushMatrix();
+            this.scene.multMatrix(component.transformation);
+
+            /*if (component.materials.length > 0) {
+                const sceneMaterial = component.materials[0]; // to do: change material with M key
+                if (sceneMaterial.id != "inherit") {
+                    const material = new CGFappearance(this.scene);
+                    material.setAmbient(...sceneMaterial.ambient);
+                    material.setEmission(...sceneMaterial.emission);
+                    material.setDiffuse(...sceneMaterial.diffuse);
+                    material.setSpecular(...sceneMaterial.specular);
+                    material.apply();
+                }        
+            }*/
+
+            /*if (component.texture != null) {
+                component.texture.apply();
+            }*/
+
+            for (const child of component.children)
+                this.displayComponent(child, {});
+            
+            
+            this.scene.popMatrix();
+        } else this.primitives[id].display();
         
     }
 }

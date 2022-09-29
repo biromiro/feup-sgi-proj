@@ -18,7 +18,6 @@ export class MyCylinder extends CGFobject {
 
         let radiusDiff = (this.upperRadius - this.baseRadius) / this.stacks;
         let currentRadius = this.baseRadius;
-        console.log(radiusDiff, currentRadius)
         for (var stack = 0; stack < this.stacks; stack++) {
         
             var ang = 0;
@@ -38,7 +37,6 @@ export class MyCylinder extends CGFobject {
     
                 this.vertices.push(currentRadius * ca, -currentRadius * sa, stack * (this.height / this.stacks));
                 this.vertices.push(nextStackRadius * ca, -nextStackRadius * sa, (stack + 1) * (this.height / this.stacks));
-                console.log("2 more vertices")
                 // triangle normal computed by cross product of two edges
                 var normal = [
                     ca, -sa, ta

@@ -10,5 +10,6 @@ export class SceneComponent {
         this.materials = materials;
         this.texture = texture;
         this.children = children;
+        this.isNode = true;
     }
 }
