@@ -3,7 +3,7 @@
 */
 
 export class SceneTransformation {
-
-    constructor() {
+    constructor(transfMatrix) {
+        this.transfMatrix = transfMatrix;
     }
 }

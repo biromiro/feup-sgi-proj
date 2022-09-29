@@ -8,6 +8,7 @@ import { SceneCamera } from './sceneObjects/SceneCamera.js';
 import { SceneComponent } from './sceneObjects/SceneComponent.js';
 import { SceneMaterial } from './sceneObjects/SceneMaterial.js';
 import { SceneTexture } from './sceneObjects/SceneTexture.js';
+import { SceneTransformation } from './sceneObjects/SceneTransformation.js';
 
 const DEGREE_TO_RAD = Math.PI / 180;
 
@@ -28,6 +29,8 @@ const POSSIBLE_PRIMITIVES = ['rectangle', 'triangle', 'cylinder', 'sphere', 'tor
 // Possible image types.
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 
+const axisCoords = {x : [1, 0, 0], y : [0, 1, 0], z : [0, 0, 1]};
+
 /**
  * MySceneGraph class, representing the scene graph.
  */
@@ -45,11 +48,6 @@ export class MySceneGraph {
         this.nodes = [];
 
         this.idRoot = null;                    // The id of the root element.
-
-        this.axisCoords = [];
-        this.axisCoords['x'] = [1, 0, 0];
-        this.axisCoords['y'] = [0, 1, 0];
-        this.axisCoords['z'] = [0, 0, 1];
 
         // File reading 
         this.reader = new CGFXMLreader();
@@ -604,56 +602,10 @@ export class MySceneGraph {
             // Checks for repeated IDs.
             if (this.transformations[transformationID] != null)
                 return "ID must be unique for each transformation (conflict: ID = " + transformationID + ")";
-
-            const transfTypes = transformation.children;
-            // Specifications for the current transformation.
-
-            let transfMatrix = mat4.create();
-
-            let coordinates;
-
-            for (const type of transfTypes) {
-                switch (type.nodeName) {
-                    case 'translate':
-                        coordinates = this.parseCoordinates3D(type, "translate transformation for ID " + transformationID);
-                        if (!Array.isArray(coordinates))
-                            return coordinates;
-
-                        transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
-                        break;
-                    case 'scale':                        
-                        coordinates = this.parseCoordinates3D(type, "scale transformation for ID " + transformationID);
-                        if (!Array.isArray(coordinates))
-                            return coordinates;
-                        
-                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
-                        break;
-                    case 'rotate':
-                        let rotateParams = this.parseRotate(type, transformationID);
-                        if (!Array.isArray(rotateParams))
-                            return rotateParams;
-                        
-                        const angle = rotateParams[0];
-                        const axis = rotateParams[1];
-
-                        switch (axis) {
-                            case 'x':
-                                transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle);
-                                break;
-                            case 'y':
-                                transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle);
-                                break;
-                            case 'z':
-                                transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle);
-                                break;
-                            default:
-                                break;
-                        }
-
-                        break;
-                }
-            }
-            this.transformations[transformationID] = transfMatrix;
+            
+            const transfMatrix = this.parseTransformationDef(transformation, transformationID);
+            
+            this.transformations[transformationID] = new SceneTransformation(transfMatrix);
         }
 
         if (Object.keys(this.transformations).length === 0) {
@@ -663,6 +615,60 @@ export class MySceneGraph {
         this.log("Parsed transformations");
         console.log(this.transformations);
         return null;
+    }
+
+    parseTransformationDef(transformationNode, id) {
+        const transfMatrix = this.parseTransformation(transformationNode);
+        
+        if (transfMatrix === mat4.create()) {
+            return "at least one valid element must be defined for transformation with ID " + id;
+        }
+        /*if (!Array.isArray(transfMatrix)) {
+            return transfMatrix + " with ID " + id;
+        }*/
+        
+        return transfMatrix;
+    }
+
+    parseTransformation(transformationNode) {
+        const transfTypes = transformationNode.children;
+        console.log(transformationNode, transfTypes);
+        
+        let transfMatrix = mat4.create();
+
+        for (const type of transfTypes) {
+            switch (type.nodeName) {
+                case 'translate':
+                    const translation = this.parseCoordinates3D(type, "translate transformation");
+                    /*if (!Array.isArray(translation))
+                        return translation;*/
+
+                    transfMatrix = mat4.translate(transfMatrix, transfMatrix, translation);
+                    break;
+                case 'scale':                        
+                    const scaling = this.parseCoordinates3D(type, "scale transformation");
+                    /*if (!Array.isArray(scaling))
+                        return scaling;*/
+                        
+                    transfMatrix = mat4.scale(transfMatrix, transfMatrix, scaling);
+                    break;
+                case 'rotate':
+                    const rotation = this.parseRotate(type);
+                    /*if (!Array.isArray(rotation))
+                        return rotation;*/
+                     
+                    const angle = rotation[0];
+                    const axis = rotation[1];
+
+                    transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axisCoords[axis]);
+                    break;
+                default:
+                    this.onXMLMinorError("ignoring unknown transformation type " + type.nodeName);
+                    break;
+            }
+        }
+
+        return transfMatrix;
     }
 
     /**
@@ -897,8 +903,20 @@ export class MySceneGraph {
 
             if (transformationIndex == -1)
                 return "component with ID "+ componentID + " does not have mandatory transformation block"
-        
-            const sceneTransformations = []             // To do: fill in transformations
+            
+            const transformationBlock = component.children[transformationIndex];
+            const transformationObj = transformationBlock.children;
+            let sceneTransformation;
+            
+            // transformation by reference
+            if (transformationObj[0].nodeName === 'transformationref') {
+                const transformationID = this.reader.getString(transformationObj[0], 'id');
+                sceneTransformation = this.transformations[transformationID];
+            }
+            else { // inline transformation
+                sceneTransformation = new SceneTransformation(this.parseTransformation(transformationBlock));
+            }
+            
         
             // Materials
 
@@ -988,7 +1006,7 @@ export class MySceneGraph {
                 }
             }
 
-            this.components[componentID] = new SceneComponent(componentID, sceneTransformations, sceneMaterials, texture, childrenArr)
+            this.components[componentID] = new SceneComponent(componentID, sceneTransformation, sceneMaterials, texture, childrenArr)
         }
     }
 
@@ -1073,16 +1091,16 @@ export class MySceneGraph {
         return color;
     }
 
-    parseRotate(node, id) {
+    parseRotate(node) {
         // angle
         const angle = this.reader.getFloat(node, 'angle');
         if (!(angle != null && !isNaN(angle)))
-            return "unable to parse angle component of the rotation for transformation with ID " + id;
+            return "unable to parse angle component of the rotation for transformation";
         
         // axis
         const axis = this.reader.getString(node, 'axis');
         if (!(axis != null && (axis === "x" || axis === "y" || axis === "z")))
-            return "unable to parse axis component of the rotation for transformation with ID " + id;
+            return "unable to parse axis component of the rotation for transformation";
 
         return [angle*DEGREE_TO_RAD, axis];
     }
@@ -1117,8 +1135,21 @@ export class MySceneGraph {
      */
     displayScene() {
         //To do: Create display loop for transversing the scene graph
+        
+        this.displayComponent(this.idRoot, {});
 
         //To test the parsing/creation of the primitives, call the display function directly
         this.primitives['demoRectangle', 'demoTorus', 'demoSphere'].display();
+    }
+
+    displayComponent(id, inheritance) {
+        const component = this.components[id];
+        
+        let transfMatrix = inheritance.transfMatrix;
+        if (transfMatrix === null) {
+            transfMatrix = component.transfMatrix;
+        }
+        
+        
     }
 }
