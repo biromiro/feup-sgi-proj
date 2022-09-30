@@ -774,14 +774,14 @@ export class MySceneGraph {
                 this.primitives[primitiveId] = triangle;
             } else if (typeName == 'cylinder') {
                 // baseRadius
-                const baseRadius = this.reader.getFloat(type, 'baseRadius');
+                const baseRadius = this.reader.getFloat(type, 'base');
                 if (!(baseRadius != null && !isNaN(baseRadius)))
-                    return "unable to parse baseRadius of the primitive for ID = " + primitiveId;
+                    return "unable to parse base of the primitive for ID = " + primitiveId;
 
                 // upperRadius
-                const upperRadius = this.reader.getFloat(type, 'upperRadius');
+                const upperRadius = this.reader.getFloat(type, 'top');
                 if (!(upperRadius != null && !isNaN(upperRadius)))
-                    return "unable to parse upperRadius of the primitive for ID = " + primitiveId;
+                    return "unable to parse top of the primitive for ID = " + primitiveId;
 
                 // height
                 const height = this.reader.getFloat(type, 'height');
