@@ -719,7 +719,9 @@ export class MySceneGraph {
                 if (!(y2 != null && !isNaN(y2) && y2 > y1))
                     return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
 
-                const rect = new MyRectangle(this.scene, primitiveId, x1, x2, y1, y2);
+                const doubleSided = this.reader.getBoolean(type, 'doubleSided', false);
+
+                const rect = new MyRectangle(this.scene, primitiveId, x1, x2, y1, y2, doubleSided ? true : false);
                 this.primitives[primitiveId] = rect;
             } else if (typeName == 'triangle'){
                 // x1
@@ -957,9 +959,9 @@ export class MySceneGraph {
                 if (this.textures[textureID] == null)
                     return "no such texture with ID " + textureID + " on component " + componentID
 
-                const length_u = this.reader.getString(texture, 'length_u');
+                const length_u = this.reader.getString(texture, 'length_u', false);
 
-                const length_v = this.reader.getString(texture, 'length_v');
+                const length_v = this.reader.getString(texture, 'length_v', false);
 
                 sceneTexture = { 
                     texture: this.textures[textureID],
@@ -1131,7 +1133,7 @@ export class MySceneGraph {
     displayScene() {
         //To do: Create display loop for transversing the scene graph
         
-        this.displayComponent(this.idRoot, {});
+        this.displayComponent(this.idRoot);
         //this.primitives['demoRectangle'].display();
         //To test the parsing/creation of the primitives, call the display function directly
         // this.primitives['demoSphere'].display();
@@ -1143,7 +1145,6 @@ export class MySceneGraph {
 
         if (component) {
             this.scene.pushMatrix();
-            console.log(component.transformation)
             this.scene.multMatrix(component.transformation.transfMatrix);
 
             if (component.materials.length > 0) {
@@ -1155,7 +1156,10 @@ export class MySceneGraph {
                     material.setDiffuse(...sceneMaterial.diffuse);
                     material.setSpecular(...sceneMaterial.specular);
                     material.apply();
-                }        
+                    inheritance = {
+                        material: material,
+                    }
+                } else inheritance.material.apply();
             }
 
             /*if (component.texture != null) {
@@ -1163,7 +1167,7 @@ export class MySceneGraph {
             }*/
 
             for (const child of component.children)
-                this.displayComponent(child, {});
+                this.displayComponent(child, inheritance);
             
             
             this.scene.popMatrix();

@@ -7,56 +7,105 @@ import { CGFobject } from '../../lib/CGF.js';
  * @param y - Scale of rectangle in Y
  */
 export class MyRectangle extends CGFobject {
-	constructor(scene, id, x1, x2, y1, y2) {
+	constructor(scene, id, x1, x2, y1, y2, doubleSided = false) {
 		super(scene);
 		this.x1 = x1;
 		this.x2 = x2;
 		this.y1 = y1;
 		this.y2 = y2;
-
+		this.doubleSided = doubleSided;
 		this.initBuffers();
 	}
 	
 	initBuffers() {
-		this.vertices = [
-			this.x1, this.y1, 0,	//0
-			this.x2, this.y1, 0,	//1
-			this.x1, this.y2, 0,	//2
-			this.x2, this.y2, 0		//3
-		];
+		if (this.doubleSided) {
+			this.vertices = [
+				this.x1, this.y1, 0,	//0
+				this.x2, this.y1, 0,	//1
+				this.x1, this.y2, 0,	//2
+				this.x2, this.y2, 0,	//3
+				this.x1, this.y1, 0,	//4
+				this.x2, this.y1, 0,	//5
+				this.x1, this.y2, 0,	//6
+				this.x2, this.y2, 0		//7
+			];
 
-		//Counter-clockwise reference of vertices
-		this.indices = [
-			0, 1, 2,
-			1, 3, 2
-		];
+			//Counter-clockwise reference of vertices
+			this.indices = [
+				0, 1, 2,
+				1, 3, 2,
+				4, 6, 5,
+				5, 6, 7
+			];
 
-		//Facing Z positive
-		this.normals = [
-			0, 0, 1,
-			0, 0, 1,
-			0, 0, 1,
-			0, 0, 1
-		];
-		
-		/*
-		Texture coords (s,t)
-		+----------> s
-        |
-        |
-		|
-		v
-        t
-        */
+			//Facing Z positive
+			this.normals = [
+				0, 0, 1,
+				0, 0, 1,
+				0, 0, 1,
+				0, 0, 1,
+				0, 0, -1,
+				0, 0, -1,
+				0, 0, -1,
+				0, 0, -1
+			];
 
-		this.texCoords = [
-			0, 1,
-			1, 1,
-			0, 0,
-			1, 0
-		]
-		this.enableNormalViz();
-		console.log(this.normals)
+					/*
+			Texture coords (s,t)
+			+----------> s
+			|
+			|
+			|
+			v
+			t
+			*/
+
+			this.texCoords = [
+				0, 1,
+				1, 1,
+				0, 0,
+				1, 0
+			]
+		} else {
+			this.vertices = [
+				this.x1, this.y1, 0,	//0
+				this.x2, this.y1, 0,	//1
+				this.x1, this.y2, 0,	//2
+				this.x2, this.y2, 0		//3
+			]
+
+			//Counter-clockwise reference of vertices
+			this.indices = [
+				0, 1, 2,
+				1, 3, 2
+			];
+
+			//Facing Z positive
+			this.normals = [
+				0, 0, 1,
+				0, 0, 1,
+				0, 0, 1,
+				0, 0, 1
+			];
+
+					/*
+			Texture coords (s,t)
+			+----------> s
+			|
+			|
+			|
+			v
+			t
+			*/
+
+			this.texCoords = [
+				0, 1,
+				1, 1,
+				0, 0,
+				1, 0
+			]
+		}
+
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
