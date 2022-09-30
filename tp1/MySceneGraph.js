@@ -901,7 +901,7 @@ export class MySceneGraph {
             
 
             if (transformationObj.length == 0) {
-                sceneTransformation = mat4.create();
+                sceneTransformation = new SceneTransformation(mat4.create());
             // transformation by reference
             } else if (transformationObj[0].nodeName === 'transformationref') {
                 const transformationID = this.reader.getString(transformationObj[0], 'id');
@@ -1132,7 +1132,7 @@ export class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
         
         this.displayComponent(this.idRoot, {});
-
+        //this.primitives['demoRectangle'].display();
         //To test the parsing/creation of the primitives, call the display function directly
         // this.primitives['demoSphere'].display();
         // this.primitives['demoCylinder'].display();
@@ -1143,9 +1143,10 @@ export class MySceneGraph {
 
         if (component) {
             this.scene.pushMatrix();
-            this.scene.multMatrix(component.transformation);
+            console.log(component.transformation)
+            this.scene.multMatrix(component.transformation.transfMatrix);
 
-            /*if (component.materials.length > 0) {
+            if (component.materials.length > 0) {
                 const sceneMaterial = component.materials[0]; // to do: change material with M key
                 if (sceneMaterial.id != "inherit") {
                     const material = new CGFappearance(this.scene);
@@ -1155,7 +1156,7 @@ export class MySceneGraph {
                     material.setSpecular(...sceneMaterial.specular);
                     material.apply();
                 }        
-            }*/
+            }
 
             /*if (component.texture != null) {
                 component.texture.apply();
@@ -1166,7 +1167,10 @@ export class MySceneGraph {
             
             
             this.scene.popMatrix();
-        } else this.primitives[id].display();
+        } else {
+            //console.log(`this.primitives[${id}].display()`);
+            this.primitives[id].display();
+        }
         
     }
 }
