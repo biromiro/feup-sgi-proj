@@ -88,4 +88,14 @@ export class MyCylinder extends CGFobject {
         this.initBuffers();
         this.initNormalVizBuffers();
     }
+
+    
+	/**
+	 * @method updateTexCoords
+	 * Updates the list of texture coordinates of the rectangle
+	 * @param {Array} coords - Array of texture coordinates
+	 */
+	updateTexCoords(length_u, length_v) {
+		this.updateTexCoordsGLBuffers();
+	}
 }

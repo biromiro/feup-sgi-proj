@@ -1,4 +1,4 @@
-import { CGFappearance, CGFXMLreader } from '../lib/CGF.js';
+import { CGFappearance, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
 import { MyCylinder } from './primitives/MyCylinder.js';
 import { MyRectangle } from './primitives/MyRectangle.js';
 import { MySphere } from './primitives/MySphere.js';
@@ -6,9 +6,6 @@ import { MyTorus } from './primitives/MyTorus.js';
 import { MyTriangle } from './primitives/MyTriangle.js';
 import { SceneCamera } from './sceneObjects/SceneCamera.js';
 import { SceneComponent } from './sceneObjects/SceneComponent.js';
-import { SceneMaterial } from './sceneObjects/SceneMaterial.js';
-import { SceneTexture } from './sceneObjects/SceneTexture.js';
-import { SceneTransformation } from './sceneObjects/SceneTransformation.js';
 
 const DEGREE_TO_RAD = Math.PI / 180;
 
@@ -499,7 +496,7 @@ export class MySceneGraph {
             img.src = attributes.file.value;
             img.scene = this;
             img.texID = attributes.id.value;
-            img.texture = new SceneTexture(img.texID, attributes, img)
+            //img.texture = new SceneTexture(img.texID, attributes, img)
             // get height and width
             img.onload = function() {
                 if (Math.log2(this.width * this.height) % 1 !== 0)
@@ -510,7 +507,7 @@ export class MySceneGraph {
                 this.scene.onXMLMinorError("'file' does not exist or has invalid extension (only .jpg or .png allowed) in texture" + this.texID);
             }
 
-            this.textures[img.texID] = img.texture;
+            this.textures[img.texID] = new CGFtexture(this.scene, img.src);
 
         }
 
@@ -525,7 +522,6 @@ export class MySceneGraph {
         const materials = materialsNode.children;
 
         this.materials = {};
-
         // Any number of materials.
         for (const material of materials) {
             if (material.nodeName != "material") {
@@ -564,7 +560,13 @@ export class MySceneGraph {
             if (emission == null || ambient == null || diffuse == null || specular == null) 
                 return "material " + materialID + " does not have necessary 'emission', 'ambient', 'diffuse' and 'specular' attributes"
             
-            this.materials[materialID] = new SceneMaterial(materialID, emission, ambient, diffuse, specular);
+            const appearance = new CGFappearance(this.scene);
+            appearance.setAmbient(...ambient);
+            appearance.setEmission(...emission);
+            appearance.setDiffuse(...diffuse);
+            appearance.setSpecular(...specular);
+            
+            this.materials[materialID] = appearance;
         }
 
         if (this.materials.length == 0)
@@ -601,7 +603,7 @@ export class MySceneGraph {
             
             const transfMatrix = this.parseTransformationDef(transformation, transformationID);
             
-            this.transformations[transformationID] = new SceneTransformation(transfMatrix);
+            this.transformations[transformationID] = transfMatrix;
         }
 
         if (Object.keys(this.transformations).length === 0) {
@@ -903,14 +905,14 @@ export class MySceneGraph {
             
 
             if (transformationObj.length == 0) {
-                sceneTransformation = new SceneTransformation(mat4.create());
+                sceneTransformation = mat4.create();
             // transformation by reference
             } else if (transformationObj[0].nodeName === 'transformationref') {
                 const transformationID = this.reader.getString(transformationObj[0], 'id');
                 sceneTransformation = this.transformations[transformationID];
             }
             else { // inline transformation
-                sceneTransformation = new SceneTransformation(this.parseTransformation(transformationBlock));
+                sceneTransformation = this.parseTransformation(transformationBlock);
             }
             
         
@@ -926,14 +928,14 @@ export class MySceneGraph {
                 const materialID = this.reader.getString(material, 'id');
 
                 if (materialID == "inherit") {
-                    sceneMaterials.push(new SceneMaterial(materialID));
+                    sceneMaterials.push(materialID);
                     continue;
                 }
 
                 if (this.materials[materialID] == null)
                     return "no such material with ID " + materialID + " on component " + componentID
                 
-                sceneMaterials.push(this.materials[materialID]);
+                sceneMaterials.push(materialID);
             }
 
             if (sceneMaterials.length == 0)
@@ -952,7 +954,7 @@ export class MySceneGraph {
 
             if (textureID == "inherit" || textureID == "none") {
                 sceneTexture = { 
-                    texture: new SceneTexture(textureID),
+                    id: textureID,
                 };
 
             } else {
@@ -964,7 +966,7 @@ export class MySceneGraph {
                 const length_v = this.reader.getString(texture, 'length_v', false);
 
                 sceneTexture = { 
-                    texture: this.textures[textureID],
+                    id: textureID,
                     length_u: length_u || 1,
                     length_v: length_v || 1,
                 };
@@ -1002,9 +1004,8 @@ export class MySceneGraph {
                 }
             }
 
-            this.components[componentID] = new SceneComponent(componentID, sceneTransformation, sceneMaterials, texture, childrenArr)
+            this.components[componentID] = new SceneComponent(componentID, sceneTransformation, sceneMaterials, sceneTexture, childrenArr)
         }
-        console.log(this.components)
     }
 
 
@@ -1133,7 +1134,12 @@ export class MySceneGraph {
     displayScene() {
         //To do: Create display loop for transversing the scene graph
         
-        this.displayComponent(this.idRoot);
+        this.displayComponent(this.idRoot, {
+            material: undefined,
+            texture: undefined,
+            length_u: undefined,
+            length_v: undefined
+        });
         //this.primitives['demoRectangle'].display();
         //To test the parsing/creation of the primitives, call the display function directly
         // this.primitives['demoSphere'].display();
@@ -1142,37 +1148,45 @@ export class MySceneGraph {
 
     displayComponent(id, inheritance) {
         const component = this.components[id];
-
+        let {material, texture, length_u, length_v} = inheritance;
         if (component) {
             this.scene.pushMatrix();
-            this.scene.multMatrix(component.transformation.transfMatrix);
-
+            this.scene.multMatrix(component.transformation);
+            
             if (component.materials.length > 0) {
                 const sceneMaterial = component.materials[0]; // to do: change material with M key
-                if (sceneMaterial.id != "inherit") {
-                    const material = new CGFappearance(this.scene);
-                    material.setAmbient(...sceneMaterial.ambient);
-                    material.setEmission(...sceneMaterial.emission);
-                    material.setDiffuse(...sceneMaterial.diffuse);
-                    material.setSpecular(...sceneMaterial.specular);
-                    material.apply();
-                    inheritance = {
-                        material: material,
-                    }
-                } else inheritance.material.apply();
+                if (sceneMaterial != "inherit") {
+                    material = this.materials[sceneMaterial];
+                }
+                
+                if (component.texture != 'inherit' && component.texture != 'none') {
+                    texture = this.textures[component.texture];
+                }
+
+                if (component.texture == 'none') {
+                    texture = undefined;
+                } 
+                
+                material.setTexture(texture);
+                material.apply();
             }
 
-            /*if (component.texture != null) {
-                component.texture.apply();
-            }*/
+            length_u = component.length_u;
+            length_v = component.length_v;
 
-            for (const child of component.children)
-                this.displayComponent(child, inheritance);
-            
+            for (const child of component.children){
+                this.displayComponent(child, {
+                    material : material,
+                    texture: texture,
+                    length_u: length_u,
+                    length_v: length_v
+                });
+            }
             
             this.scene.popMatrix();
         } else {
             //console.log(`this.primitives[${id}].display()`);
+            this.primitives[id].updateTexCoords(length_u, length_v);
             this.primitives[id].display();
         }
         
