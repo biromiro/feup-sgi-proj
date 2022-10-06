@@ -79,31 +79,9 @@ export class MyTriangle extends CGFobject {
         const b = Math.sqrt(Math.pow(this.x3 - this.x2, 2) + Math.pow(this.y3 - this.y2, 2) + Math.pow(this.z3 - this.z2, 2))
         const c = Math.sqrt(Math.pow(this.x3 - this.x1, 2) + Math.pow(this.y3 - this.y1, 2) + Math.pow(this.z3 - this.z1, 2))
 
-        const cosalpha = (Math.pow(a,2) - Math.pow(b, 2) + Math.pow(c, 2)) / (2 * a * c);
-        const sinalpha = Math.sqrt(1 - Math.pow(cosalpha, 2));
-
-		this.texCoords = [
-			0, 0,
-			a, 0,
-            c * cosalpha, c * sinalpha,
-            0, 0,
-            a, 0,
-            c * cosalpha, c * sinalpha
-		]
-        this.enableNormalViz();
+        
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
-        console.log(this.normals);
-	}
-
-	/**
-	 * @method updateTexCoords
-	 * Updates the list of texture coordinates of the rectangle
-	 * @param {Array} coords - Array of texture coordinates
-	 */
-	updateTexCoords(coords) {
-		this.texCoords = [...coords];
-		this.updateTexCoordsGLBuffers();
 	}
 
     
@@ -113,6 +91,17 @@ export class MyTriangle extends CGFobject {
 	 * @param {Array} coords - Array of texture coordinates
 	 */
 	updateTexCoords(length_u, length_v) {
+		const cosalpha = (Math.pow(a,2) - Math.pow(b, 2) + Math.pow(c, 2)) / (2 * a * c);
+        const sinalpha = Math.sqrt(1 - Math.pow(cosalpha, 2));
+
+		this.texCoords = [
+			0, 0,
+			a / length_u, 0,
+            c * cosalpha / length_u, c * sinalpha / length_v,
+            0, 0,
+            a / length_u, 0,
+            c * cosalpha / length_u, c * sinalpha / length_v
+		]
 		this.updateTexCoordsGLBuffers();
 	}
 }

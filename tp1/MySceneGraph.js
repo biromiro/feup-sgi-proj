@@ -1185,8 +1185,7 @@ export class MySceneGraph {
             
             this.scene.popMatrix();
         } else {
-            //console.log(`this.primitives[${id}].display()`);
-            this.primitives[id].updateTexCoords(length_u, length_v);
+            this.primitives[id].updateTexCoords(length_u || 1, length_v || 1);
             this.primitives[id].display();
         }
         

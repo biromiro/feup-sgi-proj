@@ -67,7 +67,6 @@ export class MySphere extends CGFobject {
 
         //--- Texture Coordinates
 
-        this.texCoords.push(longitude / this.longDivs, latitude / this.latDivs);
 
       }
       phi += phiInc;
@@ -85,6 +84,15 @@ export class MySphere extends CGFobject {
 	 * @param {Array} coords - Array of texture coordinates
 	 */
 	updateTexCoords(length_u, length_v) {
+
+    for (let latitude = 0; latitude <= this.latDivs; latitude++) {
+      for (let longitude = 0; longitude <= this.longDivs; longitude++) {
+        this.texCoords.push(longitude / (this.longDivs / length_u), latitude / (this.latDivs / length_v));
+      }
+    }
+
+
+
 		this.updateTexCoordsGLBuffers();
 	}
 }

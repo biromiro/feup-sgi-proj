@@ -55,9 +55,6 @@ export class MyCylinder extends CGFobject {
                 // push normal once for each vertex of this triangle
                 this.normals.push(...normal);
                 this.normals.push(...normal);
-    
-                this.texCoords.push(i / this.slices, 1)
-                this.texCoords.push(i / this.slices, 0)
 
                 if (i == this.slices - 1) continue;
 
@@ -95,7 +92,14 @@ export class MyCylinder extends CGFobject {
 	 * Updates the list of texture coordinates of the rectangle
 	 * @param {Array} coords - Array of texture coordinates
 	 */
-	updateTexCoords(length_u, length_v) {
+     updateTexCoords(length_u, length_v) {
+        for (var stack = 0; stack < this.stacks; stack++) {
+            for (var i = 0; i < this.slices; i++) {
+                this.texCoords.push(i / (this.slices * length_u), stack / (this.stacks * length_v))
+                this.texCoords.push(i / (this.slices * length_u), 0)
+            }
+        }
+
 		this.updateTexCoordsGLBuffers();
 	}
 }

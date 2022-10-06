@@ -25,11 +25,9 @@ export class MyTorus extends CGFobject {
         const outerAlphaAng = 2 * Math.PI / this.loops;
 
         for (let loop = 0; loop <= this.loops; ++loop) {
-            const s = loop / this.loops;
             ang = 0
 
             for (let innerSlice = 0; innerSlice <= this.slices; ++innerSlice) {
-                const t = innerSlice / this.slices;
 
                 const x = (this.radius + this.innerRadius * Math.cos(outerAng)) * Math.cos(ang);
                 const y = (this.radius + this.innerRadius * Math.cos(outerAng)) * Math.sin(ang);
@@ -55,9 +53,6 @@ export class MyTorus extends CGFobject {
                 normal[2] /= nsize;
 
                 this.normals.push(...normal);
-
-                this.texCoords.push(t);
-                this.texCoords.push(s);
 
                 if (loop != this.loops && innerSlice != this.slices) {
                     this.indices.push(loop * (this.slices + 1) + innerSlice);
@@ -85,6 +80,13 @@ export class MyTorus extends CGFobject {
 	 * @param {Array} coords - Array of texture coordinates
 	 */
 	updateTexCoords(length_u, length_v) {
+
+        for (let loop = 0; loop <= this.loops; ++loop) {
+            for (let innerSlice = 0; innerSlice <= this.slices; ++innerSlice) {
+                this.texCoords.push(innerSlice / (this.slices * length_u), loop / (this.loops * length_v));
+            }
+        }
+
 		this.updateTexCoordsGLBuffers();
 	}
 }

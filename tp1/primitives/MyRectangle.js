@@ -50,22 +50,7 @@ export class MyRectangle extends CGFobject {
 				0, 0, -1
 			];
 
-					/*
-			Texture coords (s,t)
-			+----------> s
-			|
-			|
-			|
-			v
-			t
-			*/
 
-			this.texCoords = [
-				0, 1,
-				1, 1,
-				0, 0,
-				1, 0
-			]
 		} else {
 			this.vertices = [
 				this.x1, this.y1, 0,	//0
@@ -88,22 +73,6 @@ export class MyRectangle extends CGFobject {
 				0, 0, 1
 			];
 
-					/*
-			Texture coords (s,t)
-			+----------> s
-			|
-			|
-			|
-			v
-			t
-			*/
-
-			this.texCoords = [
-				0, 1,
-				1, 1,
-				0, 0,
-				1, 0
-			]
 		}
 
 		this.primitiveType = this.scene.gl.TRIANGLES;
@@ -115,7 +84,28 @@ export class MyRectangle extends CGFobject {
 	 * Updates the list of texture coordinates of the rectangle
 	 * @param {Array} coords - Array of texture coordinates
 	 */
-	updateTexCoords(length_u, length_v) {
+     updateTexCoords(length_u, length_v) {
+
+        if (this.doubleSided) {
+			this.texCoords = [
+				0, length_v,
+				length_u, length_v,
+				0, 0,
+				length_u, 0,
+				0, length_v,
+				length_u, length_v,
+				0, 0,
+				length_u, 0
+			]
+		} else {
+			this.texCoords = [
+				0, length_v,
+				length_u, length_v,
+				0, 0,
+				length_u, 0
+			]
+		}
+
 		this.updateTexCoordsGLBuffers();
 	}
 }
