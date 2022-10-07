@@ -30,6 +30,11 @@ export class MyInterface extends CGFinterface {
         return true;
     }
 
+    setCameraDropdown() {
+        console.log(this.scene.graph.views);
+        this.gui.add(this.scene.graph, 'defaultView', Object.keys(this.scene.graph.views)).name('Camera').onChange(this.scene.graph.updateCamera.bind(this.scene.graph));
+    }
+
     /**
      * initKeys
      */

@@ -1,10 +1,9 @@
-import { CGFappearance, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
+import { CGFappearance, CGFcamera, CGFcameraOrtho, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
 import { MyCylinder } from './primitives/MyCylinder.js';
 import { MyRectangle } from './primitives/MyRectangle.js';
 import { MySphere } from './primitives/MySphere.js';
 import { MyTorus } from './primitives/MyTorus.js';
 import { MyTriangle } from './primitives/MyTriangle.js';
-import { SceneCamera } from './sceneObjects/SceneCamera.js';
 import { SceneComponent } from './sceneObjects/SceneComponent.js';
 
 const DEGREE_TO_RAD = Math.PI / 180;
@@ -276,7 +275,7 @@ export class MySceneGraph {
 
             for (const position of positions) {
                 
-                const coords = this.parseCoordinates3D(position, position.nodeName + ' for view ' + attributes.id.value);
+                const coords = this.parseCoordinates3DVec(position, position.nodeName + ' for view ' + attributes.id.value);
 
                 if (position.nodeName === "from")
                     attributes.from = coords
@@ -296,13 +295,31 @@ export class MySceneGraph {
             if (view.nodeName === "perspective") {
                 if (attributes.angle == null)
                     return "perspective view " + attributes.id + " does not have necessary 'angle' attribute"
+                
+                this.views[attributes.id.value] = new CGFcamera(
+                     attributes.angle.value * DEGREE_TO_RAD,
+                     parseFloat(attributes.near.value),
+                     parseFloat(attributes.far.value),
+                     attributes.from,
+                     attributes.to);
+
             }
             else {
                 if (attributes.left == null || attributes.right == null || attributes.top == null || attributes.bottom == null)
                     return "ortho view " + attributes.id + " does not have necessary 'left', 'right', 'top' and 'bottom' attributes"
+
+                this.views[attributes.id.value] = new CGFcameraOrtho(
+                    parseFloat(attributes.left.value),
+                    parseFloat(attributes.right.value),
+                    parseFloat(attributes.bottom.value),
+                    parseFloat(attributes.top.value),
+                    parseFloat(attributes.near.value),
+                    parseFloat(attributes.far.value),
+                    attributes.from,
+                    attributes.to,
+                    attributes.up ? attributes.up : vec3.fromValues(0, 1, 0));
             }
             
-            this.views[attributes.id.value] = new SceneCamera(attributes, view.nodeName);
 
         }
 
@@ -310,6 +327,7 @@ export class MySceneGraph {
             return "at least one view must be defined";
         }
         
+        this.scene.interface.setCameraDropdown();
         return null;
     }
 
@@ -1037,6 +1055,32 @@ export class MySceneGraph {
         return position;
     }
 
+  /**
+     * Parse the coordinates from a node with ID = id
+     * @param {block element} node
+     * @param {message to be displayed in case of error} messageError
+     */
+   parseCoordinates3DVec(node, messageError) {
+    // x
+    const x = this.reader.getFloat(node, 'x');
+    if (!(x != null && !isNaN(x)))
+        return "unable to parse x-coordinate of the " + messageError;
+
+    // y
+    const y = this.reader.getFloat(node, 'y');
+    if (!(y != null && !isNaN(y)))
+        return "unable to parse y-coordinate of the " + messageError;
+
+    // z
+    const z = this.reader.getFloat(node, 'z');
+    if (!(z != null && !isNaN(z)))
+        return "unable to parse z-coordinate of the " + messageError;
+
+    const position = vec3.fromValues(x, y, z);
+
+    return position;
+}
+
     /**
      * Parse the coordinates from a node with ID = id
      * @param {block element} node
@@ -1142,6 +1186,18 @@ export class MySceneGraph {
         }
     }
 
+    updateCamera(cam) {
+        this.scene.camera = this.views[cam];
+
+        this.scene.updateProjectionMatrix();
+        this.scene.loadIdentity();
+
+        this.scene.applyViewMatrix();
+
+        this.scene.interface.setActiveCamera(this.scene.camera);
+    
+    }
+
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
@@ -1206,7 +1262,8 @@ export class MySceneGraph {
             
             this.scene.popMatrix();
         } else {
-            //this.primitives[id].updateTexCoords(length_u || 1, length_v || 1); scene gets really slow
+            // scene gets really slow when updating tex coords
+            // this.primitives[id].updateTexCoords(length_u || 1, length_v || 1);
             this.primitives[id].display();
         }
         
