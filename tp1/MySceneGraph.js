@@ -251,6 +251,8 @@ export class MySceneGraph {
         if (!this.defaultView)
             this.defaultView = views[0].attributes.id;
 
+        this.currentView = this.defaultView;
+
         for (const view of views) {
             if (view.nodeName !== "perspective" && view.nodeName !== "ortho") {
                 this.onXMLMinorError("unknown tag <" + view.nodeName + ">");
@@ -377,7 +379,7 @@ export class MySceneGraph {
 
         this.lights = {};
         let numLights = 0;
-
+        this.currentLight = children[0].attributes.id.value;
         // Any number of lights.
         for (const light of children) {
 
@@ -480,7 +482,6 @@ export class MySceneGraph {
         else if (numLights > 8)
             this.onXMLMinorError("too many lights defined; WebGL imposes a limit of 8 lights");
 
-        this.log("Parsed lights");
         return null;
     }
 
