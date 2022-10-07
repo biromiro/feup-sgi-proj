@@ -49,6 +49,8 @@ export class MySceneGraph {
         // File reading 
         this.reader = new CGFXMLreader();
 
+        this.changingMaterials = false;
+
         /*
          * Read the contents of the xml file, and refer to this class for loading and error handlers.
          * After the file is read, the reader calls onXMLReady on this object.
@@ -1128,12 +1130,30 @@ export class MySceneGraph {
         console.log("   " + message);
     }
 
+    changeMaterial() {
+        if (this.scene.gui.isKeyPressed("KeyM")) {
+            if (this.changingMaterials) return false;
+            else {
+                this.changingMaterials = true;
+                return true;
+            }
+        } else {
+            this.changingMaterials = false;
+        }
+    }
+
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
         //To do: Create display loop for transversing the scene graph
-        
+
+        if (this.changeMaterial()) {
+            for (const component of Object.values(this.components)) {
+                component.materialIndex = (component.materialIndex + 1) % component.materials.length;
+            }
+        }
+
         this.displayComponent(this.idRoot, {
             material: undefined,
             texture: undefined,
@@ -1154,7 +1174,8 @@ export class MySceneGraph {
             this.scene.multMatrix(component.transformation);
             
             if (component.materials.length > 0) {
-                const sceneMaterial = component.materials[0]; // to do: change material with M key
+
+                const sceneMaterial = component.materials[component.materialIndex];
                 if (sceneMaterial != "inherit") {
                     material = this.materials[sceneMaterial];
                 }
@@ -1185,7 +1206,7 @@ export class MySceneGraph {
             
             this.scene.popMatrix();
         } else {
-            this.primitives[id].updateTexCoords(length_u || 1, length_v || 1);
+            //this.primitives[id].updateTexCoords(length_u || 1, length_v || 1); scene gets really slow
             this.primitives[id].display();
         }
         

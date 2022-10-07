@@ -13,5 +13,6 @@ export class SceneComponent {
         this.length_v = texture?.length_v;
         this.children = children;
         this.isNode = true;
+        this.materialIndex = 0;
     }
 }
