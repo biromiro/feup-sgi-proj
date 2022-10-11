@@ -42,39 +42,39 @@ export class XMLscene extends CGFscene {
      * Initializes the scene lights with the values read from the XML file.
      */
     initLights() {
-        var i = 0;
+        let i = 0;
         // Lights index.
 
         // Reads the lights from the scene graph.
-        for (var key in this.graph.lights) {
+        for (let key in this.graph.lights) {
             if (i >= 8)
                 break;              // Only eight lights allowed by WebGL.
 
-            if (this.graph.lights.hasOwnProperty(key)) {
-                var light = this.graph.lights[key];
+            let light = this.graph.lights[key];
 
-                this.lights[i].setPosition(light[2][0], light[2][1], light[2][2], light[2][3]);
-                this.lights[i].setAmbient(light[3][0], light[3][1], light[3][2], light[3][3]);
-                this.lights[i].setDiffuse(light[4][0], light[4][1], light[4][2], light[4][3]);
-                this.lights[i].setSpecular(light[5][0], light[5][1], light[5][2], light[5][3]);
+            this.lights[i].setPosition(...light.typeInfo.location);
+            this.lights[i].setAmbient(...light.typeInfo.ambient);
+            this.lights[i].setDiffuse(...light.typeInfo.diffuse);
+            this.lights[i].setSpecular(...light.typeInfo.specular);
 
-                if (light[1] == "spot") {
-                    this.lights[i].setSpotCutOff(light[6]);
-                    this.lights[i].setSpotExponent(light[7]);
-                    this.lights[i].setSpotDirection(light[8][0], light[8][1], light[8][2]);
-                }
-
-                this.lights[i].setVisible(true);
-                if (light[0])
-                    this.lights[i].enable();
-                else
-                    this.lights[i].disable();
-
-                this.lights[i].update();
-
-                i++;
+            if (light.type == "spot") {
+                this.lights[i].setSpotCutOff(light.typeInfo.angle);
+                this.lights[i].setSpotExponent(light.typeInfo.exponent);
+                this.lights[i].setSpotDirection(...light.typeInfo.targetLight);
             }
+
+            this.lights[i].setVisible(true);
+            if (light.isEnabled){
+                this.lights[i].enable();
+            } else
+                this.lights[i].disable();
+
+            this.lights[i].update();
+            light.light = this.lights[i];
+            i++;
         }
+
+        this.interface.setLightCheckboxes();
     }
 
     setDefaultAppearance() {

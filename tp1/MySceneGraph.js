@@ -5,6 +5,7 @@ import { MySphere } from './primitives/MySphere.js';
 import { MyTorus } from './primitives/MyTorus.js';
 import { MyTriangle } from './primitives/MyTriangle.js';
 import { SceneComponent } from './sceneObjects/SceneComponent.js';
+import { SceneLight } from './sceneObjects/SceneLight.js';
 
 const DEGREE_TO_RAD = Math.PI / 180;
 
@@ -387,7 +388,7 @@ export class MySceneGraph {
         for (const light of children) {
 
             // Storing light information
-            const global = [];
+            const lightInfo = {}
             const attributeNames = [];
             const attributeTypes = [];
 
@@ -413,14 +414,13 @@ export class MySceneGraph {
             // Light enable/disable
             let enableLight = true;
             let aux = this.reader.getBoolean(light, 'enabled');
-            if (!(aux != null && !isNaN(aux) && (aux == true || aux == false)))
+            if (!(aux != null && !isNaN(aux) && (aux == true || aux == false))) {
                 this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
-
-            enableLight = aux || 1;
+                enableLight = 1;
+            } else enableLight = aux;
 
             //Add enabled boolean and type name to light info
-            global.push(enableLight);
-            global.push(light.nodeName);
+            //global.push(light.nodeName);
 
             const attributes = light.children;
             // Specifications for the current light.
@@ -443,7 +443,7 @@ export class MySceneGraph {
                     if (!Array.isArray(aux))
                         return aux;
 
-                    global.push(aux);
+                    lightInfo[attribute] = aux;
                 }
                 else
                     return "light " + attribute + " undefined for ID = " + lightId;
@@ -473,10 +473,12 @@ export class MySceneGraph {
                 else
                     return "light target undefined for ID = " + lightId;
 
-                global.push(...[angle, exponent, targetLight])
+                lightInfo.angle = angle;
+                lightInfo.exponent = exponent;
+                lightInfo.targetLight = targetLight;
             }
 
-            this.lights[lightId] = global;
+            this.lights[lightId] = new SceneLight(lightId, light.nodeName, enableLight, lightInfo);
             numLights++;
         }
 

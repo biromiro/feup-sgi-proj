@@ -1,4 +1,5 @@
 import { CGFinterface, CGFapplication, dat } from '../lib/CGF.js';
+import { SceneLight } from './sceneObjects/SceneLight.js';
 
 /**
 * MyInterface class, creating a GUI interface.
@@ -32,6 +33,18 @@ export class MyInterface extends CGFinterface {
 
     setCameraDropdown() {
         this.gui.add(this.scene.graph, 'currentView', Object.keys(this.scene.graph.views)).name('Camera').onChange(this.scene.graph.updateCamera.bind(this.scene.graph));
+    }
+
+    setLightCheckboxes() {
+        
+        let f0 = this.gui.addFolder('Lights')
+        for (let lightID in this.scene.graph.lights) {
+
+            let light = this.scene.graph.lights[lightID];
+            f0.add(light, 'isEnabled').name(lightID).onChange(light.updateLight.bind(light));
+        }
+
+
     }
 
     /**
