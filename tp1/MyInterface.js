@@ -39,11 +39,9 @@ export class MyInterface extends CGFinterface {
         
         let f0 = this.gui.addFolder('Lights')
         for (let lightID in this.scene.graph.lights) {
-
             let light = this.scene.graph.lights[lightID];
             f0.add(light, 'isEnabled').name(lightID).onChange(light.updateLight.bind(light));
         }
-
 
     }
 

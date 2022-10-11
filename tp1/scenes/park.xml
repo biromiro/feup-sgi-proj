@@ -3,7 +3,7 @@
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
-            <from x="30" y="15" z="30" />
+            <from x="15" y="15" z="20" />
             <to x="0" y="-2" z="0" />
         </perspective>
          <ortho id="orthoCamera" near="0.1" far="500" left="-10" right="10" top="5" bottom="-5" >
@@ -414,6 +414,99 @@
                 <componentref id="leftMidSideCube" />
             </children>
         </component>
+               <component id="rightSideCubeInwards">
+            <transformation>
+                <rotate axis="y" angle="90" />
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="baseSquarePrim" />
+            </children>
+        </component>
+        <component id="leftSideCubeInwards">
+            <transformation>
+                <rotate axis="y" angle="270" />
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="baseSquarePrim" />
+            </children>
+        </component>
+        <component id="upSideCubeInwards">
+            <transformation>
+                <rotate axis="x" angle="90" />
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="baseSquarePrim" />
+            </children>
+        </component>
+        <component id="backSideCubeInwards">
+            <transformation>
+                <rotate axis="x" angle="270" />
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="baseSquarePrim" />
+            </children>
+        </component>
+        <component id="rightMidSideCubeInwards">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="baseSquarePrim" />
+            </children>
+        </component>
+        <component id="leftMidSideCubeInwards">
+            <transformation>
+                <rotate axis="y" angle="180" />
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="baseSquarePrim" />
+            </children>
+        </component>
+        <component id="cubeInwards">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="rightSideCubeInwards" />
+                <componentref id="leftSideCubeInwards" />
+                <componentref id="upSideCubeInwards" />
+                <componentref id="backSideCubeInwards" />
+                <componentref id="rightMidSideCubeInwards" />
+                <componentref id="leftMidSideCubeInwards" />
+            </children>
+        </component>
         <component id="upAndDownBar">
             <transformation>
                 <scale x="4" y="0.2" z="0.5" />
@@ -778,6 +871,18 @@
                 <componentref id="swingFunRight" />
             </children>
         </component>
+        <component id="cubeMap">
+            <transformation>
+                <scale x="10" y="10" z="10" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="cubeInwards" />
+            </children>
+        </component>
         <component id="park">
             <transformation>
             </transformation>
@@ -789,6 +894,7 @@
                 <componentref id="sandbox" />
                 <componentref id="upAndDown" />
                 <componentref id="swing" />
+                <componentref id="cubeMap" />
             </children>
         </component>
     </components>
