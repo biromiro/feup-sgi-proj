@@ -329,7 +329,10 @@ export class MySceneGraph {
             return "at least one view must be defined";
         }
         
+        this.updateCamera(this.defaultView);
         this.scene.interface.setCameraDropdown();
+
+
         return null;
     }
 
@@ -1264,7 +1267,7 @@ export class MySceneGraph {
             this.scene.popMatrix();
         } else {
             // scene gets really slow when updating tex coords
-            // this.primitives[id].updateTexCoords(length_u || 1, length_v || 1);
+            this.primitives[id].updateTexCoords(length_u || 1, length_v || 1);
             this.primitives[id].display();
         }
         

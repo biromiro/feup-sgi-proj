@@ -27,8 +27,6 @@ export class XMLscene extends CGFscene {
 
         this.sceneInited = false;
 
-        this.initCameras();
-
         this.enableTextures(true);
 
         this.gl.clearDepth(100.0);
@@ -40,13 +38,6 @@ export class XMLscene extends CGFscene {
         this.setUpdatePeriod(100);
     }
 
-    /**
-     * Initializes the scene cameras.
-     */
-    initCameras() {
-      
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
-    }
     /**
      * Initializes the scene lights with the values read from the XML file.
      */
@@ -118,12 +109,14 @@ export class XMLscene extends CGFscene {
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
         // Initialize Model-View matrix as identity (no transformation
-        this.updateProjectionMatrix();
-        this.loadIdentity();
-
-        // Apply transformations corresponding to the camera position relative to the origin
-        this.applyViewMatrix();
-
+        if (this.camera) {
+            this.updateProjectionMatrix();
+            this.loadIdentity();
+    
+            // Apply transformations corresponding to the camera position relative to the origin
+            this.applyViewMatrix();    
+        }
+       
         this.pushMatrix();
         //this.axis.display();
 

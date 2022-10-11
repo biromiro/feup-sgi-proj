@@ -60,7 +60,10 @@ export class MyCylinder extends CGFobject {
 
                 this.indices.push(0 + 2 * i + lowerStackBound, 1 + 2 * i + lowerStackBound, 2 + 2 * i + lowerStackBound)
                 this.indices.push(1 + 2 * i + lowerStackBound, 3 + 2 * i + lowerStackBound, 2 + 2 * i + lowerStackBound)
-    
+                    
+                this.texCoords.push(i / this.slices, stack / this.stacks)
+                this.texCoords.push(i / this.slices, 0)
+
                 ang += alphaAng;
 
             }
@@ -93,13 +96,6 @@ export class MyCylinder extends CGFobject {
 	 * @param {Array} coords - Array of texture coordinates
 	 */
      updateTexCoords(length_u, length_v) {
-        for (var stack = 0; stack < this.stacks; stack++) {
-            for (var i = 0; i < this.slices; i++) {
-                this.texCoords.push(i / (this.slices * length_u), stack / (this.stacks * length_v))
-                this.texCoords.push(i / (this.slices * length_u), 0)
-            }
-        }
-
-		this.updateTexCoordsGLBuffers();
+        return
 	}
 }
