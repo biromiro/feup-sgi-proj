@@ -75,11 +75,16 @@ export class MyTriangle extends CGFobject {
         t
         */
 
-        const a = Math.sqrt(Math.pow(this.x2 - this.x1, 2) + Math.pow(this.y2 - this.y1, 2) + Math.pow(this.z2 - this.z1, 2))
-        const b = Math.sqrt(Math.pow(this.x3 - this.x2, 2) + Math.pow(this.y3 - this.y2, 2) + Math.pow(this.z3 - this.z2, 2))
-        const c = Math.sqrt(Math.pow(this.x3 - this.x1, 2) + Math.pow(this.y3 - this.y1, 2) + Math.pow(this.z3 - this.z1, 2))
+        this.a = Math.sqrt(Math.pow(this.x2 - this.x1, 2) + Math.pow(this.y2 - this.y1, 2) + Math.pow(this.z2 - this.z1, 2))
+        this.b = Math.sqrt(Math.pow(this.x3 - this.x2, 2) + Math.pow(this.y3 - this.y2, 2) + Math.pow(this.z3 - this.z2, 2))
+        this.c = Math.sqrt(Math.pow(this.x3 - this.x1, 2) + Math.pow(this.y3 - this.y1, 2) + Math.pow(this.z3 - this.z1, 2))
+
+
+        this.cosalpha = (Math.pow(this.a,2) - Math.pow(this.b, 2) + Math.pow(this.c, 2)) / (2 * this.a * this.c);
+        this.sinalpha = Math.sqrt(1 - Math.pow(this.cosalpha, 2));
 
         
+
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
@@ -91,16 +96,14 @@ export class MyTriangle extends CGFobject {
 	 * @param {Array} coords - Array of texture coordinates
 	 */
 	updateTexCoords(length_u, length_v) {
-		const cosalpha = (Math.pow(a,2) - Math.pow(b, 2) + Math.pow(c, 2)) / (2 * a * c);
-        const sinalpha = Math.sqrt(1 - Math.pow(cosalpha, 2));
 
 		this.texCoords = [
 			0, 0,
-			a / length_u, 0,
-            c * cosalpha / length_u, c * sinalpha / length_v,
+			this.a / length_u, 0,
+            this.c * this.cosalpha / length_u, this.c * this.sinalpha / length_v,
             0, 0,
-            a / length_u, 0,
-            c * cosalpha / length_u, c * sinalpha / length_v
+            this.a / length_u, 0,
+            this.c * this.cosalpha / length_u, this.c * this.sinalpha / length_v
 		]
 		this.updateTexCoordsGLBuffers();
 	}

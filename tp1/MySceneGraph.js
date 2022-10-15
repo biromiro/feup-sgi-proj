@@ -1256,7 +1256,6 @@ export class MySceneGraph {
 
             length_u = component.length_u;
             length_v = component.length_v;
-
             for (const child of component.children){
                 this.displayComponent(child, {
                     material : material,
