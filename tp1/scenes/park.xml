@@ -7,9 +7,9 @@
             <to x="0" y="-2" z="0" />
         </perspective>
          <ortho id="orthoCamera" near="0.1" far="500" left="-10" right="10" top="5" bottom="-5" >
-            <from x="10" y="10" z="10" />
+            <from x="10" y="4" z="10" />
             <to x="0" y="0" z="0" />
-            <up x="0" y="1" z="0" /> <!-- opcional, default 0,1,0 -->
+            <up x="0" y="1" z="0" />
         </ortho>
     </views>
 
@@ -40,6 +40,7 @@
         <texture id="sandtex" file="scenes/images/sandtex.jpg" />
         <texture id="wood" file="scenes/images/wood.jpg" />
         <texture id="metal" file="scenes/images/metal.jpg" />
+        <texture id="dirt" file="scenes/images/dirt.png" />
         <texture id="dayCubeMapnx" file="scenes/images/cubemap/nx.png" />
         <texture id="dayCubeMapny" file="scenes/images/cubemap/ny.png" />
         <texture id="dayCubeMapnz" file="scenes/images/cubemap/nz.png" />
@@ -71,12 +72,6 @@
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
-        </material>
-        <material id="sandMaterial" shininess="10">
-            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="1.0" g="0.9" b="0.8" a="1.0" />
-            <diffuse r="1.0" g="0.9" b="0.8" a="1.0" />
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
         <material id="swingBarMaterial" shininess="100">
@@ -131,6 +126,12 @@
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.325" g="0.208" b="0.039" a="1.0" />
             <diffuse r="0.325" g="0.208" b="0.039" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
+        <material id="sandMaterial" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.35" g="0.24" b="0.15" a="1.0" />
+            <diffuse r="0.35" g="0.24" b="0.15" a="1.0" />
             <specular r="0" g="0" b="0" a="1.0" />
         </material>
     </materials>
@@ -478,182 +479,6 @@
     </primitives>
 
     <components>
-        <component id="baseSandBox">
-            <transformation>
-                <translate x="0" y="0.2" z="0" />
-                <rotate axis="x" angle="270" />
-            </transformation>
-            <materials>
-                <material id="sandMaterial" />
-            </materials>
-            <texture id="sandtex" />
-            <children>
-                <primitiveref id="baseSquarePrim" />
-            </children>
-        </component>
-        <component id="baseSide">
-            <transformation>
-                <rotate axis="z" angle="90" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit" />
-            <children>
-                <primitiveref id="sideRectanglePrim" />
-            </children>
-        </component>
-        <component id="baseSideLeft">
-            <transformation>
-                <rotate axis="y" angle="90" />
-                <translate x="0" y="0" z="-1" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit" />
-            <children>
-                <componentref id="baseSide" />
-            </children>
-        </component>
-        <component id="baseSideRight">
-            <transformation>
-                <rotate axis="y" angle="90" />
-                <translate x="0" y="0" z="1" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit" />
-            <children>
-                <componentref id="baseSide" />
-            </children>
-        </component>
-        <component id="baseSideBack">
-            <transformation>
-                <translate x="0" y="0" z="-1" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit" />
-            <children>
-                <componentref id="baseSide" />
-            </children>
-        </component>
-        <component id="baseSideTop">
-            <transformation>
-                <translate x="0" y="0" z="1" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit" />
-            <children>
-                <componentref id="baseSide" />
-            </children>
-        </component>
-        <component id="sandbox">
-            <transformation>
-                <translate x="0" y="-2" z="0" />
-                <scale x="5" y="5" z="5" />
-            </transformation>
-            <materials>
-                <material id="boxMaterial" />
-            </materials>
-            <texture id="wood" />
-            <children>
-                <componentref id="baseSideLeft" />
-                <componentref id="baseSideRight" />
-                <componentref id="baseSideTop" />
-                <componentref id="baseSideBack" />
-                <componentref id="baseSandBox" />
-            </children>
-        </component>
-        <component id="connectionCylinder">
-            <transformation>
-                <scale x="0.25" y="0.25" z="3" />
-                <translate x="0" y="5" z="-0.5" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="none" />
-            <children>
-                <primitiveref id="baseCylinderPrim" />
-            </children>
-        </component>
-        <component id="leftSupportCone">
-            <transformation>
-                <scale x="0.25" y="1.5" z="0.25" />
-                <translate x="0" y="0" z="5" />
-                <rotate axis="x" angle="-90" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="none" />
-            <children>
-                <primitiveref id="baseConePrim" />
-            </children>
-        </component>
-        <component id="rightSupportCone">
-            <transformation>
-                <scale x="0.25" y="1.5" z="0.25" />
-                <translate x="0" y="0" z="-5" />
-                <rotate axis="x" angle="-90" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="none" />
-            <children>
-                <primitiveref id="baseConePrim" />
-            </children>
-        </component>
-        <component id="connectionCoverSphereLeft">
-            <transformation>
-                <scale x="0.3" y="0.3" z="0.25" />
-                <translate x="0" y="4.2" z="5.5" />
-                <rotate axis="x" angle="-90" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="none" />
-            <children>
-                <primitiveref id="baseSpherePrim" />
-            </children>
-        </component>
-        <component id="connectionCoverSphereRight">
-            <transformation>
-                <scale x="0.3" y="0.3" z="0.25" />
-                <translate x="0" y="4.2" z="-5.5" />
-                <rotate axis="x" angle="-90" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="none" />
-            <children>
-                <primitiveref id="baseSpherePrim" />
-            </children>
-        </component>
-        <component id="upAndDownBase">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="upAndDownBaseMaterial" />
-            </materials>
-            <texture id="none" />
-            <children>
-                <componentref id="rightSupportCone" />
-                <componentref id="leftSupportCone" />
-                <componentref id="connectionCylinder" />
-                <componentref id="connectionCoverSphereRight" />
-                <componentref id="connectionCoverSphereLeft" />
-            </children>
-        </component>
         <component id="rightSideCube">
             <transformation>
                 <rotate axis="y" angle="90" />
@@ -747,7 +572,104 @@
                 <componentref id="leftMidSideCube" />
             </children>
         </component>
-               <component id="rightSideCubeInwards">
+        <component id="platform">
+            <transformation>
+                <translate x="0" y="-1.5" z="0" />
+                <scale x="7" y="0.5" z="7" />
+            </transformation>
+            <materials>
+                <material id="whiteMaterial" />
+            </materials>
+            <texture id="dirt" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="connectionCylinder">
+            <transformation>
+                <scale x="0.25" y="0.25" z="3" />
+                <translate x="0" y="5" z="-0.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="baseCylinderPrim" />
+            </children>
+        </component>
+        <component id="leftSupportCone">
+            <transformation>
+                <scale x="0.25" y="1.5" z="0.25" />
+                <translate x="0" y="0" z="5" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="baseConePrim" />
+            </children>
+        </component>
+        <component id="rightSupportCone">
+            <transformation>
+                <scale x="0.25" y="1.5" z="0.25" />
+                <translate x="0" y="0" z="-5" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="baseConePrim" />
+            </children>
+        </component>
+        <component id="connectionCoverSphereLeft">
+            <transformation>
+                <scale x="0.3" y="0.3" z="0.25" />
+                <translate x="0" y="4.2" z="5.5" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="baseSpherePrim" />
+            </children>
+        </component>
+        <component id="connectionCoverSphereRight">
+            <transformation>
+                <scale x="0.3" y="0.3" z="0.25" />
+                <translate x="0" y="4.2" z="-5.5" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="baseSpherePrim" />
+            </children>
+        </component>
+        <component id="upAndDownBase">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="upAndDownBaseMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="rightSupportCone" />
+                <componentref id="leftSupportCone" />
+                <componentref id="connectionCylinder" />
+                <componentref id="connectionCoverSphereRight" />
+                <componentref id="connectionCoverSphereLeft" />
+            </children>
+        </component>
+        <component id="rightSideCubeInwards">
             <transformation>
                 <rotate axis="y" angle="90" />
                 <translate x="0" y="0" z="-1" />
@@ -934,8 +856,8 @@
         <component id="upAndDown">
             <transformation>
                 <scale x="0.5" y="0.5" z="0.5" />
-                <translate x="4" y="-2.1" z="-4" />
-                <rotate axis="y" angle="-30" />
+                <translate x="-8" y="-2.1" z="-3" />
+                <rotate axis="y" angle="-60" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1192,7 +1114,7 @@
         </component>
         <component id="swing">
             <transformation>
-                <translate x="-3" y="-1" z="2" />
+                <translate x="-5" y="-1" z="3.5" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1539,7 +1461,7 @@
         </component>        
         <component id="tree1">
             <transformation>
-                <translate x="-2.5" y="-1.5" z="-3" />
+                <translate x="-3.5" y="-1.5" z="-6" />
                 <rotate axis="y" angle="90" />
             </transformation>
             <materials>
@@ -1552,7 +1474,7 @@
         </component>
         <component id="tree2">
             <transformation>
-                <translate x="-3.5" y="-1.5" z="-2" />
+                <translate x="-5" y="-1.5" z="-4.5" />
                 <rotate axis="y" angle="130" />
                 <scale x="0.4" y="0.5" z="0.4" />
             </transformation>
@@ -1566,7 +1488,7 @@
         </component>
         <component id="tree3">
             <transformation>
-                <translate x="2" y="-1.5" z="-3" />
+                <translate x="5" y="-1.5" z="-5" />
                 <rotate axis="y" angle="90" />
                 <scale x="0.7" y="0.6" z="0.4" />
             </transformation>
@@ -1759,7 +1681,7 @@
         </component>
         <component id="seat">
             <transformation>
-                <translate x="0" y="-0.5" z="0" />
+                <translate x="2" y="-0.5" z="-4" />
             </transformation>
             <materials>
                 <material id="trunkBrownMaterial" />
@@ -1771,6 +1693,540 @@
                 <componentref id="seatGroundBase" />
             </children>
         </component>
+        <component id="sand">
+            <transformation>
+                <translate x="2.5" y="-0.8" z="2.5" />
+                <scale x="3" y="1" z="3" />
+                <rotate axis="x" angle="270" />
+            </transformation>
+            <materials>
+                <material id="whiteMaterial" />
+            </materials>
+            <texture id="sandtex" />
+            <children>
+                <primitiveref id="baseSquarePrim" />
+            </children>
+        </component>
+        <component id="baseSupportCube">
+            <transformation>
+                <scale x="1" y="0.8" z="1" />
+            </transformation>
+            <materials>
+                <material id="whiteMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="baseUpperCube">
+            <transformation>
+                <translate x="0" y="1.1" z="0" />
+                <scale x="0.8" y="0.03" z="0.8" />
+            </transformation>
+            <materials>
+                <material id="trunkBrownMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="baseMidCube">
+            <transformation>
+                <translate x="0" y="0.9" z="0" />
+                <scale x="0.8" y="0.15" z="0.8" />
+            </transformation>
+            <materials>
+                <material id="swingRopeMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="support">
+            <transformation>
+                <scale x="0.3" y="0.3" z="0.3" />
+            </transformation>
+            <materials>
+                <material id="whiteMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="baseUpperCube" />
+                <componentref id="baseMidCube" />
+                <componentref id="baseSupportCube" />
+            </children>
+        </component>
+        <component id="supportBack">
+            <transformation>
+                <translate x="-0.5" y="0" z="-0.5" />
+            </transformation>
+            <materials>
+                <material id="trunkBrownMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="support" />
+            </children>
+        </component>
+        <component id="supportFront">
+            <transformation>
+                <translate x="5.5" y="0" z="5.5" />
+            </transformation>
+            <materials>
+                <material id="trunkBrownMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="support" />
+            </children>
+        </component>
+        <component id="supportLeft">
+            <transformation>
+                <translate x="-0.5" y="0" z="5.5" />
+            </transformation>
+            <materials>
+                <material id="trunkBrownMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="support" />
+            </children>
+        </component>
+        <component id="supportRight">
+            <transformation>
+                <translate x="5.5" y="0" z="-0.5" />
+            </transformation>
+            <materials>
+                <material id="trunkBrownMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="support" />
+            </children>
+        </component>
+        <component id="supports">
+            <transformation>
+                <translate x="0" y="-0.8" z="0" />
+            </transformation>
+            <materials>
+                <material id="trunkBrownMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="supportBack" />
+                <componentref id="supportFront" />
+                <componentref id="supportLeft" />
+                <componentref id="supportRight" />
+            </children>
+        </component>
+        <component id="connector">
+            <transformation>
+                <scale x="2.7" y="0.15" z="0.3" />
+            </transformation>
+            <materials>
+                <material id="trunkBrownMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="connectorBack">
+            <transformation>
+                <translate x="2.5" y="-0.8" z="-0.5" />
+            </transformation>
+            <materials>
+                <material id="trunkBrownMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="connector" />
+            </children>
+        </component>
+        <component id="connectorFront">
+            <transformation>
+                <translate x="2.5" y="-0.8" z="5.5" />
+            </transformation>
+            <materials>
+                <material id="trunkBrownMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="connector" />
+            </children>
+        </component>
+        <component id="connectorLeft">
+            <transformation>
+                <rotate axis="y" angle="90" />
+                <translate x="-2.5" y="-0.8" z="-0.5" />
+            </transformation>
+            <materials>
+                <material id="trunkBrownMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="connector" />
+            </children>
+        </component>
+        <component id="connectorRight">
+            <transformation>
+                <rotate axis="y" angle="90" />
+                <translate x="-2.5" y="-0.8" z="5.5" />
+            </transformation>
+            <materials>
+                <material id="trunkBrownMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="connector" />
+            </children>
+        </component>
+        <component id="connectors">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="trunkBrownMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="connectorBack" />
+                <componentref id="connectorFront" />
+                <componentref id="connectorLeft" />
+                <componentref id="connectorRight" />
+            </children>
+        </component>
+        <component id="sandbox">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="baseMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="sand" />
+                <componentref id="supports" />
+                <componentref id="connectors" />
+            </children>
+        </component>
+        <component id="slideRightSteelBase">
+            <transformation>
+                <translate x="0.45" y="0.1" z="0" />
+                <scale x="0.05" y="0.1" z="0.2" />
+                <rotate axis="x" angle="180" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="slideLeftSteelBase">
+            <transformation>
+                <translate x="-0.45" y="0.1" z="0" />
+                <scale x="0.05" y="0.1" z="0.2" />
+                <rotate axis="x" angle="180" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="slideMidSteelBase">
+            <transformation>
+                <scale x="0.5" y="0.03" z="0.2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="slideBase">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="slideMidSteelBase" />
+                <componentref id="slideLeftSteelBase" />
+                <componentref id="slideRightSteelBase" />
+            </children>
+        </component>
+        <component id="slidePlatform">
+            <transformation>
+                <translate x="0" y="1.15" z="-1.85" />
+                <rotate axis="x" angle="35" />
+                <scale x="1" y="1" z="10" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="slideBase" />
+            </children>
+        </component>
+        <component id="slideBaseUp">
+            <transformation>
+                <translate x="0" y="2.3" z="-4" />
+                <scale x="1" y="0.8" z="3.3" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="slideBase" />
+            </children>
+        </component>
+        <component id="slideBaseDown">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="slideBase" />
+            </children>
+        </component>
+        <component id="archBack">
+            <transformation>
+                <translate x="0" y="-0.2" z="0.48" />
+                <rotate axis="x" angle="-45" />
+                <rotate axis="z" angle="90" />
+                <scale x="0.3" y="0.05" z="0.05" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="archFront">
+            <transformation>
+                <translate x="0" y="-0.2" z="-0.48" />
+                <rotate axis="x" angle="45" />
+                <rotate axis="z" angle="90" />
+                <scale x="0.3" y="0.05" z="0.05" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="archMid">
+            <transformation>
+                <rotate axis="x" angle="90" />
+                <rotate axis="z" angle="90" />
+                <scale x="0.3" y="0.05" z="0.05" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="overarchingBar">
+            <transformation>
+                <translate x="0" y="1.7" z="0.67" /> 
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="archBack" />
+                <componentref id="archFront" />
+                <componentref id="archMid" />
+            </children>
+        </component>
+        <component id="bar">
+            <transformation>
+                <rotate axis="z" angle="90" />
+                <scale x="1.35" y="0.05" z="0.05" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="slideBar">
+            <transformation>
+                <translate x="0" y="1.1" z="-4.7" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="bar" />
+                <componentref id="overarchingBar" />
+            </children>
+        </component>
+        <component id="rightBar">
+            <transformation>
+                <translate x="0.45" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="slideBar" />
+            </children>
+        </component>
+        <component id="leftBar">
+            <transformation>
+                <translate x="-0.45" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="slideBar" />
+            </children>
+        </component>
+        <component id="stairBar">
+            <transformation>
+                <scale x="0.5" y="0.03" z="0.05" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="stairBar1">
+            <transformation>
+                <translate x="0" y="2" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="stairBar" />
+            </children>
+        </component>
+        <component id="stairBar2">
+            <transformation>
+                <translate x="0" y="1.5" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="stairBar" />
+            </children>
+        </component>
+        <component id="stairBar3">
+            <transformation>
+                <translate x="0" y="1" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="stairBar" />
+            </children>
+        </component>
+        <component id="stairBar4">
+            <transformation>
+                <translate x="0" y="0.5" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="stairBar" />
+            </children>
+        </component>
+        <component id="stairBar5">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="stairBar" />
+            </children>
+        </component>
+        <component id="stairs">
+            <transformation>
+                <translate x="0" y="0" z="-4.7" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="stairBar1" />
+                <componentref id="stairBar2" />
+                <componentref id="stairBar3" />
+                <componentref id="stairBar4" />
+                <componentref id="stairBar5" />
+            </children>
+        </component>
+        <component id="slideStairs">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="upAndDownSeatMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="stairs" />
+                <componentref id="leftBar" />
+                <componentref id="rightBar" />
+            </children>
+        </component>
+        <component id="slide">
+            <transformation>
+                <rotate axis="y" angle="15" />
+                <scale x="0.7" y="0.7" z="0.7" />
+                <translate x="0" y="-1.3" z="-3.5" />
+            </transformation>
+            <materials>
+                <material id="swingBarMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="slideBaseDown" />
+                <componentref id="slidePlatform" />
+                <componentref id="slideBaseUp" />
+                <componentref id="slideStairs" />
+            </children>
+        </component>
         <component id="park">
             <transformation>
             </transformation>
@@ -1779,15 +2235,17 @@
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="sandbox" />
-                <!--<componentref id="seat" />
+                <componentref id="platform" />
+                <componentref id="seat" />
                 <componentref id="upAndDown" />
                 <componentref id="swing" />
                 <componentref id="cubeMap" />
                 <componentref id="tree1" />
                 <componentref id="tree2" />
                 <componentref id="tree3" />
-                <componentref id="rockBundle" />-->
+                <componentref id="sandbox" />
+                <componentref id="slide" />
+                <!--<componentref id="rockBundle" />-->
             </children>
         </component>
 
