@@ -16,13 +16,13 @@ def generateTreeBundlePoint():
     return (x, y, z)
 
 
-def genLeafTriangles(points):
+def genTriangles(points):
     """Generate the n nearest points to the origin"""
     return [tuple(point) for point in sp.ConvexHull(points).simplices]
 
 
-def generateTreeLeafBundle(numPoints):
-    """Generate a tree leaf bundle"""
+def generateBundle(numPoints, typeOfBundle):
+    """Generate a bundle"""
 
     points = []
 
@@ -31,22 +31,22 @@ def generateTreeLeafBundle(numPoints):
         if (point not in points):
             points.append(point)
 
-    leafTriangles = genLeafTriangles(points)
+    leafTriangles = genTriangles(points)
 
     for idx, trio in enumerate(leafTriangles):
         (x1, y1, z1) = points[trio[0]]
         (x2, y2, z2) = points[trio[1]]
         (x3, y3, z3) = points[trio[2]]
         print(
-            f"<primitive id=\"treeBundleTriangle{idx}\"> \n\t<triangle x1=\"{x1}\" y1=\"{y1}\" z1=\"{z1}\" x2=\"{x2}\" y2=\"{y2}\" z2=\"{z2}\" x3=\"{x3}\" y3=\"{y3}\" z3=\"{z3}\" /> \n</primitive>")
+            f"<primitive id=\"{typeOfBundle}Triangle{idx}\"> \n\t<triangle x1=\"{x1}\" y1=\"{y1}\" z1=\"{z1}\" x2=\"{x2}\" y2=\"{y2}\" z2=\"{z2}\" x3=\"{x3}\" y3=\"{y3}\" z3=\"{z3}\" /> \n</primitive>")
 
     print("\n\n\n")
-    print(f"<component id=\"treeLeafBundle\"> \n\t<transformation>\n\t</transformation>\n\t<materials>\n\t\t<material id=\"inherit\" />\n\t</materials>\n\t<texture id=\"none\" />\n\t<children>")
+    print(f"<component id=\"{typeOfBundle}\"> \n\t<transformation>\n\t</transformation>\n\t<materials>\n\t\t<material id=\"inherit\" />\n\t</materials>\n\t<texture id=\"none\" />\n\t<children>")
 
     for idx, _ in enumerate(leafTriangles):
-        print(f"\t\t<primitiveref id=\"treeBundleTriangle{idx}\" />")
+        print(f"\t\t<primitiveref id=\"{typeOfBundle}Triangle{idx}\" />")
 
     print("\t </children >\n </component >")
 
 
-generateTreeLeafBundle(int(sys.argv[1]))
+generateBundle(int(sys.argv[1]), sys.argv[2])

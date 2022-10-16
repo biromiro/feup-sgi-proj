@@ -373,6 +373,108 @@
         <primitive id="treeBundleTriangle65"> 
             <triangle x1="-0.7226143344389009" y1="0.6442240864739383" z1="-0.7262891721532562" x2="-0.8537357987926476" y2="0.7936176254041398" z2="0.5147419158130204" x3="-0.5437517318482914" y3="0.8657527346134261" z3="-0.30121104356504075" /> 
         </primitive>
+        <primitive id="rockBundleTriangle0"> 
+            <triangle x1="0.39543455550027645" y1="-0.3814687867217045" z1="-0.9671079270541325" x2="0.3312995436746192" y2="0.9597049230944641" z2="0.22438873780274268" x3="0.9298184408390054" y3="-0.3017821716204208" z3="0.2779954291009784" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle1"> 
+            <triangle x1="0.6668302925718668" y1="0.49387602463953484" z1="0.7893691219954294" x2="0.3312995436746192" y2="0.9597049230944641" z2="0.22438873780274268" x3="0.9298184408390054" y3="-0.3017821716204208" z3="0.2779954291009784" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle2"> 
+            <triangle x1="0.2281410089969609" y1="-0.9827080995291115" z1="-0.17833273698615815" x2="-0.02302964875153517" y2="-0.9812596973936544" z2="-0.24455195183546768" x3="0.39543455550027645" y3="-0.3814687867217045" z3="-0.9671079270541325" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle3"> 
+            <triangle x1="-0.7242202610188906" y1="-0.7928356892616027" z1="-0.1298546905599979" x2="-0.0102408733797723" y2="0.3150658616178524" z2="0.9857251731902182" x3="-0.9949094920519077" y3="-0.03406757187345186" z3="-0.11404534794900302" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle4"> 
+            <triangle x1="-0.7242202610188906" y1="-0.7928356892616027" z1="-0.1298546905599979" x2="-0.9618765208136932" y2="0.3573848074316279" z2="-0.4989875655704244" x3="-0.9949094920519077" y3="-0.03406757187345186" z3="-0.11404534794900302" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle5"> 
+            <triangle x1="-0.5184957473523077" y1="-0.14413581700190564" z1="-0.932130175919767" x2="0.39543455550027645" y2="-0.3814687867217045" z2="-0.9671079270541325" x3="0.3312995436746192" y3="0.9597049230944641" z3="0.22438873780274268" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle6"> 
+            <triangle x1="-0.5184957473523077" y1="-0.14413581700190564" z1="-0.932130175919767" x2="-0.9618765208136932" y2="0.3573848074316279" z2="-0.4989875655704244" x3="0.3312995436746192" y3="0.9597049230944641" z3="0.22438873780274268" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle7"> 
+            <triangle x1="-0.5184957473523077" y1="-0.14413581700190564" z1="-0.932130175919767" x2="-0.7242202610188906" y2="-0.7928356892616027" z2="-0.1298546905599979" x3="-0.9618765208136932" y3="0.3573848074316279" z3="-0.4989875655704244" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle8"> 
+            <triangle x1="-0.5184957473523077" y1="-0.14413581700190564" z1="-0.932130175919767" x2="-0.02302964875153517" y2="-0.9812596973936544" z2="-0.24455195183546768" x3="0.39543455550027645" y3="-0.3814687867217045" z3="-0.9671079270541325" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle9"> 
+            <triangle x1="-0.5184957473523077" y1="-0.14413581700190564" z1="-0.932130175919767" x2="-0.7242202610188906" y2="-0.7928356892616027" z2="-0.1298546905599979" x3="-0.02302964875153517" y3="-0.9812596973936544" z3="-0.24455195183546768" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle10"> 
+            <triangle x1="-0.0753341967433918" y1="0.9492762000482766" z1="0.5513572353369008" x2="0.6668302925718668" y2="0.49387602463953484" z2="0.7893691219954294" x3="0.3312995436746192" y3="0.9597049230944641" z3="0.22438873780274268" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle11"> 
+            <triangle x1="-0.0753341967433918" y1="0.9492762000482766" z1="0.5513572353369008" x2="-0.0102408733797723" y2="0.3150658616178524" z2="0.9857251731902182" x3="-0.9949094920519077" y3="-0.03406757187345186" z3="-0.11404534794900302" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle12"> 
+            <triangle x1="0.8587752272177585" y1="-0.3795210824493934" z1="0.13288424554208997" x2="0.39543455550027645" y2="-0.3814687867217045" z2="-0.9671079270541325" x3="0.9298184408390054" y3="-0.3017821716204208" z3="0.2779954291009784" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle13"> 
+            <triangle x1="0.8587752272177585" y1="-0.3795210824493934" z1="0.13288424554208997" x2="0.2281410089969609" y2="-0.9827080995291115" z2="-0.17833273698615815" x3="0.39543455550027645" y3="-0.3814687867217045" z3="-0.9671079270541325" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle14"> 
+            <triangle x1="0.1643216614414033" y1="-0.07841499613690374" z1="0.9942547844972351" x2="-0.7242202610188906" y2="-0.7928356892616027" z2="-0.1298546905599979" x3="-0.0102408733797723" y3="0.3150658616178524" z3="0.9857251731902182" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle15"> 
+            <triangle x1="0.37416991763943025" y1="-0.8441400845593291" z1="0.6351311396101842" x2="0.2281410089969609" y2="-0.9827080995291115" z2="-0.17833273698615815" x3="-0.02302964875153517" y3="-0.9812596973936544" z3="-0.24455195183546768" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle16"> 
+            <triangle x1="0.37416991763943025" y1="-0.8441400845593291" z1="0.6351311396101842" x2="0.8587752272177585" y2="-0.3795210824493934" z2="0.13288424554208997" x3="0.9298184408390054" y3="-0.3017821716204208" z3="0.2779954291009784" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle17"> 
+            <triangle x1="0.37416991763943025" y1="-0.8441400845593291" z1="0.6351311396101842" x2="0.8587752272177585" y2="-0.3795210824493934" z2="0.13288424554208997" x3="0.2281410089969609" y3="-0.9827080995291115" z3="-0.17833273698615815" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle18"> 
+            <triangle x1="0.37416991763943025" y1="-0.8441400845593291" z1="0.6351311396101842" x2="0.6668302925718668" y2="0.49387602463953484" z2="0.7893691219954294" x3="0.9298184408390054" y3="-0.3017821716204208" z3="0.2779954291009784" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle19"> 
+            <triangle x1="0.37416991763943025" y1="-0.8441400845593291" z1="0.6351311396101842" x2="0.1643216614414033" y2="-0.07841499613690374" z2="0.9942547844972351" x3="0.6668302925718668" y3="0.49387602463953484" z3="0.7893691219954294" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle20"> 
+            <triangle x1="-0.6528124974284536" y1="0.6934510920128026" z1="-0.11143910404276172" x2="-0.9618765208136932" y2="0.3573848074316279" z2="-0.4989875655704244" x3="0.3312995436746192" y3="0.9597049230944641" z3="0.22438873780274268" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle21"> 
+            <triangle x1="-0.6528124974284536" y1="0.6934510920128026" z1="-0.11143910404276172" x2="-0.0753341967433918" y2="0.9492762000482766" z2="0.5513572353369008" x3="0.3312995436746192" y3="0.9597049230944641" z3="0.22438873780274268" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle22"> 
+            <triangle x1="-0.6528124974284536" y1="0.6934510920128026" z1="-0.11143910404276172" x2="-0.9618765208136932" y2="0.3573848074316279" z2="-0.4989875655704244" x3="-0.9949094920519077" y3="-0.03406757187345186" z3="-0.11404534794900302" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle23"> 
+            <triangle x1="-0.6528124974284536" y1="0.6934510920128026" z1="-0.11143910404276172" x2="-0.0753341967433918" y2="0.9492762000482766" z2="0.5513572353369008" x3="-0.9949094920519077" y3="-0.03406757187345186" z3="-0.11404534794900302" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle24"> 
+            <triangle x1="0.274612999063487" y1="0.4348924112160729" z1="0.9612327712569553" x2="-0.0753341967433918" y2="0.9492762000482766" z2="0.5513572353369008" x3="0.6668302925718668" y3="0.49387602463953484" z3="0.7893691219954294" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle25"> 
+            <triangle x1="0.274612999063487" y1="0.4348924112160729" z1="0.9612327712569553" x2="0.1643216614414033" y2="-0.07841499613690374" z2="0.9942547844972351" x3="-0.0102408733797723" y3="0.3150658616178524" z3="0.9857251731902182" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle26"> 
+            <triangle x1="0.274612999063487" y1="0.4348924112160729" z1="0.9612327712569553" x2="0.1643216614414033" y2="-0.07841499613690374" z2="0.9942547844972351" x3="0.6668302925718668" y3="0.49387602463953484" z3="0.7893691219954294" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle27"> 
+            <triangle x1="-0.46206306569715266" y1="-0.89234444268671" z1="0.04460008197563072" x2="-0.7242202610188906" y2="-0.7928356892616027" z2="-0.1298546905599979" x3="-0.02302964875153517" y3="-0.9812596973936544" z3="-0.24455195183546768" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle28"> 
+            <triangle x1="-0.46206306569715266" y1="-0.89234444268671" z1="0.04460008197563072" x2="0.37416991763943025" y2="-0.8441400845593291" z2="0.6351311396101842" x3="-0.02302964875153517" y3="-0.9812596973936544" z3="-0.24455195183546768" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle29"> 
+            <triangle x1="-0.46206306569715266" y1="-0.89234444268671" z1="0.04460008197563072" x2="0.1643216614414033" y2="-0.07841499613690374" z2="0.9942547844972351" x3="-0.7242202610188906" y3="-0.7928356892616027" z3="-0.1298546905599979" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle30"> 
+            <triangle x1="-0.46206306569715266" y1="-0.89234444268671" z1="0.04460008197563072" x2="0.37416991763943025" y2="-0.8441400845593291" z2="0.6351311396101842" x3="0.1643216614414033" y3="-0.07841499613690374" z3="0.9942547844972351" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle31"> 
+            <triangle x1="0.1727061517771314" y1="0.5308977199257389" z1="0.8880573068174024" x2="-0.0753341967433918" y2="0.9492762000482766" z2="0.5513572353369008" x3="-0.0102408733797723" y3="0.3150658616178524" z3="0.9857251731902182" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle32"> 
+            <triangle x1="0.1727061517771314" y1="0.5308977199257389" z1="0.8880573068174024" x2="0.274612999063487" y2="0.4348924112160729" z2="0.9612327712569553" x3="-0.0102408733797723" y3="0.3150658616178524" z3="0.9857251731902182" /> 
+        </primitive>
+        <primitive id="rockBundleTriangle33"> 
+            <triangle x1="0.1727061517771314" y1="0.5308977199257389" z1="0.8880573068174024" x2="0.274612999063487" y2="0.4348924112160729" z2="0.9612327712569553" x3="-0.0753341967433918" y3="0.9492762000482766" z3="0.5513572353369008" /> 
+        </primitive>
     </primitives>
 
     <components>
@@ -1115,6 +1217,51 @@
                 <componentref id="cubeInwards" />
             </children>
         </component>
+        <component id="rockBundle"> 
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="rockBundleTriangle0" />
+                <primitiveref id="rockBundleTriangle1" />
+                <primitiveref id="rockBundleTriangle2" />
+                <primitiveref id="rockBundleTriangle3" />
+                <primitiveref id="rockBundleTriangle4" />
+                <primitiveref id="rockBundleTriangle5" />
+                <primitiveref id="rockBundleTriangle6" />
+                <primitiveref id="rockBundleTriangle7" />
+                <primitiveref id="rockBundleTriangle8" />
+                <primitiveref id="rockBundleTriangle9" />
+                <primitiveref id="rockBundleTriangle10" />
+                <primitiveref id="rockBundleTriangle11" />
+                <primitiveref id="rockBundleTriangle12" />
+                <primitiveref id="rockBundleTriangle13" />
+                <primitiveref id="rockBundleTriangle14" />
+                <primitiveref id="rockBundleTriangle15" />
+                <primitiveref id="rockBundleTriangle16" />
+                <primitiveref id="rockBundleTriangle17" />
+                <primitiveref id="rockBundleTriangle18" />
+                <primitiveref id="rockBundleTriangle19" />
+                <primitiveref id="rockBundleTriangle20" />
+                <primitiveref id="rockBundleTriangle21" />
+                <primitiveref id="rockBundleTriangle22" />
+                <primitiveref id="rockBundleTriangle23" />
+                <primitiveref id="rockBundleTriangle24" />
+                <primitiveref id="rockBundleTriangle25" />
+                <primitiveref id="rockBundleTriangle26" />
+                <primitiveref id="rockBundleTriangle27" />
+                <primitiveref id="rockBundleTriangle28" />
+                <primitiveref id="rockBundleTriangle29" />
+                <primitiveref id="rockBundleTriangle30" />
+                <primitiveref id="rockBundleTriangle31" />
+                <primitiveref id="rockBundleTriangle32" />
+                <primitiveref id="rockBundleTriangle33" />
+            </children >
+        </component >
+
         <component id="treeLeafBundle"> 
             <transformation>
             </transformation>
@@ -1376,7 +1523,7 @@
                 <componentref id="treeRightBranch" />
             </children>
         </component>
-        <component id="treeTrunk">
+        <component id="treeComp">
             <transformation>
             </transformation>
             <materials>
@@ -1390,9 +1537,9 @@
                 <componentref id="treeTop" />
             </children>
         </component>        
-        <component id="tree">
+        <component id="tree1">
             <transformation>
-                <translate x="0" y="-1.5" z="0" />
+                <translate x="-2.5" y="-1.5" z="-3" />
                 <rotate axis="y" angle="90" />
             </transformation>
             <materials>
@@ -1400,7 +1547,228 @@
             </materials>
             <texture id="none" />
             <children>
-                <componentref id="treeTrunk" />
+                <componentref id="treeComp" />
+            </children>
+        </component>
+        <component id="tree2">
+            <transformation>
+                <translate x="-3.5" y="-1.5" z="-2" />
+                <rotate axis="y" angle="130" />
+                <scale x="0.4" y="0.5" z="0.4" />
+            </transformation>
+            <materials>
+                <material id="trunkBrownMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="treeComp" />
+            </children>
+        </component>
+        <component id="tree3">
+            <transformation>
+                <translate x="2" y="-1.5" z="-3" />
+                <rotate axis="y" angle="90" />
+                <scale x="0.7" y="0.6" z="0.4" />
+            </transformation>
+            <materials>
+                <material id="trunkBrownMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="treeComp" />
+            </children>
+        </component>
+        <component id="seatBackSupportWoodDown">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="seatBackSupportWoodUp">
+            <transformation>
+                <translate x="0" y="0" z="3" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="seatBackSupportWood">
+            <transformation>
+                <scale x="1" y="0.03" z="0.15" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="seatBackSupportWoodDown" />
+                <componentref id="seatBackSupportWoodUp" />                
+            </children>
+        </component>
+
+        <component id="seatBackSupportSteelLeft">
+            <transformation>
+                <translate x="-20" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="seatBackSupportSteelRight">
+            <transformation>
+                <translate x="20" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="cube" />             
+            </children>
+        </component>
+        <component id="seatBackSupportSteel">
+            <transformation>
+                <scale x="0.03" y="0.03" z="0.4" />
+                <translate x="0" y="-1.5" z="0.3" />
+            </transformation>
+            <materials>
+                <material id="swingRopeMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="seatBackSupportSteelLeft" />
+                <componentref id="seatBackSupportSteelRight" />        
+            </children>
+        </component>
+        <component id="seatBackSupport">
+            <transformation>
+                <translate x="0" y="0.2" z="-0.25" />
+                <rotate axis="y" angle="180" />
+                <rotate axis="x" angle="270" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="seatBackSupportWood" />
+                <componentref id="seatBackSupportSteel" />
+            </children>
+        </component>
+         <component id="seatBaseSupport">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="seatBackSupportWood" />
+                <componentref id="seatBackSupportSteel" />
+            </children>
+        </component>
+        <component id="legFrontBase">
+            <transformation>
+                <translate x="0" y="0" z="0.6" />
+                <rotate axis="x" angle="-35" />
+                <scale x="0.03" y="0.3" z="0.03" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="legBackBase">
+            <transformation>
+                <translate x="0" y="0" z="-0.4" />
+                <rotate axis="x" angle="35" />
+                <scale x="0.03" y="0.3" z="0.03" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="legPair">
+            <transformation>
+                <translate x="0" y="-0.3" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="legBackBase" />
+                <componentref id="legFrontBase" />
+            </children>
+        </component>
+        <component id="legPairLeft">
+            <transformation>
+                <translate x="-0.6" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="legPair" />
+            </children>
+        </component>
+        <component id="legPairRight">
+            <transformation>
+                <translate x="0.6" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="legPair" />
+            </children>
+        </component>
+         <component id="seatGroundBase">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="swingRopeMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="legPairRight" />
+                <componentref id="legPairLeft" />
+            </children>
+        </component>
+        <component id="seat">
+            <transformation>
+                <translate x="0" y="-0.5" z="0" />
+            </transformation>
+            <materials>
+                <material id="trunkBrownMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="seatBackSupport" />
+                <componentref id="seatBaseSupport" />
+                <componentref id="seatGroundBase" />
             </children>
         </component>
         <component id="park">
@@ -1412,10 +1780,14 @@
             <texture id="none"/>
             <children>
                 <componentref id="sandbox" />
-                <!--<componentref id="upAndDown" />
+                <!--<componentref id="seat" />
+                <componentref id="upAndDown" />
                 <componentref id="swing" />
-                <componentref id="cubeMap" />-->
-                <componentref id="tree" />
+                <componentref id="cubeMap" />
+                <componentref id="tree1" />
+                <componentref id="tree2" />
+                <componentref id="tree3" />
+                <componentref id="rockBundle" />-->
             </children>
         </component>
 
