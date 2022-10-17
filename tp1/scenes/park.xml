@@ -38,11 +38,18 @@
     </lights>
 
     <textures>
-        <texture id="baseTexture" file="scenes/images/vidral.jpg" />
         <texture id="sandtex" file="scenes/images/sandtex.jpg" />
-        <texture id="wood" file="scenes/images/wood.jpg" />
         <texture id="metal" file="scenes/images/metal.jpg" />
         <texture id="dirt" file="scenes/images/dirt.jpg" />
+        <texture id="bank" file="scenes/images/bank.jpg" />
+        <texture id="break" file="scenes/images/break.jpg" />
+        <texture id="chalkboard" file="scenes/images/chalkboard.jpg" />
+        <texture id="dots" file="scenes/images/dots.jpg" />
+        <texture id="paintwaves" file="scenes/images/paintwaves.jpg" />
+        <texture id="squares" file="scenes/images/squares.jpg" />
+        <texture id="waves" file="scenes/images/waves.jpg" />
+        <texture id="leaves" file="scenes/images/leaves.png" />
+        <texture id="wood" file="scenes/images/wood.jpg" />
         <texture id="dayCubeMapnx" file="scenes/images/cubemap/nx.png" />
         <texture id="dayCubeMapny" file="scenes/images/cubemap/ny.png" />
         <texture id="dayCubeMapnz" file="scenes/images/cubemap/nz.png" />
@@ -198,7 +205,10 @@
         <primitive id="sideRectanglePrim">
             <rectangle x1="-0.25" y1="-1" x2="0.25" y2="1" doubleSided="true"/>
         </primitive>
-        <primitive id="baseSquarePrim">
+        <primitive id="baseSquarePrimOutwards">
+            <rectangle x1="-1" y1="-1" x2="1" y2="1" />
+        </primitive>
+        <primitive id="baseSquarePrimInwards">
             <rectangle x1="-1" y1="-1" x2="1" y2="1" />
         </primitive>
         <primitive id="baseTrianglePrim">
@@ -539,7 +549,7 @@
             </materials>
             <texture id="inherit" />
             <children>
-                <primitiveref id="baseSquarePrim" />
+                <primitiveref id="baseSquarePrimOutwards" />
             </children>
         </component>
         <component id="leftSideCube">
@@ -552,7 +562,7 @@
             </materials>
             <texture id="inherit" />
             <children>
-                <primitiveref id="baseSquarePrim" />
+                <primitiveref id="baseSquarePrimOutwards" />
             </children>
         </component>
         <component id="upSideCube">
@@ -565,7 +575,7 @@
             </materials>
             <texture id="inherit" />
             <children>
-                <primitiveref id="baseSquarePrim" />
+                <primitiveref id="baseSquarePrimOutwards" />
             </children>
         </component>
         <component id="backSideCube">
@@ -578,7 +588,7 @@
             </materials>
             <texture id="inherit" />
             <children>
-                <primitiveref id="baseSquarePrim" />
+                <primitiveref id="baseSquarePrimOutwards" />
             </children>
         </component>
         <component id="rightMidSideCube">
@@ -590,7 +600,7 @@
             </materials>
             <texture id="inherit" />
             <children>
-                <primitiveref id="baseSquarePrim" />
+                <primitiveref id="baseSquarePrimOutwards" />
             </children>
         </component>
         <component id="leftMidSideCube">
@@ -603,7 +613,7 @@
             </materials>
             <texture id="inherit" />
             <children>
-                <primitiveref id="baseSquarePrim" />
+                <primitiveref id="baseSquarePrimOutwards" />
             </children>
         </component>
         <component id="cube">
@@ -632,7 +642,7 @@
                 <material id="platformMaterialSpring" />
                 <material id="platformMaterialWinter" />
             </materials>
-            <texture id="none" />
+            <texture id="break" />
             <children>
                 <componentref id="cube" />
             </children>
@@ -645,7 +655,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="baseCylinderPrim" />
             </children>
@@ -659,7 +669,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="baseConePrim" />
             </children>
@@ -673,7 +683,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="baseConePrim" />
             </children>
@@ -687,7 +697,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="baseSpherePrim" />
             </children>
@@ -701,7 +711,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="baseSpherePrim" />
             </children>
@@ -714,7 +724,7 @@
                 <material id="springRed" />
                 <material id="winterDarkBlue" />
             </materials>
-            <texture id="none" />
+            <texture id="bank" />
             <children>
                 <componentref id="rightSupportCone" />
                 <componentref id="leftSupportCone" />
@@ -731,9 +741,9 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="dayCubeMapnx" />
+            <texture id="none" />
             <children>
-                <primitiveref id="baseSquarePrim" />
+                <primitiveref id="baseSquarePrimInwards" />
             </children>
         </component>
         <component id="leftSideCubeInwards">
@@ -744,9 +754,9 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="dayCubeMappx" />
+            <texture id="none" />
             <children>
-                <primitiveref id="baseSquarePrim" />
+                <primitiveref id="baseSquarePrimInwards" />
             </children>
         </component>
         <component id="upSideCubeInwards">
@@ -757,9 +767,9 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="dayCubeMappy" />
+            <texture id="none" />
             <children>
-                <primitiveref id="baseSquarePrim" />
+                <primitiveref id="baseSquarePrimInwards" />
             </children>
         </component>
         <component id="backSideCubeInwards">
@@ -770,9 +780,9 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="dayCubeMapny" />
+            <texture id="none" />
             <children>
-                <primitiveref id="baseSquarePrim" />
+                <primitiveref id="baseSquarePrimInwards" />
             </children>
         </component>
         <component id="rightMidSideCubeInwards">
@@ -782,9 +792,9 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="dayCubeMappz" />
+            <texture id="none" />
             <children>
-                <primitiveref id="baseSquarePrim" />
+                <primitiveref id="baseSquarePrimInwards" />
             </children>
         </component>
         <component id="leftMidSideCubeInwards">
@@ -795,9 +805,9 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="dayCubeMapnz" />
+            <texture id="none" />
             <children>
-                <primitiveref id="baseSquarePrim" />
+                <primitiveref id="baseSquarePrimInwards" />
             </children>
         </component>
         <component id="cubeInwards">
@@ -842,7 +852,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="dots" />
             <children>
                 <primitiveref id="baseTorusPrim" />
             </children>
@@ -856,7 +866,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="dots" />
             <children>
                 <primitiveref id="baseTorusPrim" />
             </children>
@@ -1081,7 +1091,7 @@
                 <material id="springRed" />
                 <material id="winterDarkBlue" />
             </materials>
-            <texture id="none" />
+            <texture id="bank" />
             <children>
                 <componentref id="swingSupportLeft" />
                 <componentref id="swingSupportRight" />
@@ -1389,7 +1399,7 @@
                 <material id="springGreen" />
                 <material id="winterLightBlue" />
             </materials>
-            <texture id="none" />
+            <texture id="leaves" />
             <children>
                 <primitiveref id="treeBundleTriangle0" />
                 <primitiveref id="treeBundleTriangle1" />
@@ -1467,7 +1477,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="cutTrapezoidPyramid" />
             </children>
@@ -1481,7 +1491,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="cutTrapezoidCylindricShape" />
             </children>
@@ -1495,7 +1505,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="cutTrapezoidCylindricShape" />
             </children>
@@ -1507,7 +1517,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="lowPolyCylinder" />
             </children>
@@ -1533,7 +1543,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="cutTrapezoidPyramid" />
             </children>
@@ -1545,7 +1555,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="treeLeftBranchTrunk" />
                 <componentref id="treeLeftLeaves" />
@@ -1572,7 +1582,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="cutTrapezoidPyramid" />
             </children>
@@ -1584,7 +1594,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="treeRightBranchTrunk" />
                 <componentref id="treeRightLeaves" />
@@ -1611,7 +1621,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="cutTrapezoidPyramid" />
             </children>
@@ -1623,7 +1633,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="treeMidBranchTrunk" />
                 <componentref id="treeMidLeaves" />
@@ -1636,7 +1646,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="treeTopConnector" />
                 <componentref id="treeLeftBranch" />
@@ -1652,7 +1662,7 @@
                 <material id="lightBrown" />
                 <material id="winterBrown" />
             </materials>
-            <texture id="none" />
+            <texture id="wood" />
             <children>
                 <componentref id="treeBaseTrunk" />
                 <componentref id="treeMidTrunk" />
@@ -1707,7 +1717,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="cube" />
             </children>
@@ -1719,7 +1729,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="cube" />
             </children>
@@ -1731,7 +1741,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="seatBackSupportWoodDown" />
                 <componentref id="seatBackSupportWoodUp" />                
@@ -1745,7 +1755,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="cube" />
             </children>
@@ -1757,7 +1767,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="cube" />             
             </children>
@@ -1772,7 +1782,7 @@
                 <material id="springWhite" />
                 <material id="iceGreen" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="seatBackSupportSteelLeft" />
                 <componentref id="seatBackSupportSteelRight" />        
@@ -1787,7 +1797,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="seatBackSupportWood" />
                 <componentref id="seatBackSupportSteel" />
@@ -1799,7 +1809,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="seatBackSupportWood" />
                 <componentref id="seatBackSupportSteel" />
@@ -1814,7 +1824,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="cube" />
             </children>
@@ -1828,7 +1838,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="cube" />
             </children>
@@ -1840,7 +1850,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="legBackBase" />
                 <componentref id="legFrontBase" />
@@ -1853,7 +1863,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="legPair" />
             </children>
@@ -1865,7 +1875,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="legPair" />
             </children>
@@ -1878,7 +1888,7 @@
                 <material id="lightBrown" />
                 <material id="winterBrown" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="legPairRight" />
                 <componentref id="legPairLeft" />
@@ -1913,7 +1923,7 @@
             </materials>
             <texture id="sandtex" />
             <children>
-                <primitiveref id="baseSquarePrim" />
+                <primitiveref id="baseSquarePrimOutwards" />
             </children>
         </component>
         <component id="baseSupportCube">
@@ -2133,7 +2143,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -2147,7 +2157,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -2159,7 +2169,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -2170,7 +2180,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="slideMidSteelBase" />
                 <componentref id="slideLeftSteelBase" />
@@ -2186,7 +2196,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="slideBase" />
             </children>
@@ -2199,7 +2209,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="slideBase" />
             </children>
@@ -2210,7 +2220,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="slideBase" />
             </children>
@@ -2225,7 +2235,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -2240,7 +2250,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -2254,7 +2264,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -2266,7 +2276,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="archBack" />
                 <componentref id="archFront" />
@@ -2281,7 +2291,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -2293,7 +2303,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="bar" />
                 <componentref id="overarchingBar" />
@@ -2306,7 +2316,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="slideBar" />
             </children>
@@ -2318,7 +2328,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="slideBar" />
             </children>
@@ -2330,7 +2340,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -2342,7 +2352,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="stairBar" />
             </children>
@@ -2354,7 +2364,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="stairBar" />
             </children>
@@ -2366,7 +2376,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="stairBar" />
             </children>
@@ -2378,7 +2388,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="stairBar" />
             </children>
@@ -2389,7 +2399,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="stairBar" />
             </children>
@@ -2401,7 +2411,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="stairBar1" />
                 <componentref id="stairBar2" />
