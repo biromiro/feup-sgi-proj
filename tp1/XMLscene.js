@@ -65,7 +65,6 @@ export class XMLscene extends CGFscene {
 
             if(light.typeInfo.attenuation != undefined) {
                 const {constant, linear, quadratic} = light.typeInfo.attenuation
-                console.log("Attenuation: " + constant + " " + linear + " " + quadratic);
 
                 this.lights[i].setConstantAttenuation(constant)
                 this.lights[i].setLinearAttenuation(linear)

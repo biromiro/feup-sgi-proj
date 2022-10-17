@@ -209,7 +209,6 @@ export class MySceneGraph {
             if ((error = this.parseComponents(nodes[index])) != null)
                 return error;
         }
-        this.log("all parsed");
     }
 
     /**
@@ -223,8 +222,6 @@ export class MySceneGraph {
         if (root == null)
             return "no root defined for scene";
 
-        console.log("root: " + root);
-
         this.idRoot = root;
 
         // Get axis length        
@@ -233,8 +230,6 @@ export class MySceneGraph {
             this.onXMLMinorError("no axis_length defined for scene; assuming 'length = 1'");
 
         this.referenceLength = axis_length || 1;
-
-        this.log("Parsed scene");
 
         return null;
     }
@@ -369,8 +364,6 @@ export class MySceneGraph {
         else
             this.background = color;
 
-        this.log("Parsed ambient");
-
         return null;
     }
 
@@ -430,8 +423,6 @@ export class MySceneGraph {
                 nodeNames.push(attribute.nodeName);
             }
 
-            console.log(nodeNames);
-
             for (const attribute of nodeNames) {
                 const attributeIndex = attributeNames.indexOf(attribute);
                 const attributeIndexName = nodeNames.indexOf(attribute);
@@ -450,7 +441,7 @@ export class MySceneGraph {
 
                     lightInfo[attribute] = aux;
                 } else if (attribute == "attenuation") {
-                    console.log("got attenuation")
+
                     const constant = this.reader.getFloat(attributes[attributeIndexName], 'constant') || 0, 
                     linear = this.reader.getFloat(attributes[attributeIndexName], 'linear') || 0, 
                     quadratic = this.reader.getFloat(attributes[attributeIndexName], 'quadratic') || 0
@@ -903,6 +894,20 @@ export class MySceneGraph {
         return null;
     }
 
+    checkForCircularComponentDependency(nodeID, visited) {
+        visited = [...visited, nodeID];
+        if (this.primitives[nodeID] != null) return null
+
+        for (let child of this.components[nodeID].children) {
+            if (visited.includes(child))
+                return 'Node ' + nodeID + ' has a circular dependency with node ' + child;
+            let circularDependency = ""
+            if ((circularDependency = this.checkForCircularComponentDependency(child, visited)))
+                return circularDependency;
+        }
+        return null;
+    }
+
     /**
    * Parses the <components> block.
    * @param {components block element} componentsNode
@@ -911,10 +916,8 @@ export class MySceneGraph {
         const components = componentsNode.children;
 
         this.components = {};
-
-        // Any number of components.
+        const componentIDs = [];
         for (const component of components) {
-
             if (component.nodeName != "component") {
                 this.onXMLMinorError("unknown tag <" + component.nodeName + ">");
                 continue;
@@ -928,6 +931,17 @@ export class MySceneGraph {
             // Checks for repeated IDs.
             if (this.components[componentID] != null)
                 return "ID must be unique for each component (conflict: ID = " + componentID + ")";
+            
+            componentIDs.push(componentID);
+        }
+
+        // Any number of components.
+        for (const component of components) {
+
+            
+            const componentID = this.reader.getString(component, 'id');
+            if (componentID == null)
+                return "no ID defined for componentID";
 
             const attributes = component.children;
 
@@ -1039,7 +1053,7 @@ export class MySceneGraph {
                 const childID = this.reader.getString(child, 'id');
 
                 if (childType == "componentref") {
-                    if (this.components[childID] == null)
+                    if (componentIDs.indexOf(childID) == -1)
                         return "no such component with ID " + childID + " to be child of component " + componentID
                     
                     childrenArr.push(childID);
@@ -1053,6 +1067,13 @@ export class MySceneGraph {
 
             this.components[componentID] = new SceneComponent(componentID, sceneTransformation, sceneMaterials, sceneTexture, childrenArr)
         }
+
+        let circularDependency = "";
+        if ((circularDependency = this.checkForCircularComponentDependency(this.idRoot, [])))
+            return circularDependency
+
+        return null;
+
     }
 
 
