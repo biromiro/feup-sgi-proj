@@ -64,10 +64,34 @@
             <diffuse r="0.9" g="0.71" b="0.47" a="1.0" />
             <specular r="0.6" g="0.0" b="0.0" a="1.0" />
         </material>
+        <material id="platformMaterialSpring" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.69" g="0.55" b="0.40" a="1.0" />
+            <diffuse r="0.69" g="0.55" b="0.40" a="1.0" />
+            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+        </material>
+        <material id="platformMaterialWinter" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.14" g="0.47" b="0.64" a="1.0" />
+            <diffuse r="0.14" g="0.47" b="0.64" a="1.0" />
+            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+        </material>
         <material id="autumnYellow" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.83" g="0.65" b="0.14" a="1.0" />
             <diffuse r="0.83" g="0.65" b="0.14" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
+        <material id="springRed" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.71" g="0.11" b="0.12" a="1.0" />
+            <diffuse r="0.71" g="0.11" b="0.12" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
+        <material id="winterDarkBlue" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.07" g="0.25" b="0.34" a="1.0" />
+            <diffuse r="0.07" g="0.25" b="0.34" a="1.0" />
             <specular r="0" g="0" b="0" a="1.0" />
         </material>
         <material id="lightYellow" shininess="10">
@@ -76,10 +100,34 @@
             <diffuse r="0.94" g="0.78" b="0.4" a="1.0" />
             <specular r="0" g="0" b="0" a="1.0" />
         </material>
+        <material id="darkerYellow" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.74" g="0.58" b="0.2" a="1.0" />
+            <diffuse r="0.74" g="0.58" b="0.2" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
+        <material id="lightKhaki" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.88" g="0.88" b="0.88" a="1.0" />
+            <diffuse r="0.88" g="0.88" b="0.88" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
         <material id="darkAutumnOrange" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.62" g="0.27" b="0.02" a="1.0" />
             <diffuse r="0.62" g="0.27" b="0.02" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
+        <material id="springGreen" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.35" g="0.69" b="0.22" a="1.0" />
+            <diffuse r="0.35" g="0.69" b="0.22" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
+        <material id="winterLightBlue" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.47" g="0.75" b="0.84" a="1.0" />
+            <diffuse r="0.47" g="0.75" b="0.84" a="1.0" />
             <specular r="0" g="0" b="0" a="1.0" />
         </material>
         <material id="autumnOrange" shininess="10">
@@ -88,22 +136,40 @@
             <diffuse r="0.91" g="0.40" b="0.0" a="1.0" />
             <specular r="0.93" g="0.65" b="0.65" a="1.0" />
         </material>
+        <material id="springWhite" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.95" g="0.94" b="0.93" a="1.0" />
+            <diffuse r="0.95" g="0.94" b="0.93" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
+        <material id="iceGreen" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.88" g="0.96" b="0.95" a="1.0" />
+            <diffuse r="0.88" g="0.96" b="0.95" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
         <material id="lightBrown" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.73" g="0.49" b="0.24" a="1.0" />
             <diffuse r="0.73" g="0.49" b="0.24" a="1.0" />
             <specular r="0" g="0" b="0" a="1.0" />
         </material>
+        <material id="springBrown" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.53" g="0.22" b="0.07" a="1.0" />
+            <diffuse r="0.53" g="0.22" b="0.07" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
+        <material id="winterBrown" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.33" g="0.22" b="0.22" a="1.0" />
+            <diffuse r="0.33" g="0.22" b="0.22" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
         <material id="darkBrown" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.5" g="0.2" b="0.04" a="1.0" />
             <diffuse r="0.5" g="0.2" b="0.04" a="1.0" />
-            <specular r="0" g="0" b="0" a="1.0" />
-        </material>
-        <material id="brown" shininess="10">
-            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="0.56" g="0.33" b="0.19" a="1.0" />
-            <diffuse r="0.56" g="0.33" b="0.19" a="1.0" />
             <specular r="0" g="0" b="0" a="1.0" />
         </material>
         <material id="steelGray" shininess="10">
@@ -117,12 +183,6 @@
             <ambient r="0.82" g="0.70" b="0.57" a="1.0" />
             <diffuse r="0.82" g="0.70" b="0.57" a="1.0" />
             <specular r="0" g="0" b="0" a="1.0" />
-        </material>
-        <material id="orangeSunDown" shininess="10">
-            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="1" g="1" b="1" a="1.0" />
-            <diffuse r="1" g="1" b="1" a="1.0" />
-            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
     </materials>
 
@@ -569,6 +629,8 @@
             </transformation>
             <materials>
                 <material id="platformMaterial" />
+                <material id="platformMaterialSpring" />
+                <material id="platformMaterialWinter" />
             </materials>
             <texture id="none" />
             <children>
@@ -649,6 +711,8 @@
             </transformation>
             <materials>
                 <material id="autumnYellow" />
+                <material id="springRed" />
+                <material id="winterDarkBlue" />
             </materials>
             <texture id="none" />
             <children>
@@ -740,7 +804,10 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="orangeSunDown" />
+                <material id="lightYellow" />
+                <material id="springGreen" />
+                <material id="winterLightBlue" />
+
             </materials>
             <texture id="inherit" />
             <children>
@@ -758,6 +825,8 @@
             </transformation>
             <materials>
                 <material id="darkAutumnOrange" />
+                <material id="springWhite" />
+                <material id="iceGreen" />
             </materials>
             <texture id="none" />
             <children>
@@ -798,6 +867,8 @@
             </transformation>
             <materials>
                 <material id="lightBrown" />
+                <material id="springBrown" />
+                <material id="winterBrown" />
             </materials>
             <texture id="none" />
             <children>
@@ -836,6 +907,8 @@
             </transformation>
             <materials>
                 <material id="autumnOrange" />
+                <material id="springGreen" />
+                <material id="winterLightBlue" />
             </materials>
             <texture id="none" />
             <children>
@@ -1005,6 +1078,8 @@
             </transformation>
             <materials>
                 <material id="autumnYellow" />
+                <material id="springRed" />
+                <material id="winterDarkBlue" />
             </materials>
             <texture id="none" />
             <children>
@@ -1057,6 +1132,8 @@
             </transformation>
             <materials>
                 <material id="lightBrown" />
+                <material id="springBrown" />
+                <material id="winterBrown" />
             </materials>
             <texture id="none" />
             <children>
@@ -1069,6 +1146,8 @@
             </transformation>
             <materials>
                 <material id="darkAutumnOrange" />
+                <material id="springWhite" />
+                <material id="iceGreen" />
             </materials>
             <texture id="none" />
             <children>
@@ -1307,6 +1386,8 @@
             </transformation>
             <materials>
                 <material id="autumnOrange" />
+                <material id="springGreen" />
+                <material id="winterLightBlue" />
             </materials>
             <texture id="none" />
             <children>
@@ -1568,6 +1649,8 @@
             </transformation>
             <materials>
                 <material id="darkBrown" />
+                <material id="lightBrown" />
+                <material id="winterBrown" />
             </materials>
             <texture id="none" />
             <children>
@@ -1686,6 +1769,8 @@
             </transformation>
             <materials>
                 <material id="darkAutumnOrange" />
+                <material id="springWhite" />
+                <material id="iceGreen" />
             </materials>
             <texture id="none" />
             <children>
@@ -1790,6 +1875,8 @@
             </transformation>
             <materials>
                 <material id="darkBrown" />
+                <material id="lightBrown" />
+                <material id="winterBrown" />
             </materials>
             <texture id="none" />
             <children>
@@ -1803,6 +1890,8 @@
             </transformation>
             <materials>
                 <material id="lightBrown" />
+                <material id="springBrown" />
+                <material id="winterBrown" />
             </materials>
             <texture id="none" />
             <children>
@@ -1819,6 +1908,8 @@
             </transformation>
             <materials>
                 <material id="lightYellow" />
+                <material id="darkerYellow" />
+                <material id="lightKhaki" />
             </materials>
             <texture id="sandtex" />
             <children>
@@ -1844,6 +1935,8 @@
             </transformation>
             <materials>
                 <material id="lightBrown" />
+                <material id="springBrown" />
+                <material id="winterBrown" />
             </materials>
             <texture id="none" />
             <children>
@@ -1857,6 +1950,8 @@
             </transformation>
             <materials>
                 <material id="darkAutumnOrange" />
+                <material id="springWhite" />
+                <material id="iceGreen" />
             </materials>
             <texture id="none" />
             <children>
@@ -2320,6 +2415,8 @@
             </transformation>
             <materials>
                 <material id="autumnYellow" />
+                <material id="springRed" />
+                <material id="winterDarkBlue" />
             </materials>
             <texture id="none"/>
             <children>
