@@ -398,8 +398,8 @@ export class MySceneGraph {
                 continue;
             }
             else {
-                attributeNames.push(...["location", "ambient", "diffuse", "specular"]);
-                attributeTypes.push(...["position", "color", "color", "color"]);
+                attributeNames.push(...["location", "ambient", "diffuse", "specular", "target"]);
+                attributeTypes.push(...["position4d", "color", "color", "color", "position3d"]);
             }
 
             // Get id of the current light.
@@ -430,22 +430,43 @@ export class MySceneGraph {
                 nodeNames.push(attribute.nodeName);
             }
 
-            for (const attribute of attributeNames) {
-                const attributeIndex = nodeNames.indexOf(attribute);
+            console.log(nodeNames);
+
+            for (const attribute of nodeNames) {
+                const attributeIndex = attributeNames.indexOf(attribute);
+                const attributeIndexName = nodeNames.indexOf(attribute);
 
                 if (attributeIndex != -1) {
                     
-                    if (attributeTypes[attributeIndex] == "position")
-                        aux = this.parseCoordinates4D(attributes[attributeIndex], "light position for ID" + lightId);
+                    if (attributeTypes[attributeIndex] == "position4d")
+                        aux = this.parseCoordinates4D(attributes[attributeIndexName], "light position for ID " + lightId);
+                    else if (attributeTypes[attributeIndex] == "position3d")
+                        aux = this.parseCoordinates3D(attributes[attributeIndexName], "light target for ID " + lightId);
                     else
-                        aux = this.parseColor(attributes[attributeIndex], attribute + " illumination for ID" + lightId);
+                        aux = this.parseColor(attributes[attributeIndexName], attribute + " illumination for ID " + lightId);
 
                     if (!Array.isArray(aux))
                         return aux;
 
                     lightInfo[attribute] = aux;
-                }
-                else
+                } else if (attribute == "attenuation") {
+                    console.log("got attenuation")
+                    const constant = this.reader.getFloat(attributes[attributeIndexName], 'constant') || 0, 
+                    linear = this.reader.getFloat(attributes[attributeIndexName], 'linear') || 0, 
+                    quadratic = this.reader.getFloat(attributes[attributeIndexName], 'quadratic') || 0
+
+                    if ((constant && !linear && !quadratic) || (!constant && linear && !quadratic) || (!constant && !linear && quadratic)) {
+                        lightInfo[attribute] = {
+                            constant,
+                            linear,
+                            quadratic
+                        }
+                    } else {
+                        this.onXMLMinorError("'attenuation' field for ID = " + lightId + " should have one and only one of constant, linear or quadratic set to 1");
+                    }
+
+
+                } else
                     return "light " + attribute + " undefined for ID = " + lightId;
             }
 
