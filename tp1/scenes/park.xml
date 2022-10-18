@@ -642,7 +642,7 @@
                 <material id="platformMaterialSpring" />
                 <material id="platformMaterialWinter" />
             </materials>
-            <texture id="break" />
+            <texture id="break" length_u="2" length_v="3"/>
             <children>
                 <componentref id="cube" />
             </children>

@@ -823,6 +823,55 @@ export class MySceneGraph {
         return null;
     }
 
+    multiplexComponentPrimitives() {
+
+        const updatedPrimitives = {};
+        const primitivesToUpdate = ['MyRectangle', 'MyTriangle']
+        console.log(this.components)
+        for (let [componentID, component] of Object.entries(this.components)) {
+            const componentChildren = component.children
+            const newComponentChildren = component.children
+            for (let child of componentChildren) {
+                if (child.type == 'primitive') {
+                    if (child.id in updatedPrimitives) {
+                        const origPrimitive = this.primitives[child.id]
+
+                        if (!primitivesToUpdate.includes(origPrimitive.constructor.name)) continue
+
+                        let newPrimitiveID;
+
+                        for (let createdPrimitive of updatedPrimitives[child.id]) {
+                            if (createdPrimitive.length_u === component.length_u && createdPrimitive.length_v === component.length_v) {
+                                newPrimitiveID = createdPrimitive.primitiveID;
+                                break;
+                            }
+                        }
+
+                        if (!newPrimitiveID) {
+                            newPrimitiveID = child.id
+                            let count = 0;
+                            while (newPrimitiveID in this.primitives) {
+                                newPrimitiveID = `${child.id}-copy${count++}`
+                            }
+                            this.primitives[newPrimitiveID] = origPrimitive.copy()
+                            this.primitives[newPrimitiveID].updateTexCoords(component.length_u || 1, component.length_v || 1);
+                            updatedPrimitives[child.id].push({length_u: component.length_u, length_v: component.length_v, primitiveID: newPrimitiveID})
+                        }
+
+                        newComponentChildren.splice(newComponentChildren.indexOf(child), 1, {id: newPrimitiveID, type: 'primitive'});
+
+                    } else {
+                        this.primitives[child.id].updateTexCoords(component.length_u || 1, component.length_v || 1);
+                        updatedPrimitives[child.id] = [{length_u: component.length_u, length_v: component.length_v, primitiveID: child.id}];
+                    }
+                }
+            }
+
+            component.children = newComponentChildren
+        }
+        console.log(this.primitives)
+    }
+
     /**
    * Parses the <components> block.
    * @param {components block element} componentsNode
@@ -985,6 +1034,8 @@ export class MySceneGraph {
         let circularDependency = "";
         if ((circularDependency = this.checkForCircularComponentDependency({id: this.idRoot, type: 'component'}, [])))
             return circularDependency
+
+        this.multiplexComponentPrimitives();
 
         return null;
 
@@ -1224,7 +1275,6 @@ export class MySceneGraph {
             this.scene.popMatrix();
         } else {
             // scene gets really slow when updating tex coords
-            this.primitives[info.id].updateTexCoords(length_u || 1, length_v || 1);
             this.primitives[info.id].display();
         }
         

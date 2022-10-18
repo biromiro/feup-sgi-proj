@@ -9,6 +9,7 @@ import { CGFobject } from '../../lib/CGF.js';
 export class MyTriangle extends CGFobject {
 	constructor(scene, id, x1, x2, x3, y1, y2, y3, z1, z2, z3) {
 		super(scene);
+        this.id = id;
 		this.x1 = x1;
 		this.x2 = x2;
         this.x3 = x3;
@@ -21,6 +22,10 @@ export class MyTriangle extends CGFobject {
 
 		this.initBuffers();
 	}
+
+    copy () {
+        return new MyTriangle(this.scene, this.id, this.x1, this.x2, this.x3, this.y1, this.y2, this.y3, this.z1, this.z2, this.z3)
+    }
 	
 	initBuffers() {
 		this.vertices = [

@@ -9,6 +9,7 @@ import { CGFobject } from '../../lib/CGF.js';
 export class MyRectangle extends CGFobject {
 	constructor(scene, id, x1, x2, y1, y2, doubleSided = false) {
 		super(scene);
+		this.id = id;
 		this.x1 = x1;
 		this.x2 = x2;
 		this.y1 = y1;
@@ -16,6 +17,10 @@ export class MyRectangle extends CGFobject {
 		this.doubleSided = doubleSided;
 		this.initBuffers();
 	}
+
+	copy () {
+        return new MyRectangle(this.scene, this.id, this.x1, this.x2, this.y1, this.y2, this.doubleSided)
+    }
 	
 	initBuffers() {
 		if (this.doubleSided) {
