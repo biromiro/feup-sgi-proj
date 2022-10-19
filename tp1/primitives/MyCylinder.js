@@ -39,7 +39,7 @@ export class MyCylinder extends CGFobject {
                 this.vertices.push(nextStackRadius * ca, -nextStackRadius * sa, (stack + 1) * (this.height / this.stacks));
                 // triangle normal computed by cross product of two edges
                 var normal = [
-                    ca, -sa, ta
+                    ca, ta, -sa, 
                 ];
     
                 // normalization
