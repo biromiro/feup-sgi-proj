@@ -32,20 +32,16 @@ export class MyTriangle extends CGFobject {
 			this.x1, this.y1, this.z1,	//0
 			this.x2, this.y2, this.z2,	//1
 			this.x3, this.y3, this.z3,	//2
-            this.x1, this.y1, this.z1,	//3
-			this.x2, this.y2, this.z2,	//4
-			this.x3, this.y3, this.z3,	//5
 		];
 
 		//Counter-clockwise reference of vertices
 		this.indices = [
 			0, 1, 2,
-            2, 1, 0
 		];
 
         // cross([a1,a2,a3], [b1,b2,b3]) =  [a2 * b3 - a3 * b2, a3 * b1 - a1 * b3, a1 * b2 - a2 * b1]
         const v1 = [this.x2 - this.x1, this.y2 - this.y1, this.z2 - this.z1]
-        const v2 = [this.x2 - this.x3, this.y2 - this.y3, this.z2 - this.z3]
+        const v2 = [this.x3 - this.x2, this.y3 - this.y2, this.z3 - this.z2]
         const normal =  [v1[1] * v2[2] - v1[2] * v2[1], v1[2] * v2[0] - v1[0] * v2[2], v1[0] * v2[1] - v1[1] * v2[0]]
 
            // normalization
@@ -59,15 +55,10 @@ export class MyTriangle extends CGFobject {
         normal[1] /= nsize;
         normal[2] /= nsize;
 
-        const negNormal = normal.map((val) => -val);
-
         this.normals = [
             ...normal,
             ...normal,
-            ...normal,
-            ...negNormal,
-            ...negNormal,
-            ...negNormal
+            ...normal
         ]
 		
 		/*

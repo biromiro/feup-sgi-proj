@@ -1257,7 +1257,7 @@ export class MySceneGraph {
                     texture = undefined;
                 } 
                 
-                material.setTexture(texture);
+                //material.setTexture(texture);
                 material.apply();
             }
 
