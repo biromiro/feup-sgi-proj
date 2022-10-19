@@ -781,14 +781,14 @@ export class MySceneGraph {
                 this.primitives[primitiveId] = cylinder;
             } else if (typeName == 'torus') {
                 const tor = [];
-                for (const [index, param] of ['radius', 'innerRadius', 'slices', 'loops'].entries()) {
+                for (const [index, param] of ['outer', 'inner', 'slices', 'loops'].entries()) {
                     tor[index] = this.reader.getFloat(type, param);
                     if (tor[index] == null || isNaN(tor[index]))
                         return "unable to parse " + param + " of the primitive coordinates for ID = " + primitiveId;
                 }
 
                 if (tor[1] >= tor[0])
-                    return "innerRadius of primitive for ID = " + primitiveId + " cannot be equal to or greater than radius"
+                    return "inner of primitive for ID = " + primitiveId + " cannot be equal to or greater than outer"
 
                 const torus = new MyTorus(this.scene, primitiveId, ...tor);
                 this.primitives[primitiveId] = torus;
@@ -832,39 +832,40 @@ export class MySceneGraph {
             const componentChildren = component.children
             const newComponentChildren = component.children
             for (let child of componentChildren) {
-                if (child.type == 'primitive') {
-                    if (child.id in updatedPrimitives) {
-                        const origPrimitive = this.primitives[child.id]
+                if (child.type != 'primitive') continue
 
-                        if (!primitivesToUpdate.includes(origPrimitive.constructor.name)) continue
+                if (child.id in updatedPrimitives) {
+                    const origPrimitive = this.primitives[child.id]
 
-                        let newPrimitiveID;
+                    if (!primitivesToUpdate.includes(origPrimitive.constructor.name)) continue
 
-                        for (let createdPrimitive of updatedPrimitives[child.id]) {
-                            if (createdPrimitive.length_u === component.length_u && createdPrimitive.length_v === component.length_v) {
-                                newPrimitiveID = createdPrimitive.primitiveID;
-                                break;
-                            }
+                    let newPrimitiveID;
+
+                    for (let createdPrimitive of updatedPrimitives[child.id]) {
+                        if (createdPrimitive.length_u === component.length_u && createdPrimitive.length_v === component.length_v) {
+                            newPrimitiveID = createdPrimitive.primitiveID;
+                            break;
                         }
-
-                        if (!newPrimitiveID) {
-                            newPrimitiveID = child.id
-                            let count = 0;
-                            while (newPrimitiveID in this.primitives) {
-                                newPrimitiveID = `${child.id}-copy${count++}`
-                            }
-                            this.primitives[newPrimitiveID] = origPrimitive.copy()
-                            this.primitives[newPrimitiveID].updateTexCoords(component.length_u || 1, component.length_v || 1);
-                            updatedPrimitives[child.id].push({length_u: component.length_u, length_v: component.length_v, primitiveID: newPrimitiveID})
-                        }
-
-                        newComponentChildren.splice(newComponentChildren.indexOf(child), 1, {id: newPrimitiveID, type: 'primitive'});
-
-                    } else {
-                        this.primitives[child.id].updateTexCoords(component.length_u || 1, component.length_v || 1);
-                        updatedPrimitives[child.id] = [{length_u: component.length_u, length_v: component.length_v, primitiveID: child.id}];
                     }
+
+                    if (!newPrimitiveID) {
+                        newPrimitiveID = child.id
+                        let count = 0;
+                        while (newPrimitiveID in this.primitives) {
+                            newPrimitiveID = `${child.id}-copy${count++}`
+                        }
+                        this.primitives[newPrimitiveID] = origPrimitive.copy()
+                        this.primitives[newPrimitiveID].updateTexCoords(component.length_u || 1, component.length_v || 1);
+                        updatedPrimitives[child.id].push({length_u: component.length_u, length_v: component.length_v, primitiveID: newPrimitiveID})
+                    }
+
+                    newComponentChildren.splice(newComponentChildren.indexOf(child), 1, {id: newPrimitiveID, type: 'primitive'});
+
+                } else {
+                    this.primitives[child.id].updateTexCoords(component.length_u || 1, component.length_v || 1);
+                    updatedPrimitives[child.id] = [{length_u: component.length_u, length_v: component.length_v, primitiveID: child.id}];
                 }
+                
             }
 
             component.children = newComponentChildren
@@ -1257,13 +1258,14 @@ export class MySceneGraph {
                     texture = undefined;
                 } 
                 
-                //material.setTexture(texture);
+                material.setTexture(texture);
                 material.apply();
             }
 
             length_u = component.length_u;
             length_v = component.length_v;
-            for (const child of component.children){
+            
+            for (const child of component.children) {
                 this.displayComponent(child, {
                     material : material,
                     texture: texture,
@@ -1273,10 +1275,6 @@ export class MySceneGraph {
             }
             
             this.scene.popMatrix();
-        } else {
-            // scene gets really slow when updating tex coords
-            this.primitives[info.id].display();
-        }
-        
+        } else this.primitives[info.id].display();
     }
 }

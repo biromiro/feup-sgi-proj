@@ -47,8 +47,10 @@ def generateBundle(numPoints, typeOfBundle):
         bc = (x3-x2, y3-y2, z3-z2)
         normal = np.cross(ab, bc)
         centroid = ((x1+x2+x3)/3, (y1+y2+y3)/3, (z1+z2+z3)/3)
+
         if (np.dot(normal, centroid) < 0):
             (x1,y1,z1), (x3, y3, z3) = c, a
+        
         print(
            f"<primitive id=\"{typeOfBundle}Triangle{idx}\"> \n\t<triangle x1=\"{x1}\" y1=\"{y1}\" z1=\"{z1}\" x2=\"{x2}\" y2=\"{y2}\" z2=\"{z2}\" x3=\"{x3}\" y3=\"{y3}\" z3=\"{z3}\" /> \n</primitive>")
 

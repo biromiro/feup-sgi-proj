@@ -48,7 +48,7 @@
         <texture id="paintwaves" file="scenes/images/paintwaves.jpg" />
         <texture id="squares" file="scenes/images/squares.jpg" />
         <texture id="waves" file="scenes/images/waves.jpg" />
-        <texture id="leaves" file="scenes/images/leaves.png" />
+        <texture id="leaves" file="scenes/images/leaves.jpg" />
         <texture id="wood" file="scenes/images/wood.jpg" />
     </textures>
 
@@ -101,6 +101,12 @@
             <diffuse r="0.94" g="0.78" b="0.4" a="1.0" />
             <specular r="0" g="0" b="0" a="1.0" />
         </material>
+        <material id="lightYellowCubeMap" shininess="0">
+            <emission r="0.1" g="0.1" b="0.1" a="1.0" />
+            <ambient r="0.94" g="0.78" b="0.4" a="1.0" />
+            <diffuse r="0.94" g="0.78" b="0.4" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
         <material id="darkerYellow" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.74" g="0.58" b="0.2" a="1.0" />
@@ -123,10 +129,22 @@
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.35" g="0.69" b="0.22" a="1.0" />
             <diffuse r="0.35" g="0.69" b="0.22" a="1.0" />
+            <specular r="0.50" g="0.50" b="0.50" a="1.0" />
+        </material>
+        <material id="springGreenCubeMap" shininess="10">
+            <emission r="0.1" g="0.1" b="0.1" a="1.0" />
+            <ambient r="0.35" g="0.69" b="0.22" a="1.0" />
+            <diffuse r="0.35" g="0.69" b="0.22" a="1.0" />
             <specular r="0" g="0" b="0" a="1.0" />
         </material>
         <material id="winterLightBlue" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.47" g="0.75" b="0.84" a="1.0" />
+            <diffuse r="0.47" g="0.75" b="0.84" a="1.0" />
+            <specular r="0.50" g="0.50" b="0.50" a="1.0" />
+        </material>
+        <material id="winterLightBlueCubeMap" shininess="10">
+            <emission r="0.1" g="0.1" b="0.1" a="1.0" />
             <ambient r="0.47" g="0.75" b="0.84" a="1.0" />
             <diffuse r="0.47" g="0.75" b="0.84" a="1.0" />
             <specular r="0" g="0" b="0" a="1.0" />
@@ -206,11 +224,11 @@
             <triangle x1="3" y1="2" z1="0" x2="4" y2="3" z2="4" x3="0" y3="0" z3="-2" />
         </primitive>
         <primitive id="baseTorusPrim">
-            <torus radius="1" innerRadius="0.2" slices="40" loops="10" />
+            <torus outer="1" inner="0.2" slices="40" loops="10" />
         </primitive>
 
         <primitive id="baseCylinderPrim">
-            <cylinder base="1" top="1" height="1" slices="20" stacks="20"/>
+            <cylinder base="1" top="1" height="1" slices="20" stacks="1"/>
         </primitive>
          <primitive id="baseConePrim">
             <cylinder base="1" top="0" height="1" slices="20" stacks="20"/>
@@ -824,10 +842,7 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="lightYellow" />
-                <material id="springGreen" />
-                <material id="winterLightBlue" />
-
+                <material id="inherit" />
             </materials>
             <texture id="inherit" />
             <children>
@@ -862,7 +877,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="dots" />
+            <texture id="waves" />
             <children>
                 <primitiveref id="baseTorusPrim" />
             </children>
@@ -876,7 +891,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="dots" />
+            <texture id="waves" />
             <children>
                 <primitiveref id="baseTorusPrim" />
             </children>
@@ -1220,7 +1235,9 @@
                 <scale x="50" y="50" z="50" />
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="lightYellowCubeMap" />
+                <material id="springGreenCubeMap" />
+                <material id="winterLightBlueCubeMap" />
             </materials>
             <texture id="none" />
             <children>
@@ -2488,8 +2505,19 @@
                 <componentref id="sandbox" />
                 <componentref id="slide" />
                 <componentref id="rocks" />
+                <componentref id="test-component" />
             </children>
         </component>
-
+        <component id="test-component">
+        <transformation>
+            </transformation>
+            <materials>
+                <material id="baseMaterial" />
+            </materials>
+            <texture id="wood"/>
+            <children>
+                <primitiveref id="baseCylinderPrim" />
+            </children>
+        </component>
     </components>
 </sxs>
