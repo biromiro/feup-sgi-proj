@@ -1,20 +1,25 @@
 # SGI 2022/2023 - TP1
 
-## Group: T0xG0y
+## Group: T04G08
 
 | Name             | Number    | E-Mail             |
 | ---------------- | --------- | ------------------ |
-| John Doe         | 201801010 | ...                |
-| Jane Doe         | 201801011 | ...                |
+| João Baltazar    | 201905616 | up201905616@up.pt  |
+| Nuno Costa       | 201906272 | up201906272@up.pt  |
 
 ----
 ## Project information
 
-- (items describing main strong points)
-- Scene
-  - (Brief description of the created scene)
+Our scene portrays a low-poly outdoors playground. It has a marble platform supporting a sandbox, a bench, a slide, an up-and-down and a swing, as well as some decorative trees and rocks.
+
+### Strong Points
+- 
+
+### Scene
+- 
+
   - (relative link to the scene)
 ----
 ## Issues/Problems
 
-- (items describing unimplemented features, bugs, problems, etc.)
+- All requested features were properly implemented.

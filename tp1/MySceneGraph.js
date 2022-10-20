@@ -980,21 +980,22 @@ export class MySceneGraph {
                     id: textureID,
                 };
 
-            } else {
-                if (this.textures[textureID] == null)
-                    return "no such texture with ID " + textureID + " on component " + componentID
-
+            } else if (this.textures[textureID] == null) 
+                return "no such texture with ID " + textureID + " on component " + componentID
+            
+            
+            if (textureID != "none") {
                 const length_u = this.reader.getString(texture, 'length_u', false);
 
                 const length_v = this.reader.getString(texture, 'length_v', false);
 
                 sceneTexture = { 
                     id: textureID,
-                    length_u: length_u || 1,
-                    length_v: length_v || 1,
+                    length_u: length_u || (textureID == 'inherit' ? -1 : 1),
+                    length_v: length_v || (textureID == 'inherit' ? -1 : 1),
                 };
-
             }
+               
 
             // Children
 
@@ -1253,12 +1254,12 @@ export class MySceneGraph {
                 } 
                 
                 material.setTexture(texture);
-                material.setTextureWrap('REPEAT', 'REPEAT');
+                material.setTextureWrap('MIRRORED_REPEAT', 'MIRRORED_REPEAT');
                 material.apply();
             }
 
-            length_u = component.length_u;
-            length_v = component.length_v;
+            length_u = component.length_u != -1 ? component.length_u : length_u;
+            length_v = component.length_v != -1 ? component.length_u : length_u;
             
             for (const child of component.children) {
                 this.displayComponent(child, {
