@@ -2505,19 +2505,8 @@
                 <componentref id="sandbox" />
                 <componentref id="slide" />
                 <componentref id="rocks" />
-                <componentref id="test-component" />
             </children>
         </component>
-        <component id="test-component">
-        <transformation>
-            </transformation>
-            <materials>
-                <material id="baseMaterial" />
-            </materials>
-            <texture id="wood"/>
-            <children>
-                <primitiveref id="baseCylinderPrim" />
-            </children>
-        </component>
+        
     </components>
 </sxs>
