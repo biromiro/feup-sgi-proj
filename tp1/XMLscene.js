@@ -14,7 +14,7 @@ export class XMLscene extends CGFscene {
      */
     constructor(myinterface) {
         super();
-
+        this.nightMode = false;
         this.interface = myinterface;
     }
 
@@ -138,7 +138,7 @@ export class XMLscene extends CGFscene {
 
         for (var i = 0; i < this.lights.length; i++) {
             this.lights[i].setVisible(true);
-            this.lights[i].enable();
+            this.lights[i].update();
         }
 
         if (this.sceneInited) {

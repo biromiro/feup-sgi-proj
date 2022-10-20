@@ -42,7 +42,6 @@ export class MyInterface extends CGFinterface {
             let light = this.scene.graph.lights[lightID];
             f0.add(light, 'isEnabled').name(lightID).onChange(light.updateLight.bind(light));
         }
-
     }
 
     /**
