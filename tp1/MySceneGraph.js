@@ -754,9 +754,6 @@ export class MySceneGraph {
                         return "unable to parse " + param + " of the primitive coordinates for ID = " + primitiveId;
                 }
 
-                const doubleSided = this.reader.getBoolean(type, 'doubleSided', false);
-                rect.push(doubleSided ? true : false);
-
                 const rectangle = new MyRectangle(this.scene, primitiveId, ...rect);
                 this.primitives[primitiveId] = rectangle;
             } else if (typeName == 'triangle'){
@@ -1230,10 +1227,7 @@ export class MySceneGraph {
             length_u: undefined,
             length_v: undefined
         });
-        //this.primitives['demoRectangle'].display();
-        //To test the parsing/creation of the primitives, call the display function directly
-        // this.primitives['demoSphere'].display();
-        // this.primitives['demoCylinder'].display();
+
     }
 
     displayComponent(info, inheritance) {
@@ -1259,6 +1253,7 @@ export class MySceneGraph {
                 } 
                 
                 material.setTexture(texture);
+                material.setTextureWrap('REPEAT', 'REPEAT');
                 material.apply();
             }
 
