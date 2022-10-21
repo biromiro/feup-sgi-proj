@@ -839,7 +839,7 @@ export class MySceneGraph {
                     let newPrimitiveID;
 
                     for (let createdPrimitive of updatedPrimitives[child.id]) {
-                        if (createdPrimitive.length_u === component.length_u && createdPrimitive.length_v === component.length_v) {
+                        if (createdPrimitive.length_s === component.length_s && createdPrimitive.length_t === component.length_t) {
                             newPrimitiveID = createdPrimitive.primitiveID;
                             break;
                         }
@@ -852,15 +852,15 @@ export class MySceneGraph {
                             newPrimitiveID = `${child.id}-copy${count++}`
                         }
                         this.primitives[newPrimitiveID] = origPrimitive.copy()
-                        this.primitives[newPrimitiveID].updateTexCoords(component.length_u || 1, component.length_v || 1);
-                        updatedPrimitives[child.id].push({length_u: component.length_u, length_v: component.length_v, primitiveID: newPrimitiveID})
+                        this.primitives[newPrimitiveID].updateTexCoords(component.length_s || 1, component.length_t || 1);
+                        updatedPrimitives[child.id].push({length_s: component.length_s, length_t: component.length_t, primitiveID: newPrimitiveID})
                     }
 
                     newComponentChildren.splice(newComponentChildren.indexOf(child), 1, {id: newPrimitiveID, type: 'primitive'});
 
                 } else {
-                    this.primitives[child.id].updateTexCoords(component.length_u || 1, component.length_v || 1);
-                    updatedPrimitives[child.id] = [{length_u: component.length_u, length_v: component.length_v, primitiveID: child.id}];
+                    this.primitives[child.id].updateTexCoords(component.length_s || 1, component.length_t || 1);
+                    updatedPrimitives[child.id] = [{length_s: component.length_s, length_t: component.length_t, primitiveID: child.id}];
                 }
                 
             }
@@ -984,14 +984,17 @@ export class MySceneGraph {
             
             
             if (textureID != "none") {
-                const length_u = this.reader.getString(texture, 'length_u', false);
 
-                const length_v = this.reader.getString(texture, 'length_v', false);
-
+                let length_s = this.reader.getString(texture, 'length_s', false);
+                console.log(length_s)
+                if (length_s == null) length_s = (textureID == 'inherit' ? '-1' : '1')
+                let length_t = this.reader.getString(texture, 'length_t', false);
+                if (length_t == null) length_t = (textureID == 'inherit' ? '-1' : '1')
+                
                 sceneTexture = { 
                     id: textureID,
-                    length_u: length_u || (textureID == 'inherit' ? -1 : 1),
-                    length_v: length_v || (textureID == 'inherit' ? -1 : 1),
+                    length_s: length_s,
+                    length_t: length_t,
                 };
             }
                
@@ -1034,7 +1037,7 @@ export class MySceneGraph {
             return circularDependency
 
         this.multiplexComponentPrimitives();
-
+        console.log(this.components);
         return null;
 
     }
@@ -1224,14 +1227,14 @@ export class MySceneGraph {
         this.displayComponent({id: this.idRoot, type: 'component'}, {
             material: undefined,
             texture: undefined,
-            length_u: undefined,
-            length_v: undefined
+            length_s: undefined,
+            length_t: undefined
         });
 
     }
 
     displayComponent(info, inheritance) {
-        let {material, texture, length_u, length_v} = inheritance;
+        let {material, texture, length_s, length_t} = inheritance;
         if (info.type === 'component') {
             const component = this.components[info.id];
             this.scene.pushMatrix();
@@ -1256,16 +1259,15 @@ export class MySceneGraph {
                 material.setTextureWrap('MIRRORED_REPEAT', 'MIRRORED_REPEAT');
                 material.apply();
             }
-
-            length_u = component.length_u != -1 ? component.length_u : length_u;
-            length_v = component.length_v != -1 ? component.length_u : length_u;
+            length_s = component.length_s != -1 ? component.length_s : length_s;
+            length_t = component.length_t != -1 ? component.length_s : length_s;
             
             for (const child of component.children) {
                 this.displayComponent(child, {
                     material : material,
                     texture: texture,
-                    length_u: length_u,
-                    length_v: length_v
+                    length_s: length_s,
+                    length_t: length_t
                 });
             }
             

@@ -81,7 +81,7 @@ export class MyTorus extends CGFobject {
 	 * Updates the list of texture coordinates of the rectangle
 	 * @param {Array} coords - Array of texture coordinates
 	 */
-	updateTexCoords(length_u, length_v) {
+	updateTexCoords(length_s, length_t) {
         return
 	}
 }

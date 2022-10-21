@@ -14,7 +14,7 @@ Our scene portrays a low-poly outdoors playground. It has a marble platform supp
 ### Strong Points
 - Engaging visuals
 - Randomly generated convex triangle spheres using our Python script allows for believable low-poly trees
-- Uses a primitive multiplexer, allowing for no updates to texCoords to be made on display, which significantly improves performance when applying textures to primitives with different length_v and length_u parameters
+- Uses a primitive multiplexer, allowing for no updates to texCoords to be made on display, which significantly improves performance when applying textures to primitives with different length_t and length_s parameters
 - Takes special care of texture wraping
 - 3 different scene 'seasons', each with its own personalized color pallete
 - Scene composed by several different components, which make it quite complex and interesting

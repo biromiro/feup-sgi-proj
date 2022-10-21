@@ -9,8 +9,8 @@ export class SceneComponent {
         this.transformation = transformation;
         this.materials = materials;
         this.texture = texture.id;
-        this.length_u = texture?.length_u;
-        this.length_v = texture?.length_v;
+        this.length_s = texture?.length_s;
+        this.length_t = texture?.length_t;
         this.children = children;
         this.isNode = true;
         this.materialIndex = 0;

@@ -91,15 +91,15 @@ export class MyTriangle extends CGFobject {
 	 * Updates the list of texture coordinates of the rectangle
 	 * @param {Array} coords - Array of texture coordinates
 	 */
-	updateTexCoords(length_u, length_v) {
+	updateTexCoords(length_s, length_t) {
 
 		this.texCoords = [
 			0, 0,
-			this.a / length_u, 0,
-            this.c * this.cosalpha / length_u, this.c * this.sinalpha / length_v,
+			this.a / length_s, 0,
+            this.c * this.cosalpha / length_s, this.c * this.sinalpha / length_t,
             0, 0,
-            this.a / length_u, 0,
-            this.c * this.cosalpha / length_u, this.c * this.sinalpha / length_v
+            this.a / length_s, 0,
+            this.c * this.cosalpha / length_s, this.c * this.sinalpha / length_t
 		]
 		this.updateTexCoordsGLBuffers();
 	}
