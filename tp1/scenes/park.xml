@@ -71,16 +71,9 @@
 
     <textures>
         <texture id="sandtex" file="scenes/images/sandtex.jpg" />
-        <texture id="metal" file="scenes/images/metal.jpg" />
-        <texture id="dirt" file="scenes/images/dirt.jpg" />
         <texture id="bank" file="scenes/images/bank.jpg" />
         <texture id="break" file="scenes/images/break.jpg" />
-        <texture id="chalkboard" file="scenes/images/chalkboard.jpg" />
-        <texture id="dots" file="scenes/images/dots.jpg" />
-        <texture id="paintwaves" file="scenes/images/paintwaves.jpg" />
-        <texture id="squares" file="scenes/images/squares.jpg" />
         <texture id="waves" file="scenes/images/waves.jpg" />
-        <texture id="leaves" file="scenes/images/leaves.jpg" />
         <texture id="wood" file="scenes/images/wood.jpg" />
     </textures>
 

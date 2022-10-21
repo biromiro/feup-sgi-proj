@@ -808,9 +808,9 @@ export class MySceneGraph {
 
     checkForCircularComponentDependency(info, visited) {
         visited = [...visited, info.id];
-        if (info.type == 'primitive') return null
 
         for (let child of this.components[info.id].children) {
+            if (child.type == 'primitive') continue;
             if (visited.includes(child.id))
                 return 'Node ' + info.id + ' has a circular dependency with node ' + child.id;
             let circularDependency = ""
@@ -824,7 +824,7 @@ export class MySceneGraph {
 
         const updatedPrimitives = {};
         const primitivesToUpdate = ['MyRectangle', 'MyTriangle']
-        console.log(this.components)
+
         for (let [componentID, component] of Object.entries(this.components)) {
             const componentChildren = component.children
             const newComponentChildren = component.children
@@ -867,7 +867,6 @@ export class MySceneGraph {
 
             component.children = newComponentChildren
         }
-        console.log(this.primitives)
     }
 
     /**
