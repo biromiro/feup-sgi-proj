@@ -270,6 +270,16 @@
         <primitive id="lowPolyCylinder">
             <cylinder base="1" top="1" height="1" slices="4" stacks="1"/>
         </primitive>
+
+        <primitive id="patchedRectangle">
+            <patch degree_u="1" parts_u="10" degree_v="1" parts_v="10" >
+                <controlpoint x="-0.5" y="-0.5" z="0" w="1" />
+                <controlpoint x="-0.5" y="0.5" z="0" w="1" />
+                <controlpoint x="0.5" y="-0.5" z="0" w="1" />
+                <controlpoint x="0.5" y="0.5" z="0" w="1" />
+            </patch>
+        </primitive>
+
         <primitive id="treeLeafBundleTriangle0"> 
             <triangle x1="-0.9510493092808495" y1="-0.3167897494786097" z1="-0.390037305907445" x2="-0.5574781434747186" y2="0.43986793102752625" z2="-0.8749745658092721" x3="-0.4654506509527891" y3="-0.531177464362609" z3="-0.8530695213549819" /> 
         </primitive>
@@ -2558,7 +2568,7 @@
             </materials>
             <texture id="none"/>
             <children>
-                <primitiveref id="patchExample" />
+                <primitiveref id="patchedRectangle" />
             </children>
         </component>
         
