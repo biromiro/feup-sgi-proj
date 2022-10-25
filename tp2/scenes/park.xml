@@ -589,6 +589,23 @@
         <primitive id="rockBundleTriangle41"> 
             <triangle x1="-0.8649829269760629" y1="0.1093552784394627" z1="-0.767966640140692" x2="-0.8981591898851928" y2="-0.7756646741114918" z2="0.06748493759078868" x3="-0.8710158115534014" y3="0.36678672552216257" z3="-0.6012246302602835" /> 
         </primitive>
+
+        <primitive id="patchExample">
+            <patch degree_u="2" parts_u="10" degree_v="3" parts_v="10" >
+                <controlpoint x="-1.5" y="-1.5" z="0" w="1" />
+                <controlpoint x="-2.0" y="-2.0" z="2.0" w="1"/>
+                <controlpoint x="-2.0" y="2.0" z="2.0" w="1"/>
+                <controlpoint x="-1.5" y="1.5" z="0" w="1"/>
+                <controlpoint x="0" y="0" z="3" w="1"/>
+                <controlpoint x="0" y="-2" z="3" w="5"/>
+                <controlpoint x="0" y="2" z="3" w="5"/>
+                <controlpoint x="0" y="0" z="3" w="1"/>
+                <controlpoint x="1.5" y="-1.5" z="0" w="1"/>
+                <controlpoint x="2" y="-2" z="2" w="1"/>
+                <controlpoint x="2" y="2" z="2" w="1"/>
+                <controlpoint x="1.5" y="1.5" z="0" w="1"/>
+            </patch> 
+        </primitive>
     </primitives>
 
     <components>
@@ -2530,6 +2547,18 @@
                 <componentref id="sandbox" />
                 <componentref id="slide" />
                 <componentref id="rocks" />
+                <componentref id="patch" />
+            </children>
+        </component>
+        <component id="patch">
+                    <transformation>
+            </transformation>
+            <materials>
+                <material id="baseMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="patchExample" />
             </children>
         </component>
         

@@ -4,6 +4,7 @@ import { MyRectangle } from './primitives/MyRectangle.js';
 import { MySphere } from './primitives/MySphere.js';
 import { MyTorus } from './primitives/MyTorus.js';
 import { MyTriangle } from './primitives/MyTriangle.js';
+import { MyPatch } from './primitives/MyPatch.js';
 import { SceneComponent } from './sceneObjects/SceneComponent.js';
 import { SceneLight } from './sceneObjects/SceneLight.js';
 
@@ -21,7 +22,7 @@ const PRIMITIVES_INDEX = 7;
 const COMPONENTS_INDEX = 8;
 
 // Possible primitive types.
-const POSSIBLE_PRIMITIVES = ['rectangle', 'triangle', 'cylinder', 'sphere', 'torus'];
+const POSSIBLE_PRIMITIVES = ['rectangle', 'triangle', 'cylinder', 'sphere', 'torus', 'patch'];
 
 // Possible image types.
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
@@ -744,7 +745,7 @@ export class MySceneGraph {
             if (!POSSIBLE_PRIMITIVES.includes(typeName)) {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus)";
             }            
-
+            console.log(typeName)
             // Retrieves the primitive coordinates.
             if (typeName == 'rectangle') {
                 const rect = [];
@@ -799,8 +800,38 @@ export class MySceneGraph {
                 
                 const sphere = new MySphere(this.scene, ...sph);
                 this.primitives[primitiveId] = sphere;
-            } else console.warn("To do: Parse other primitives.");
-            
+            } else if (typeName == 'patch') {
+                const patch = {};
+                for (const param of ['degree_u', 'parts_u', 'degree_v', 'parts_v']) {
+                    patch[param] = this.reader.getInteger(type, param);
+                    if (patch[param] == null || isNaN(patch[param]))
+                        return "unable to parse " + param + " of the primitive coordinates for ID = " + primitiveId;
+                    if (param.startsWith('degree') && (patch[param] < 1 || patch[param] > 3))
+                        return "parameter " + param + " should be between 1 and 3"
+                    if (param.startsWith('parts') && patch[param] < 1)
+                        return "parameter " + param + " should be greater than 0"
+                }
+                
+                const controlPointsNodes = type.children;
+                const numControlPoints = (patch['degree_u'] + 1) * (patch['degree_v'] + 1);
+                if (controlPointsNodes.length != numControlPoints)
+                    return "unexpected number of control points - expected " + numControlPoints + ", got " + controlPointsNodes.length
+                
+                const controlPoints = []
+
+                for (let u_degree = 0; u_degree <= patch['degree_u']; u_degree++) {
+                    const innerControlPoints = []
+                    for (let v_degree = 0; v_degree <= patch['degree_v']; v_degree++) {
+                        const controlPointCoords = this.parseCoordinates4D(controlPointsNodes[u_degree * (patch['degree_v'] + 1) + v_degree], "control point coords are not valid for patch " + primitiveId);
+                        innerControlPoints.push(controlPointCoords);
+                    }
+                    controlPoints.push(innerControlPoints);
+                }
+                
+                console.log(controlPoints)
+                const patchPrim = new MyPatch(this.scene, ...Object.values(patch), controlPoints);
+                this.primitives[primitiveId] = patchPrim;
+            }
         }
 
         return null;
@@ -986,7 +1017,6 @@ export class MySceneGraph {
             if (textureID != "none") {
 
                 let length_s = this.reader.getString(texture, 'length_s', false);
-                console.log(length_s)
                 if (length_s == null) length_s = (textureID == 'inherit' ? '-1' : '1')
                 let length_t = this.reader.getString(texture, 'length_t', false);
                 if (length_t == null) length_t = (textureID == 'inherit' ? '-1' : '1')
@@ -1037,7 +1067,6 @@ export class MySceneGraph {
             return circularDependency
 
         this.multiplexComponentPrimitives();
-        console.log(this.components);
         return null;
 
     }
