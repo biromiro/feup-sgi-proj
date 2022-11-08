@@ -1,5 +1,5 @@
-import { CGFscene } from '../lib/CGF.js';
-import { CGFaxis,CGFcamera } from '../lib/CGF.js';
+import { CGFscene, CGFshader } from '../lib/CGF.js';
+import { CGFaxis, CGFcamera } from '../lib/CGF.js';
 
 
 var DEGREE_TO_RAD = Math.PI / 180;
@@ -35,7 +35,12 @@ export class XMLscene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
 
         this.axis = new CGFaxis(this);
-        this.setUpdatePeriod(100);
+
+        this.shader = new CGFshader(this.gl, "shaders/pulse.vert", "shaders/pulse.frag");
+
+        this.shader.setUniformsValues({ timeFactor: 0, normScale: 1 });
+
+        this.setUpdatePeriod(50);
     }
 
     /**
@@ -58,29 +63,31 @@ export class XMLscene extends CGFscene {
             this.lights[i].setSpecular(...light.typeInfo.specular);
 
             if (light.type == "spot") {
+                this.lights[i].isSpot = true;
                 this.lights[i].setSpotCutOff(light.typeInfo.angle);
                 this.lights[i].setSpotExponent(light.typeInfo.exponent);
-                
+
                 let x1, x2, y1, y2, z1, z2, dx, dy, dz;
                 [x1, y1, z1] = light.typeInfo.location;
                 [x2, y2, z2] = light.typeInfo.targetLight;
                 [dx, dy, dz] = [x2 - x1, y2 - y1, z2 - z1];
 
                 const norm = Math.sqrt(dx * dx + dy * dy + dz * dz);
-                this.lights[i].setSpotDirection(dx/norm, dy/norm, dz/norm);
-            }
+                this.lights[i].setSpotDirection(dx / norm, dy / norm, dz / norm);
+            } else this.lights[i].isSpot = false;
 
-            if(light.typeInfo.attenuation != undefined) {
-                const {constant, linear, quadratic} = light.typeInfo.attenuation
+            if (light.typeInfo.attenuation != undefined) {
+                const { constant, linear, quadratic } = light.typeInfo.attenuation
 
                 this.lights[i].setConstantAttenuation(constant)
                 this.lights[i].setLinearAttenuation(linear)
                 this.lights[i].setQuadraticAttenuation(quadratic)
-                
+
             }
+            console.log(this.lights[i])
 
             this.lights[i].setVisible(true);
-            if (light.isEnabled){
+            if (light.isEnabled) {
                 this.lights[i].enable();
             } else
                 this.lights[i].disable();
@@ -90,7 +97,37 @@ export class XMLscene extends CGFscene {
             i++;
         }
 
+
         this.interface.setLightCheckboxes();
+        this.setShaderLights();
+    }
+
+    setShaderLights() {
+        console.log('changing lights', !this.lights[0].enabled)
+
+        const lights = [];
+
+        for (let i = 0; i < 8; i++) {
+
+            const light = {
+                isDisabled: !this.lights[i].enabled,
+                isSpot: this.lights[i].isSpot,
+                ambient: vec4.fromValues(...this.lights[i].ambient),
+                diffuse: vec4.fromValues(...this.lights[i].diffuse),
+                specular: vec4.fromValues(...this.lights[i].specular),
+                position: vec3.fromValues(...this.lights[i].position),
+                direction: vec3.fromValues(...this.lights[i].spot_direction),
+                constant: this.lights[i].constant_attenuation,
+                linear: this.lights[i].linear_attenuation,
+                quadratic: this.lights[i].quadratic_attenuation
+            }
+
+            lights.push(light);
+        }
+
+        this.shader.setUniformsValues({
+            "lights": lights
+        });
     }
 
     setDefaultAppearance() {
@@ -114,6 +151,13 @@ export class XMLscene extends CGFscene {
         this.sceneInited = true;
     }
 
+    update(t) {
+        // Dividing the time by 100 "slows down" the variation (i.e. in 100 ms timeFactor increases 1 unit).
+        // Doing the modulus (%) by 100 makes the timeFactor loop between 0 and 99
+        // ( so the loop period of timeFactor is 100 times 100 ms = 10s ; the actual animation loop depends on how timeFactor is used in the shader )
+        this.shader.setUniformsValues({ timeFactor: t / 250 % 157 });
+    }
+
     /**
      * Displays the scene.
      */
@@ -128,11 +172,11 @@ export class XMLscene extends CGFscene {
         if (this.camera) {
             this.updateProjectionMatrix();
             this.loadIdentity();
-    
+
             // Apply transformations corresponding to the camera position relative to the origin
-            this.applyViewMatrix();    
+            this.applyViewMatrix();
         }
-       
+
         this.pushMatrix();
         //this.axis.display();
 

@@ -4,7 +4,7 @@
 
 export class SceneComponent {
 
-    constructor(id, transformation, materials, texture, children) {
+    constructor(id, transformation, materials, texture, children, highlighted) {
         this.id = id;
         this.transformation = transformation;
         this.materials = materials;
@@ -14,5 +14,6 @@ export class SceneComponent {
         this.children = children;
         this.isNode = true;
         this.materialIndex = 0;
+        this.highlighted = highlighted;
     }
 }

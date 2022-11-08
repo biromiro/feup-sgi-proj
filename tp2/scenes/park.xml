@@ -929,6 +929,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
+            <highlighted r="0.95" g="0.2" b="0.3" scale_h="1.2" />
             <texture id="waves" />
             <children>
                 <primitiveref id="baseTorusPrim" />
@@ -943,6 +944,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
+            <highlighted r="0.2" g="0.95" b="0.3" scale_h="1.2" />
             <texture id="waves" />
             <children>
                 <primitiveref id="baseTorusPrim" />
