@@ -745,7 +745,6 @@ export class MySceneGraph {
             if (!POSSIBLE_PRIMITIVES.includes(typeName)) {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus)";
             }
-            console.log(typeName)
             // Retrieves the primitive coordinates.
             if (typeName == 'rectangle') {
                 const rect = [];
@@ -828,7 +827,6 @@ export class MySceneGraph {
                     controlPoints.push(innerControlPoints);
                 }
 
-                console.log(controlPoints)
                 const patchPrim = new MyPatch(this.scene, ...Object.values(patch), controlPoints);
                 this.primitives[primitiveId] = patchPrim;
             }
@@ -908,6 +906,7 @@ export class MySceneGraph {
         const components = componentsNode.children;
 
         this.components = {};
+        this.highlightedComponents = [];
         const componentIDs = [];
         for (const component of components) {
             if (component.nodeName != "component") {
@@ -1083,6 +1082,11 @@ export class MySceneGraph {
 
 
             this.components[componentID] = new SceneComponent(componentID, sceneTransformation, sceneMaterials, sceneTexture, childrenArr, highlighted)
+
+            if (highlighted != undefined) {
+                console.log(componentID)
+                this.highlightedComponents.push(componentID);
+            }
         }
 
         let circularDependency = "";
@@ -1090,6 +1094,7 @@ export class MySceneGraph {
             return circularDependency
 
         this.multiplexComponentPrimitives();
+        this.scene.interface.setShaderCheckboxes();
         return null;
 
     }
@@ -1306,12 +1311,22 @@ export class MySceneGraph {
             material: undefined,
             texture: undefined,
             highlighted: undefined,
-        });
+        }, false);
+
+        this.scene.setActiveShader(this.scene.shader);
+
+        this.displayComponent({ id: this.idRoot, type: 'component' }, {
+            material: undefined,
+            texture: undefined,
+            highlighted: undefined,
+        }, true);
+
+        this.scene.setActiveShader(this.scene.defaultShader);
 
     }
 
-    displayComponent(info, inheritance) {
-        let { material, texture, length_s, length_t } = inheritance;
+    displayComponent(info, inheritance, highlightedOnly) {
+        let { material, texture } = inheritance;
         if (info.type === 'component') {
             const component = this.components[info.id];
             this.scene.pushMatrix();
@@ -1335,20 +1350,19 @@ export class MySceneGraph {
                 material.setTexture(texture);
                 material.setTextureWrap('MIRRORED_REPEAT', 'MIRRORED_REPEAT');
                 material.apply();
-                //console.log(material.diffuse);
             }
 
             for (const child of component.children) {
                 this.displayComponent(child, {
                     material: material,
                     texture: texture,
-                    highlighted: component.highlighted
-                });
+                    highlighted: component.isHighlighted ? component.highlighted : undefined,
+                }, highlightedOnly);
             }
 
             this.scene.popMatrix();
         } else {
-            if (inheritance.highlighted) {
+            if (inheritance.highlighted && highlightedOnly) {
                 this.scene.shader.setUniformsValues({
                     normScale: inheritance.highlighted.scale_h,
                     targetColor: vec3.fromValues(...inheritance.highlighted.color)
@@ -1356,10 +1370,8 @@ export class MySceneGraph {
 
                 this.scene.texture = inheritance.texture;
 
-                this.scene.setActiveShader(this.scene.shader);
                 this.primitives[info.id].display();
-                this.scene.setActiveShader(this.scene.defaultShader);
-            } else {
+            } else if (inheritance.highlighted == undefined && !highlightedOnly) {
                 this.primitives[info.id].display();
             }
         }

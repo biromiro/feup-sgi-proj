@@ -21,9 +21,7 @@ void main() {
 	
 	vTextureCoord = aTextureCoord;
 	
-	float scaleFactor = (1.0 + sin( 2.0 * timeFactor)) / 2.0;
-
-	offset=aVertexNormal*normScale*scaleFactor;
+	offset=aVertexNormal*normScale*timeFactor;
 
 	vec4 vertex = uMVMatrix * vec4(aVertexPosition + offset, 1.0);
 	

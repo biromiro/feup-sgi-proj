@@ -15,5 +15,7 @@ export class SceneComponent {
         this.isNode = true;
         this.materialIndex = 0;
         this.highlighted = highlighted;
+        this.isHighlighted = false;
     }
+
 }

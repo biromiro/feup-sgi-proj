@@ -60,11 +60,11 @@ vec4 CalcLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir, bool target
 	vec4 ambient, diffuse, specular;
 
 	if (target) {
-		ambient  = light.ambient  * vec4(targetColor, 1.0);
+		ambient  = light.ambient  * 0.1 * vec4(targetColor, 1.0);
 		diffuse  = light.diffuse  * diff * vec4(targetColor, 1.0);
 		specular = light.specular * spec * vec4(targetColor, 1.0);
 	} else {
-		ambient  = light.ambient  * uFrontMaterial.ambient;
+		ambient  = light.ambient  * 0.3 * uFrontMaterial.ambient;
 		diffuse  = light.diffuse  * diff * uFrontMaterial.diffuse;
 		specular = light.specular * spec * uFrontMaterial.specular;
 	}
@@ -102,11 +102,8 @@ void main() {
 		resultTarget += CalcLight(lights[i], norm, vFragPos, viewDir, true);    
 
 	vec4 texColor = texture2D(uSampler, vTextureCoord+vec2(timeFactor*.01,0.0));
-	float minR, maxR, minG, maxG, minB, maxB;
 
-	float changeFactor = (1.0 + sin( 2.0 * timeFactor)) / 2.0;
-
-	vec4 color = result  + (resultTarget  - result) * changeFactor;
+	vec4 color = result  + (resultTarget  - result) * timeFactor;
 
 	gl_FragColor = texColor * color;
 

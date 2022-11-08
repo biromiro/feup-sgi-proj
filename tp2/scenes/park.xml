@@ -1336,6 +1336,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="none" />
+            <highlighted r="0.5" g="0.1" b="0.2" scale_h="1.2" />
             <children>
                 <primitiveref id="rockBundleTriangle0" />
                 <primitiveref id="rockBundleTriangle1" />
