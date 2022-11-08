@@ -279,6 +279,37 @@
                 <controlpoint x="0.5" y="0.5" z="0" w="1" />
             </patch>
         </primitive>
+        <primitive id="patchedTent">
+            <patch degree_u="1" parts_u="5" degree_v="2" parts_v="10" >
+                <controlpoint x="0.5" y="-0.5" z="0.5" w="1" />
+                <controlpoint x="0.5" y="-0.5" z="-0.5" w="1" />
+                <controlpoint x="0" y="0.5" z="0.5" w="1" />
+                <controlpoint x="0" y="0.5" z="-0.5" w="1" />
+                <controlpoint x="-0.5" y="-0.5" z="0.5" w="1" />
+                <controlpoint x="-0.5" y="-0.5" z="-0.5" w="1" />
+            </patch>
+        </primitive>
+        <primitive id="patchedBarrelHalf">
+            <patch degree_u="1" parts_u="5" degree_v="2" parts_v="10" >
+                <controlpoint x="-0.5" y="-0.5" z="0" w="1" />
+                <controlpoint x="-0.5" y="0.5" z="0" w="1" />
+                <controlpoint x="0" y="-0.5" z="0.666" w="1" />
+                <controlpoint x="0" y="0.5" z="0.666" w="1" />
+                <controlpoint x="0.5" y="-0.5" z="0" w="1" />
+                <controlpoint x="0.5" y="0.5" z="0" w="1" />
+            </patch>
+        </primitive>
+        <primitive id="patchedSemiCircle">
+            <patch degree_u="1" parts_u="10" degree_v="2" parts_v="10" >
+                <controlpoint x="-0.5" y="0" z="0" w="1" />
+                <controlpoint x="-0.5" y="0" z="0" w="1" />
+                <controlpoint x="0" y="0" z="0" w="1" />
+                <controlpoint x="0" y="0.666" z="0" w="1" />
+                <controlpoint x="0.5" y="0" z="0" w="1" />
+                <controlpoint x="0.5" y="0" z="0" w="1" />
+            </patch>
+        </primitive>
+
 
         <primitive id="treeLeafBundleTriangle0"> 
             <triangle x1="-0.9510493092808495" y1="-0.3167897494786097" z1="-0.390037305907445" x2="-0.5574781434747186" y2="0.43986793102752625" z2="-0.8749745658092721" x3="-0.4654506509527891" y3="-0.531177464362609" z3="-0.8530695213549819" /> 
@@ -2559,20 +2590,44 @@
                 <componentref id="sandbox" />
                 <componentref id="slide" />
                 <componentref id="rocks" />
-                <componentref id="patch" />
+                <componentref id="barrel" />
             </children>
         </component>
         <component id="patch">
-                    <transformation>
+            <transformation>
             </transformation>
             <materials>
                 <material id="baseMaterial" />
             </materials>
             <texture id="none"/>
             <children>
-                <primitiveref id="patchedRectangle" />
+                <primitiveref id="patchedSemiCircle" />
+                <primitiveref id="patchedBarrelHalf" />
             </children>
         </component>
-        
+        <component id="barrel">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="baseMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="patchedSemiCircle" />
+                <componentref id="topLeftSemiCircle" />
+            </children>
+        </component>
+        <component id="topLeftSemiCircle">
+            <transformation>
+                <scale x="-1" y="-1" z="1" />
+            </transformation>
+            <materials>
+                <material id="baseMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="patchedSemiCircle" />
+            </children>
+        </component>
     </components>
 </sxs>
