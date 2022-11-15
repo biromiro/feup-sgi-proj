@@ -1471,9 +1471,10 @@ export class MySceneGraph {
                 });
 
                 this.scene.texture = inheritance.texture;
-
+                this.primitives[info.id].enableNormalViz();
                 this.primitives[info.id].display();
             } else if (inheritance.highlighted == undefined && !highlightedOnly) {
+                this.primitives[info.id].enableNormalViz();
                 this.primitives[info.id].display();
             }
         }

@@ -651,13 +651,15 @@
 
     <animations>
         <keyframeanim id="animExample">        
-            <keyframe instant="2">                                                                                         
+            <keyframe instant="2">      
+                <translate x="3" y="3" z="3" />
             </keyframe>
             <keyframe instant="5">
-                <translate x="3" y="3" z="3" />
                 <rotate axis="x" angle="-45" />
-                <rotate axis="z" angle="-45" />
+                <translate x="3" y="3" z="3" />
+                <rotate axis="y" angle="185" />
                 <scale x="2" y="2" z="2" />
+                <rotate axis="z" angle="-45" />
             </keyframe>
         </keyframeanim>
     </animations>
@@ -2593,7 +2595,7 @@
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="platform" />
+                <!--<componentref id="platform" />
                 <componentref id="seat" />
                 <componentref id="upAndDown" />
                 <componentref id="swing" />
@@ -2604,7 +2606,8 @@
                 <componentref id="sandbox" />
                 <componentref id="slide" />
                 <componentref id="rocks" />
-                <componentref id="barrel" />
+                <componentref id="barrel" />-->
+                <primitiveref id="baseConePrim" />
             </children>
         </component>
         <component id="patch">
