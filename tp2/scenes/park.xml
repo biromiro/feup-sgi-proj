@@ -254,7 +254,7 @@
         </primitive>
 
         <primitive id="baseCylinderPrim">
-            <cylinder base="1" top="1" height="1" slices="20" stacks="1"/>
+            <cylinder base="1" top="1" height="1" slices="20" stacks="3"/>
         </primitive>
          <primitive id="baseConePrim">
             <cylinder base="1" top="0" height="1" slices="20" stacks="20"/>

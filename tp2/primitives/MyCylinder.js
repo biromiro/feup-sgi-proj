@@ -22,7 +22,7 @@ export class MyCylinder extends CGFobject {
         
             var ang = 0;
             var alphaAng = 2 * Math.PI / this.slices;
-            const lowerStackBound = (2 * this.slices) * stack;
+            const lowerStackBound = (2 * this.slices + 2) * stack;
 
             const nextStackRadius = currentRadius + radiusDiff;
             var ta = Math.atan((this.baseRadius - this.upperRadius) / this.height)
@@ -48,6 +48,7 @@ export class MyCylinder extends CGFobject {
                     normal[1] * normal[1] +
                     normal[2] * normal[2]
                 );
+
                 normal[0] /= nsize;
                 normal[1] /= nsize;
                 normal[2] /= nsize;
@@ -59,25 +60,30 @@ export class MyCylinder extends CGFobject {
                 this.indices.push(0 + 2 * i + lowerStackBound, 1 + 2 * i + lowerStackBound, 2 + 2 * i + lowerStackBound)
                 this.indices.push(1 + 2 * i + lowerStackBound, 3 + 2 * i + lowerStackBound, 2 + 2 * i + lowerStackBound)
                     
-                this.texCoords.push(i / this.slices, 1 - (stack + 1) / this.stacks)
-                this.texCoords.push(i / this.slices, 1 - stack / this.stacks)
+                this.texCoords.push(1 - i / this.slices, (stack + 1) / this.stacks)
+                this.texCoords.push(1 - i / this.slices, stack / this.stacks)
 
                 ang += alphaAng;
-
             }
 
             this.vertices.push(currentRadius , 0, stack * (this.height / this.stacks));
             this.vertices.push(nextStackRadius, 0, (stack + 1) * (this.height / this.stacks));
 
+            this.indices.push(0 + 2 * this.slices + lowerStackBound, 1 + 2 * this.slices + lowerStackBound, 2 + 2 * this.slices + lowerStackBound)
+            this.indices.push(1 + 2 * this.slices + lowerStackBound, 3 + 2 * this.slices + lowerStackBound, 2 + 2 * this.slices + lowerStackBound)
+
             // push normal once for each vertex of this triangle
             this.normals.push(...[1, ta, 0]);
             this.normals.push(...[1, ta, 0]);
 
-            this.texCoords.push(1, 1 - (stack + 1) / this.stacks)
-            this.texCoords.push(1, 1 - stack / this.stacks)
+            this.texCoords.push(0, (stack + 1) / this.stacks)
+            this.texCoords.push(0, stack / this.stacks)
 
             currentRadius += radiusDiff;
         }
+
+        console.log(this.normals)
+        console.log(this.indices)
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
