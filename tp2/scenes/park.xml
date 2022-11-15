@@ -2594,9 +2594,9 @@
             <materials>
                 <material id="steelGray" />
             </materials>
-            <texture id="test" length_s="10" length_t="10"/>
+            <texture id="test" length_s="5" length_t="10"/>
             <children>
-                <primitiveref id="baseTrianglePrim" />
+                <primitiveref id="baseTorusPrim" />
             </children>
         </component>
         <component id="park">
@@ -2607,7 +2607,7 @@
             </materials>
             <texture id="none"/>
             <children>
-                <!--<componentref id="platform" />
+                <componentref id="platform" />
                 <componentref id="seat" />
                 <componentref id="upAndDown" />
                 <componentref id="swing" />
@@ -2618,8 +2618,7 @@
                 <componentref id="sandbox" />
                 <componentref id="slide" />
                 <componentref id="rocks" />
-                <componentref id="barrel" />-->
-                <componentref id="baseTrianglePrim" />
+                <componentref id="barrel" />
             </children>
         </component>
         <component id="patch">

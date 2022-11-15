@@ -64,7 +64,7 @@ export class MyTorus extends CGFobject {
                     this.indices.push((loop + 1) * (this.slices + 1) + innerSlice + 1);
                 }
 
-                this.texCoords.push(innerSlice / this.slices, loop / this.loops);
+                this.texCoords.push(1 - innerSlice / this.slices, loop / this.loops);
 
                 ang += alphaAng
             }
