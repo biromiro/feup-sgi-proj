@@ -59,8 +59,8 @@ export class MyCylinder extends CGFobject {
                 this.indices.push(0 + 2 * i + lowerStackBound, 1 + 2 * i + lowerStackBound, 2 + 2 * i + lowerStackBound)
                 this.indices.push(1 + 2 * i + lowerStackBound, 3 + 2 * i + lowerStackBound, 2 + 2 * i + lowerStackBound)
                     
-                this.texCoords.push(i / this.slices, (stack + 1) / this.stacks)
-                this.texCoords.push(i / this.slices, stack / this.stacks)
+                this.texCoords.push(i / this.slices, 1 - (stack + 1) / this.stacks)
+                this.texCoords.push(i / this.slices, 1 - stack / this.stacks)
 
                 ang += alphaAng;
 
@@ -73,8 +73,8 @@ export class MyCylinder extends CGFobject {
             this.normals.push(...[1, ta, 0]);
             this.normals.push(...[1, ta, 0]);
 
-            this.texCoords.push(1, (stack + 1) / this.stacks)
-            this.texCoords.push(1, stack / this.stacks)
+            this.texCoords.push(1, 1 - (stack + 1) / this.stacks)
+            this.texCoords.push(1, 1 - stack / this.stacks)
 
             currentRadius += radiusDiff;
         }
