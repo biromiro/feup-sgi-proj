@@ -649,6 +649,19 @@
         </primitive>
     </primitives>
 
+    <animations>
+        <keyframeanim id="animExample">        
+            <keyframe instant="2">                                                                                         
+            </keyframe>
+            <keyframe instant="5">
+                <translate x="3" y="3" z="3" />
+                <rotate axis="x" angle="-45" />
+                <rotate axis="z" angle="-45" />
+                <scale x="2" y="2" z="2" />
+            </keyframe>
+        </keyframeanim>
+    </animations>
+
     <components>
         <component id="rightSideCube">
             <transformation>

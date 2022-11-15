@@ -7,6 +7,8 @@ import { MyTriangle } from './primitives/MyTriangle.js';
 import { MyPatch } from './primitives/MyPatch.js';
 import { SceneComponent } from './sceneObjects/SceneComponent.js';
 import { SceneLight } from './sceneObjects/SceneLight.js';
+import { MyKeyframe } from './animations/MyKeyframe.js';
+import { MyKeyframeAnimation } from './animations/MyKeyframeAnimation.js';
 
 const DEGREE_TO_RAD = Math.PI / 180;
 
@@ -19,7 +21,8 @@ const TEXTURES_INDEX = 4;
 const MATERIALS_INDEX = 5;
 const TRANSFORMATIONS_INDEX = 6;
 const PRIMITIVES_INDEX = 7;
-const COMPONENTS_INDEX = 8;
+const ANIMATIONS_INDEX = 8;
+const COMPONENTS_INDEX = 9;
 
 // Possible primitive types.
 const POSSIBLE_PRIMITIVES = ['rectangle', 'triangle', 'cylinder', 'sphere', 'torus', 'patch'];
@@ -196,6 +199,18 @@ export class MySceneGraph {
 
             //Parse primitives block
             if ((error = this.parsePrimitives(nodes[index])) != null)
+                return error;
+        }
+
+        // <animations>
+        if ((index = nodeNames.indexOf("animations")) == -1)
+            return "tag <animations> missing";
+        else {
+            if (index != ANIMATIONS_INDEX)
+                this.onXMLMinorError("tag <animations> out of order");
+
+            //Parse transformations block
+            if ((error = this.parseAnimations(nodes[index])) != null)
                 return error;
         }
 
@@ -899,6 +914,74 @@ export class MySceneGraph {
     }
 
     /**
+     * Parses the <animations> block.
+     * @param {animations block element} animationsNode
+     */
+    parseAnimations(animationsNode) {
+        const animations = animationsNode.children;
+
+        this.animations = {};
+
+        // Any number of animations.
+        for (const animation of animations) {
+
+            if (animation.nodeName != "keyframeanim") {
+                this.onXMLMinorError("unknown tag <" + transformation.nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current transformation.
+            const animationID = this.reader.getString(animation, 'id');
+            if (animationID == null)
+                return "no ID defined for animation";
+
+            // Checks for repeated IDs.
+            if (this.animations[animationID] != null)
+                return "ID must be unique for each animation (conflict: ID = " + animationID + ")";
+
+
+            const keyframes = animation.children;
+
+            const keyframeList = [];
+            let lastInstant = -1;
+            for (const keyframe of keyframes) {
+                if (keyframe.nodeName != "keyframe") {
+                    this.onXMLMinorError("unknown tag <" + keyframe.nodeName + ">");
+                    continue;
+                }
+
+                const instant = this.reader.getFloat(keyframe, 'instant');
+
+                if (instant == null || isNaN(instant))
+                    return "unable to parse instant of the keyframe for ID = " + animationID;
+
+                if (instant <= lastInstant)
+                    return "keyframes must be in ascending order of instant for animation " + animationID;
+                else lastInstant = instant;
+
+                const transfMatrix = this.parseTransformation(keyframe);
+
+                if (typeof transfMatrix === 'string')
+                    return transfMatrix;
+
+                const mykeyframe = new MyKeyframe(instant, transfMatrix);
+                keyframeList.push(mykeyframe);
+                console.log(`t=0 - ${mykeyframe.getCurrentTransformationMatrix(0)}`);
+                console.log(`t=0.2 - ${mykeyframe.getCurrentTransformationMatrix(0.2)}`);
+                console.log(`t=0.5 - ${mykeyframe.getCurrentTransformationMatrix(0.5)}`);
+                console.log(`t=1 - ${mykeyframe.getCurrentTransformationMatrix(1)}`);
+                console.log(`target - ${mykeyframe.transfMatrix}`);
+            }
+
+            this.animations[animationID] = new MyKeyframeAnimation(this.scene, keyframeList);
+        }
+
+        console.log(this.animations);
+
+        return null;
+    }
+
+    /**
    * Parses the <components> block.
    * @param {components block element} componentsNode
    */
@@ -1062,6 +1145,19 @@ export class MySceneGraph {
 
             // Animation
 
+
+            let animationID = undefined;
+
+            if (animationIndex != -1) {
+                const animationProperties = component.children[animationIndex];
+
+                animationID = this.reader.getString(animationProperties, 'id');
+
+                if (this.animations[animationID] == null)
+                    return "no such animation with ID " + animationID + " on component " + componentID
+
+            }
+
             // Highlighted
 
             let highlighted = undefined;
@@ -1081,7 +1177,7 @@ export class MySceneGraph {
             }
 
 
-            this.components[componentID] = new SceneComponent(componentID, sceneTransformation, sceneMaterials, sceneTexture, childrenArr, highlighted)
+            this.components[componentID] = new SceneComponent(componentID, sceneTransformation, sceneMaterials, sceneTexture, childrenArr, highlighted, animationID)
 
             if (highlighted != undefined) {
                 console.log(componentID)
@@ -1293,6 +1389,12 @@ export class MySceneGraph {
 
         this.scene.interface.setActiveCamera(this.scene.camera);
 
+    }
+
+    updateAnimations(t) {
+        for (let key in this.animations) {
+            this.animations[key].update(t);
+        }
     }
 
     /**

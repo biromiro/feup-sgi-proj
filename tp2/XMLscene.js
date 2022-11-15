@@ -39,8 +39,9 @@ export class XMLscene extends CGFscene {
         this.shader = new CGFshader(this.gl, "shaders/pulse.vert", "shaders/pulse.frag");
 
         this.shader.setUniformsValues({ timeFactor: 0, normScale: 1 });
-
-        this.setUpdatePeriod(50);
+        this.updatePeriod = 50;
+        this.setUpdatePeriod(this.updatePeriod);
+        this.instant = 0;
     }
 
     /**
@@ -156,10 +157,11 @@ export class XMLscene extends CGFscene {
         // Doing the modulus (%) by 100 makes the timeFactor loop between 0 and 99
         // ( so the loop period of timeFactor is 100 times 100 ms = 10s ; the actual animation loop depends on how timeFactor is used in the shader )
 
-        const t_ = t / 250 % 157;
-        const timeFactor = (1.0 + Math.sin(2.0 * t_)) / 2.0;
-
+        let t_ = (t / 10) % 314;
+        const timeFactor = (1.0 + Math.sin(2.0 * t_ * 0.01)) / 2.0;
         this.shader.setUniformsValues({ timeFactor: timeFactor });
+        this.instant += this.updatePeriod;
+        this.graph.updateAnimations(this.instant * 0.001);
     }
 
     /**
