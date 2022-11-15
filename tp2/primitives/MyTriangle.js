@@ -71,15 +71,14 @@ export class MyTriangle extends CGFobject {
         t
         */
 
+        // ajustar
+
         this.a = Math.sqrt(Math.pow(this.x2 - this.x1, 2) + Math.pow(this.y2 - this.y1, 2) + Math.pow(this.z2 - this.z1, 2))
         this.b = Math.sqrt(Math.pow(this.x3 - this.x2, 2) + Math.pow(this.y3 - this.y2, 2) + Math.pow(this.z3 - this.z2, 2))
         this.c = Math.sqrt(Math.pow(this.x3 - this.x1, 2) + Math.pow(this.y3 - this.y1, 2) + Math.pow(this.z3 - this.z1, 2))
 
-
         this.cosalpha = (Math.pow(this.a,2) - Math.pow(this.b, 2) + Math.pow(this.c, 2)) / (2 * this.a * this.c);
         this.sinalpha = Math.sqrt(1 - Math.pow(this.cosalpha, 2));
-
-        
 
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
@@ -94,12 +93,12 @@ export class MyTriangle extends CGFobject {
 	updateTexCoords(length_s, length_t) {
 
 		this.texCoords = [
-			0, 0,
-			this.a / length_s, 0,
-            this.c * this.cosalpha / length_s, this.c * this.sinalpha / length_t,
-            0, 0,
-            this.a / length_s, 0,
-            this.c * this.cosalpha / length_s, this.c * this.sinalpha / length_t
+			0, 1,
+			this.a / length_s, 1,
+            this.c * this.cosalpha / length_s, 1 - this.c * this.sinalpha / length_t,
+            0, 1,
+            this.a / length_s, 1,
+            this.c * this.cosalpha / length_s, 1 - this.c * this.sinalpha / length_t
 		]
 		this.updateTexCoordsGLBuffers();
 	}
