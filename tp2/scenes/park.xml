@@ -1,5 +1,5 @@
 <sxs>
-    <scene root="park" axis_length="200"/>
+    <scene root="park" axis_length="0"/>
 
     <views default="orthoCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -254,10 +254,10 @@
         </primitive>
 
         <primitive id="baseCylinderPrim">
-            <cylinder base="1" top="1" height="1" slices="20" stacks="3"/>
+            <cylinder base="1" top="1" height="1" slices="20" stacks="10"/>
         </primitive>
          <primitive id="baseConePrim">
-            <cylinder base="1" top="0" height="1" slices="20" stacks="20"/>
+            <cylinder base="1" top="0" height="1" slices="20" stacks="2"/>
         </primitive>
         <primitive id="baseSpherePrim">
             <sphere radius="1" slices="20" stacks="20" />
@@ -2607,7 +2607,7 @@
             </materials>
             <texture id="none"/>
             <children>
-                <!--<componentref id="platform" />
+                <componentref id="platform" />
                 <componentref id="seat" />
                 <componentref id="upAndDown" />
                 <componentref id="swing" />
@@ -2618,8 +2618,7 @@
                 <componentref id="sandbox" />
                 <componentref id="slide" />
                 <componentref id="rocks" />
-                <componentref id="barrel" />-->
-                <componentref id="baseTrianglePrim" />
+                <componentref id="barrel" />
             </children>
         </component>
         <component id="patch">

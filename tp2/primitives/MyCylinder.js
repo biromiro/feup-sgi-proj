@@ -8,6 +8,7 @@ export class MyCylinder extends CGFobject {
         this.height = height;
         this.slices = slices;
         this.stacks = stacks;
+        this.id = id;
         this.initBuffers();
     }
     initBuffers() {
@@ -27,7 +28,7 @@ export class MyCylinder extends CGFobject {
             const nextStackRadius = currentRadius + radiusDiff;
             var ta = Math.atan((this.baseRadius - this.upperRadius) / this.height)
 
-            for (var i = 0; i < this.slices; i++) {
+            for (var slice = 0; slice < this.slices; slice++) {
                 // All vertices have to be declared for a given face
                 // even if they are shared with others, as the normals 
                 // in each face will be different
@@ -57,33 +58,31 @@ export class MyCylinder extends CGFobject {
                 this.normals.push(...normal);
                 this.normals.push(...normal);
 
-                this.indices.push(0 + 2 * i + lowerStackBound, 1 + 2 * i + lowerStackBound, 2 + 2 * i + lowerStackBound)
-                this.indices.push(1 + 2 * i + lowerStackBound, 3 + 2 * i + lowerStackBound, 2 + 2 * i + lowerStackBound)
+                this.indices.push(0 + 2 * slice + lowerStackBound, 1 + 2 * slice + lowerStackBound, 2 + 2 * slice + lowerStackBound)
+                this.indices.push(1 + 2 * slice + lowerStackBound, 3 + 2 * slice + lowerStackBound, 2 + 2 * slice + lowerStackBound)
                     
-                this.texCoords.push(1 - i / this.slices, (stack + 1) / this.stacks)
-                this.texCoords.push(1 - i / this.slices, stack / this.stacks)
+                this.texCoords.push(1 - slice / this.slices, 1 - stack / this.stacks)
+                this.texCoords.push(1 - slice / this.slices, 1 - (stack + 1) / this.stacks)
+
 
                 ang += alphaAng;
             }
-
             this.vertices.push(currentRadius , 0, stack * (this.height / this.stacks));
             this.vertices.push(nextStackRadius, 0, (stack + 1) * (this.height / this.stacks));
 
-            this.indices.push(0 + 2 * this.slices + lowerStackBound, 1 + 2 * this.slices + lowerStackBound, 2 + 2 * this.slices + lowerStackBound)
-            this.indices.push(1 + 2 * this.slices + lowerStackBound, 3 + 2 * this.slices + lowerStackBound, 2 + 2 * this.slices + lowerStackBound)
+            //this.indices.push(0 + 2 * this.slices + lowerStackBound, 1 + 2 * this.slices + lowerStackBound, 2 + 2 * this.slices + lowerStackBound)
+            //this.indices.push(1 + 2 * this.slices + lowerStackBound, 3 + 2 * this.slices + lowerStackBound, 2 + 2 * this.slices + lowerStackBound)
 
             // push normal once for each vertex of this triangle
             this.normals.push(...[1, ta, 0]);
             this.normals.push(...[1, ta, 0]);
 
-            this.texCoords.push(0, (stack + 1) / this.stacks)
-            this.texCoords.push(0, stack / this.stacks)
+            this.texCoords.push(0, 1 - stack / this.stacks)
+            this.texCoords.push(0, 1 - (stack + 1) / this.stacks)
+
 
             currentRadius += radiusDiff;
         }
-
-        console.log(this.normals)
-        console.log(this.indices)
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
