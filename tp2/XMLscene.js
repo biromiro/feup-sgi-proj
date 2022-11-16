@@ -85,7 +85,6 @@ export class XMLscene extends CGFscene {
                 this.lights[i].setQuadraticAttenuation(quadratic)
 
             }
-            console.log(this.lights[i])
 
             this.lights[i].setVisible(true);
             if (light.isEnabled) {
@@ -104,7 +103,6 @@ export class XMLscene extends CGFscene {
     }
 
     setShaderLights() {
-        console.log('changing lights', !this.lights[0].enabled)
 
         const lights = [];
 

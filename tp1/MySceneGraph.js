@@ -986,7 +986,6 @@ export class MySceneGraph {
             if (textureID != "none") {
 
                 let length_s = this.reader.getString(texture, 'length_s', false);
-                console.log(length_s)
                 if (length_s == null) length_s = (textureID == 'inherit' ? '-1' : '1')
                 let length_t = this.reader.getString(texture, 'length_t', false);
                 if (length_t == null) length_t = (textureID == 'inherit' ? '-1' : '1')
@@ -1037,7 +1036,6 @@ export class MySceneGraph {
             return circularDependency
 
         this.multiplexComponentPrimitives();
-        console.log(this.components);
         return null;
 
     }

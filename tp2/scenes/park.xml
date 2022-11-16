@@ -652,7 +652,7 @@
 
     <animations>
         <keyframeanim id="animExample">        
-            <keyframe instant="2">      
+            <keyframe instant="2"> 
                 <translate x="3" y="3" z="3" />
             </keyframe>
             <keyframe instant="5">
@@ -1517,6 +1517,7 @@
                 <material id="steelGray" />
             </materials>
             <texture id="none" />
+            <animation id="animExample" />
             <children>
                 <componentref id="rock1" />
                 <componentref id="rock2" />

@@ -54,7 +54,6 @@ export class MyInterface extends CGFinterface {
         let f0 = this.gui.addFolder('Highlighted Components');
         for (let componentID of this.scene.graph.highlightedComponents) {
             let component = this.scene.graph.components[componentID];
-            console.log(componentID, component);
             f0.add(component, 'isHighlighted').name(componentID);
         }
     }

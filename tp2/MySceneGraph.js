@@ -966,17 +966,10 @@ export class MySceneGraph {
 
                 const mykeyframe = new MyKeyframe(instant, transfMatrix);
                 keyframeList.push(mykeyframe);
-                console.log(`t=0 - ${mykeyframe.getCurrentTransformationMatrix(0)}`);
-                console.log(`t=0.2 - ${mykeyframe.getCurrentTransformationMatrix(0.2)}`);
-                console.log(`t=0.5 - ${mykeyframe.getCurrentTransformationMatrix(0.5)}`);
-                console.log(`t=1 - ${mykeyframe.getCurrentTransformationMatrix(1)}`);
-                console.log(`target - ${mykeyframe.transfMatrix}`);
             }
 
             this.animations[animationID] = new MyKeyframeAnimation(this.scene, keyframeList);
         }
-
-        console.log(this.animations);
 
         return null;
     }
@@ -1180,7 +1173,6 @@ export class MySceneGraph {
             this.components[componentID] = new SceneComponent(componentID, sceneTransformation, sceneMaterials, sceneTexture, childrenArr, highlighted, animationID)
 
             if (highlighted != undefined) {
-                console.log(componentID)
                 this.highlightedComponents.push(componentID);
             }
         }
@@ -1433,6 +1425,9 @@ export class MySceneGraph {
             const component = this.components[info.id];
             this.scene.pushMatrix();
             this.scene.multMatrix(component.transformation);
+
+            if (component.animation)
+                this.animations[component.animation].apply(this.scene);
 
             if (component.materials.length > 0) {
 

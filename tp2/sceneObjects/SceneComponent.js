@@ -16,7 +16,7 @@ export class SceneComponent {
         this.materialIndex = 0;
         this.highlighted = highlighted;
         this.isHighlighted = false;
-        this.animation = animation;
+        this.animation = animation ? animation :  undefined;
     }
 
 }

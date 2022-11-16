@@ -8,11 +8,8 @@ export class MyKeyframe {
         this.instant = instant;
         this.transfMatrix = transfMatrix;
         this.rotationQuat = this.getRotation(transfMatrix);
-        this.rotationIdentityQuat = this.getRotation(mat4.create());
         this.scalingVec3 = this.getScaling(transfMatrix);
-        this.scalingIdentityVec3 = this.getScaling(mat4.create());
         this.translationVec3 = this.getTranslation(transfMatrix);
-        this.translationIdentityVec3 = this.getTranslation(mat4.create());
     }
 
     getTranslation(mat) {
@@ -146,12 +143,21 @@ export class MyKeyframe {
 
     }
 
-    getCurrentTransformationMatrix(t_percentage) {
+    getTransformationMatrix(prevKeyframe, t_percentage) {
+        let rotationPrevQuat = this.getRotation(mat4.create());
+        let scalingPrevVec3 = this.getScaling(mat4.create());
+        let translationPrevVec3 = this.getTranslation(mat4.create());
+
+        if (prevKeyframe) {
+            rotationPrevQuat = prevKeyframe.rotationQuat;
+            scalingPrevVec3 = prevKeyframe.scalingVec3;
+            translationPrevVec3 = prevKeyframe.translationVec3;
+        }
+
         let currentRotationQuat = quat.create(), currentScalingVec3 = vec3.create(), currentTranslationVec3 = vec3.create();
-        quat.slerp(currentRotationQuat, this.rotationIdentityQuat, this.rotationQuat, t_percentage);
-        vec3.lerp(currentScalingVec3, this.scalingIdentityVec3, this.scalingVec3, t_percentage);
-        vec3.lerp(currentTranslationVec3, this.translationIdentityVec3, this.translationVec3, t_percentage);
-        console.log(currentRotationQuat, currentScalingVec3, currentTranslationVec3);
+        quat.slerp(currentRotationQuat, rotationPrevQuat, this.rotationQuat, t_percentage);
+        vec3.lerp(currentScalingVec3, scalingPrevVec3, this.scalingVec3, t_percentage);
+        vec3.lerp(currentTranslationVec3, translationPrevVec3, this.translationVec3, t_percentage);
         return this.fromRotationTranslationScale(currentRotationQuat, currentTranslationVec3, currentScalingVec3);
     }
 

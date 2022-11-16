@@ -12,7 +12,7 @@ export class MyAnimation {
 
     }
 
-    apply() {
+    apply(scene) {
 
     }
 }
