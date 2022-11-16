@@ -656,11 +656,93 @@
                 <translate x="3" y="3" z="3" />
             </keyframe>
             <keyframe instant="5">
-                <rotate axis="x" angle="-45" />
                 <translate x="3" y="3" z="3" />
-                <rotate axis="y" angle="185" />
-                <scale x="2" y="2" z="2" />
+                <rotate axis="x" angle="180" />
+
+            </keyframe>
+            <keyframe instant="10">
+                <translate x="3" y="3" z="3" />
+            </keyframe>
+        </keyframeanim>
+        <keyframeanim id="swing">        
+            <keyframe instant="0"> 
+                <translate x="0" y="-0.15" z="0" />
+            </keyframe>
+            <keyframe instant="0.5">
+                <translate x="0" y="1.5" z="0" />
+                <rotate axis="z" angle="25" />
+                <translate x="0" y="-1.5" z="0" />
+            </keyframe>
+            <keyframe instant="0.8">
+                <translate x="0" y="1.5" z="0" />
+                <rotate axis="z" angle="35" />
+                <translate x="0" y="-1.5" z="0" />
+            </keyframe>
+            <keyframe instant="1.1">
+                <translate x="0" y="1.5" z="0" />
+                <rotate axis="z" angle="40" />
+                <translate x="0" y="-1.5" z="0" />            
+            </keyframe>
+            <keyframe instant="1.3">
+                <translate x="0" y="1.5" z="0" />
+                <rotate axis="z" angle="45" />
+                <translate x="0" y="-1.5" z="0" />
+            </keyframe>
+            <keyframe instant="1.5">
+                <translate x="0" y="1.5" z="0" />
+                <rotate axis="z" angle="40" />
+                <translate x="0" y="-1.5" z="0" />            
+            </keyframe>
+            <keyframe instant="1.8">
+                <translate x="0" y="1.5" z="0" />
+                <rotate axis="z" angle="35" />
+                <translate x="0" y="-1.5" z="0" />
+            </keyframe>
+            <keyframe instant="2.1">
+                <translate x="0" y="1.5" z="0" />
+                <rotate axis="z" angle="25" />
+                <translate x="0" y="-1.5" z="0" />
+            </keyframe>
+            <keyframe instant="2.6"> 
+                <translate x="0" y="-0.15" z="0" />
+            </keyframe>
+            <keyframe instant="3.1">
+                <translate x="0" y="1.5" z="0" />
+                <rotate axis="z" angle="-25" />
+                <translate x="0" y="-1.5" z="0" />
+            </keyframe>
+            <keyframe instant="3.4">
+                <translate x="0" y="1.5" z="0" />
+                <rotate axis="z" angle="-35" />
+                <translate x="0" y="-1.5" z="0" />
+            </keyframe>
+            <keyframe instant="3.7">
+                <translate x="0" y="1.5" z="0" />
+                <rotate axis="z" angle="-40" />
+                <translate x="0" y="-1.5" z="0" />            
+            </keyframe>
+            <keyframe instant="3.9">
+                <translate x="0" y="1.5" z="0" />
                 <rotate axis="z" angle="-45" />
+                <translate x="0" y="-1.5" z="0" />
+            </keyframe>
+            <keyframe instant="4.1">
+                <translate x="0" y="1.5" z="0" />
+                <rotate axis="z" angle="-40" />
+                <translate x="0" y="-1.5" z="0" />            
+            </keyframe>
+            <keyframe instant="4.4">
+                <translate x="0" y="1.5" z="0" />
+                <rotate axis="z" angle="-35" />
+                <translate x="0" y="-1.5" z="0" />
+            </keyframe>
+            <keyframe instant="4.7">
+                <translate x="0" y="1.5" z="0" />
+                <rotate axis="z" angle="-25" />
+                <translate x="0" y="-1.5" z="0" />
+            </keyframe>
+            <keyframe instant="5"> 
+                <translate x="0" y="-0.15" z="0" />
             </keyframe>
         </keyframeanim>
     </animations>
@@ -1286,6 +1368,7 @@
                 <material id="iceGreen" />
             </materials>
             <texture id="none" />
+            <animation id="swing" />
             <children>
                 <componentref id="swingRopeLeft" />
                 <componentref id="swingRopeRight" />
@@ -1517,7 +1600,6 @@
                 <material id="steelGray" />
             </materials>
             <texture id="none" />
-            <animation id="animExample" />
             <children>
                 <componentref id="rock1" />
                 <componentref id="rock2" />

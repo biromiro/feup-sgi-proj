@@ -1426,9 +1426,6 @@ export class MySceneGraph {
             this.scene.pushMatrix();
             this.scene.multMatrix(component.transformation);
 
-            if (component.animation)
-                this.animations[component.animation].apply(this.scene);
-
             if (component.materials.length > 0) {
 
                 const sceneMaterial = component.materials[component.materialIndex];
@@ -1449,12 +1446,20 @@ export class MySceneGraph {
                 material.apply();
             }
 
-            for (const child of component.children) {
-                this.displayComponent(child, {
-                    material: material,
-                    texture: texture,
-                    highlighted: component.isHighlighted ? component.highlighted : undefined,
-                }, highlightedOnly);
+            if (!component.animation || this.animations[component.animation].isActive) {
+
+                if (component.animation){
+                    this.animations[component.animation].apply(this.scene);
+                }
+    
+
+                for (const child of component.children) {
+                    this.displayComponent(child, {
+                        material: material,
+                        texture: texture,
+                        highlighted: component.isHighlighted ? component.highlighted : undefined,
+                    }, highlightedOnly);
+                }
             }
 
             this.scene.popMatrix();

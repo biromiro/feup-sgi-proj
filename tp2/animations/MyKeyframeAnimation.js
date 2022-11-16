@@ -13,10 +13,16 @@ export class MyKeyframeAnimation extends MyAnimation {
         this.currentTime = 0;
         this.prevKeyframeInitialTime = 0;
         this.currentIndex = 0;
+        this.isActive = false;
     }
 
     update(t) {
         if (this.currentTime >= this.instants.at(-1)) return;
+        console.log(this.isActive, this.instants.at(0))
+        if (!this.isActive && t > this.instants.at(0)) {
+            console.log("now active");
+            this.isActive = true;
+        }
 
         while (this.instants[this.currentIndex] < t && this.currentIndex < this.instants.length){
             this.prevKeyframeInitialTime = this.instants[this.currentIndex++]
