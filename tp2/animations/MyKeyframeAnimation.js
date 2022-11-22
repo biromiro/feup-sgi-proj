@@ -18,9 +18,7 @@ export class MyKeyframeAnimation extends MyAnimation {
 
     update(t) {
         if (this.currentTime >= this.instants.at(-1)) return;
-        console.log(this.isActive, this.instants.at(0))
         if (!this.isActive && t > this.instants.at(0)) {
-            console.log("now active");
             this.isActive = true;
         }
 

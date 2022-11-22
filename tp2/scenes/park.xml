@@ -301,12 +301,14 @@
             </patch>
         </primitive>
         <primitive id="patchedSemiCircle">
-            <patch degree_u="1" parts_u="10" degree_v="2" parts_v="10" >
+            <patch degree_u="1" parts_u="10" degree_v="3" parts_v="10" >
                 <controlpoint x="-0.5" y="0" z="0" w="1" />
                 <controlpoint x="-0.5" y="0" z="0" w="1" />
-                <controlpoint x="0" y="0" z="0" w="1" />
-                <controlpoint x="0" y="0.666" z="0" w="1" />
                 <controlpoint x="0.5" y="0" z="0" w="1" />
+                <controlpoint x="0.5" y="0" z="0" w="1" />
+                <controlpoint x="-0.5" y="0" z="0" w="1" />
+                <controlpoint x="-0.5" y="0.666" z="0" w="1" />
+                <controlpoint x="0.5" y="0.666" z="0" w="1" />
                 <controlpoint x="0.5" y="0" z="0" w="1" />
             </patch>
         </primitive>
@@ -2702,6 +2704,7 @@
                 <componentref id="slide" />
                 <componentref id="rocks" />
                 <componentref id="barrel" />
+                <primitiveref id="patchedRectangle" />
             </children>
         </component>
         <component id="patch">

@@ -834,13 +834,16 @@ export class MySceneGraph {
                 const controlPoints = []
 
                 for (let u_degree = 0; u_degree <= patch['degree_u']; u_degree++) {
-                    const innerControlPoints = []
+                    let vPoints = []
                     for (let v_degree = 0; v_degree <= patch['degree_v']; v_degree++) {
-                        const controlPointCoords = this.parseCoordinates4D(controlPointsNodes[v_degree * (patch['degree_u'] + 1) + u_degree], "control point coords are not valid for patch " + primitiveId);
-                        innerControlPoints.push(controlPointCoords);
+                        let controlPointCoords = this.parseCoordinates4D(controlPointsNodes[u_degree * (patch['degree_v'] + 1) + v_degree], "control point coords are not valid for patch " + primitiveId);
+                        vPoints.push(controlPointCoords);
                     }
-                    controlPoints.push(innerControlPoints);
+                    controlPoints.push(vPoints);
                 }
+
+                console.log(primitiveId);
+                console.log(controlPoints);
 
                 const patchPrim = new MyPatch(this.scene, ...Object.values(patch), controlPoints);
                 this.primitives[primitiveId] = patchPrim;
