@@ -276,39 +276,50 @@
             <patch degree_u="1" parts_u="10" degree_v="1" parts_v="10" >
                 <controlpoint x="-0.5" y="-0.5" z="0" w="1" />
                 <controlpoint x="-0.5" y="0.5" z="0" w="1" />
+
                 <controlpoint x="0.5" y="-0.5" z="0" w="1" />
                 <controlpoint x="0.5" y="0.5" z="0" w="1" />
             </patch>
         </primitive>
         <primitive id="patchedTent">
-            <patch degree_u="1" parts_u="5" degree_v="2" parts_v="10" >
-                <controlpoint x="0.5" y="-0.5" z="0.5" w="1" />
-                <controlpoint x="0.5" y="-0.5" z="-0.5" w="1" />
-                <controlpoint x="0" y="0.5" z="0.5" w="1" />
-                <controlpoint x="0" y="0.5" z="-0.5" w="1" />
-                <controlpoint x="-0.5" y="-0.5" z="0.5" w="1" />
-                <controlpoint x="-0.5" y="-0.5" z="-0.5" w="1" />
+            <patch degree_u="1" parts_u="10" degree_v="2" parts_v="10" >
+                <controlpoint x="-0.5" y="0.5" z="-0.75" w="1" />
+                <controlpoint x="0" y="0.5" z="0.75" w="1" />
+                <controlpoint x="0.5" y="0.5" z="-0.75" w="1" />
+
+                <controlpoint x="-0.5" y="-0.5" z="-0.75" w="1" />
+                <controlpoint x="0" y="-0.5" z="0.75" w="1" />
+                <controlpoint x="0.5" y="-0.5" z="-0.75" w="1" />
             </patch>
         </primitive>
         <primitive id="patchedBarrelHalf">
-            <patch degree_u="1" parts_u="5" degree_v="2" parts_v="10" >
-                <controlpoint x="-0.5" y="-0.5" z="0" w="1" />
-                <controlpoint x="-0.5" y="0.5" z="0" w="1" />
-                <controlpoint x="0" y="-0.5" z="0.666" w="1" />
-                <controlpoint x="0" y="0.5" z="0.666" w="1" />
-                <controlpoint x="0.5" y="-0.5" z="0" w="1" />
-                <controlpoint x="0.5" y="0.5" z="0" w="1" />
+            <patch degree_u="2" parts_u="10" degree_v="3" parts_v="10" >
+                <controlpoint x="-0.5" y="0" z="-0.5" w="1" />
+                <controlpoint x="-0.5" y="0.666" z="-0.5" w="1" />
+                <controlpoint x="0.5" y="0.666" z="-0.5" w="1" />
+                <controlpoint x="0.5" y="0" z="-0.5" w="1" />
+
+                <controlpoint x="-0.75" y="0" z="0" w="1" />
+                <controlpoint x="-0.75" y="1" z="0" w="1" />
+                <controlpoint x="0.75" y="1" z="0" w="1" />
+                <controlpoint x="0.75" y="0" z="0" w="1" />
+
+                <controlpoint x="-0.5" y="0" z="0.5" w="1" />
+                <controlpoint x="-0.5" y="0.666" z="0.5" w="1" />
+                <controlpoint x="0.5" y="0.666" z="0.5" w="1" />
+                <controlpoint x="0.5" y="0" z="0.5" w="1" />
             </patch>
         </primitive>
         <primitive id="patchedSemiCircle">
             <patch degree_u="1" parts_u="10" degree_v="3" parts_v="10" >
                 <controlpoint x="-0.5" y="0" z="0" w="1" />
-                <controlpoint x="-0.5" y="0" z="0" w="1" />
-                <controlpoint x="0.5" y="0" z="0" w="1" />
-                <controlpoint x="0.5" y="0" z="0" w="1" />
-                <controlpoint x="-0.5" y="0" z="0" w="1" />
                 <controlpoint x="-0.5" y="0.666" z="0" w="1" />
                 <controlpoint x="0.5" y="0.666" z="0" w="1" />
+                <controlpoint x="0.5" y="0" z="0" w="1" />
+
+                <controlpoint x="-0.5" y="0" z="0" w="1" />
+                <controlpoint x="-0.5" y="0" z="0" w="1" />
+                <controlpoint x="0.5" y="0" z="0" w="1" />
                 <controlpoint x="0.5" y="0" z="0" w="1" />
             </patch>
         </primitive>
@@ -2704,43 +2715,86 @@
                 <componentref id="slide" />
                 <componentref id="rocks" />
                 <componentref id="barrel" />
-                <primitiveref id="patchedRectangle" />
-            </children>
-        </component>
-        <component id="patch">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="baseMaterial" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="patchedSemiCircle" />
-                <primitiveref id="patchedBarrelHalf" />
             </children>
         </component>
         <component id="barrel">
             <transformation>
+                <translate x="0" y="2" z="0" />
             </transformation>
             <materials>
-                <material id="baseMaterial" />
+                <material id="darkBrown" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="topBarrelCover" />
+                <componentref id="barrelBack" />
+                <componentref id="barrelFront" />
+                <componentref id="barrelCover" />
+            </children>
+        </component>
+        <component id="barrelFront">
+            <transformation>
+                <rotate axis="y" angle="180" />
+                <translate x="0" y="0" z="-1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="barrelBack" />
+            </children>
+        </component>
+        <component id="barrelBack">
+            <transformation>
+                <translate x="0" y="-0.5" z="0.5" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="patchedBarrelHalf" />
+            </children>
+        </component>
+        <component id="barrelCover">
+            <transformation>
+                <translate x="0" y="0" z="0.5" />
+                <rotate axis="x" angle="270" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
             </materials>
             <texture id="none"/>
             <children>
                 <primitiveref id="patchedSemiCircle" />
-                <componentref id="topLeftSemiCircle" />
+                <componentref id="barrelCoverHalf" />
             </children>
         </component>
-        <component id="topLeftSemiCircle">
+        <component id="barrelCoverHalf">
             <transformation>
                 <scale x="-1" y="-1" z="1" />
             </transformation>
             <materials>
-                <material id="baseMaterial" />
+                <material id="inherit" />
             </materials>
             <texture id="none"/>
             <children>
                 <primitiveref id="patchedSemiCircle" />
+            </children>
+        </component>
+        <component id="topBarrelCover">
+            <transformation>
+                <rotate axis="z" angle="180" />
+                <translate x="0" y="1" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="barrelCover" />
             </children>
         </component>
     </components>
