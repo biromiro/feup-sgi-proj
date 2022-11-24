@@ -17,10 +17,10 @@ export class MyRectangle extends CGFobject {
 		this.initBuffers();
 	}
 
-	copy () {
-        return new MyRectangle(this.scene, this.id, this.x1, this.x2, this.y1, this.y2, this.doubleSided)
-    }
-	
+	copy() {
+		return new MyRectangle(this.scene, this.id, this.x1, this.x2, this.y1, this.y2)
+	}
+
 	initBuffers() {
 
 		this.vertices = [
@@ -44,7 +44,7 @@ export class MyRectangle extends CGFobject {
 			0, 0, 1
 		];
 
-		
+
 
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
@@ -55,7 +55,7 @@ export class MyRectangle extends CGFobject {
 	 * Updates the list of texture coordinates of the rectangle
 	 * @param {Array} coords - Array of texture coordinates
 	 */
-     updateTexCoords(length_s, length_t) {
+	updateTexCoords(length_s, length_t) {
 
 		const x_diff = this.x2 - this.x1;
 		const y_diff = this.y2 - this.y1;

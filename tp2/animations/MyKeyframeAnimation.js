@@ -18,11 +18,11 @@ export class MyKeyframeAnimation extends MyAnimation {
 
     update(t) {
         if (this.currentTime >= this.instants.at(-1)) return;
-        if (!this.isActive && t > this.instants.at(0)) {
-            this.isActive = true;
-        }
 
-        while (this.instants[this.currentIndex] < t && this.currentIndex < this.instants.length){
+        if (!this.isActive && t > this.instants.at(0))
+            this.isActive = true;
+
+        while (this.instants[this.currentIndex] < t && this.currentIndex < this.instants.length) {
             this.prevKeyframeInitialTime = this.instants[this.currentIndex++]
         }
         this.currentTime = t;
@@ -32,9 +32,9 @@ export class MyKeyframeAnimation extends MyAnimation {
         let percentage = 1;
 
         if (this.currentTime < this.instants.at(-1)) {
-            percentage = 
-            (this.currentTime - this.prevKeyframeInitialTime) /
-             (this.instants[this.currentIndex] - this.prevKeyframeInitialTime);
+            percentage =
+                (this.currentTime - this.prevKeyframeInitialTime) /
+                (this.instants[this.currentIndex] - this.prevKeyframeInitialTime);
         }
 
         const prevKeyframe = this.keyframes[this.currentIndex - 1]

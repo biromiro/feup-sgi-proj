@@ -1703,7 +1703,8 @@
 
         <component id="treeBaseTrunk">
             <transformation>
-                <scale x="0.5" y="1.2" z="0.5" />
+                <translate x="0" y="0" z="-0.25" />
+                <scale x="0.75" y="1.3" z="0.75" />
                 <rotate axis="x" angle="270" />
             </transformation>
             <materials>
@@ -1711,35 +1712,35 @@
             </materials>
             <texture id="inherit" />
             <children>
-                <primitiveref id="cutTrapezoidPyramid" />
+                <componentref id="treeTrunk" />
             </children>
         </component>  
         <component id="treeMidTrunk">
             <transformation>
-                <translate x="0" y="1.05" z="0" />
+                <translate x="0" y="1.15" z="-0.25" />
                 <rotate axis="x" angle="290" />
-                <scale x="0.35" y="0.35" z="1.2" />
+                <scale x="0.6" y="0.6" z="1.2" />
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit" />
             <children>
-                <primitiveref id="cutTrapezoidCylindricShape" />
+                <componentref id="treeTrunk" />
             </children>
         </component>
         <component id="treeTopTrunk">
             <transformation>
-                <translate x="0" y="2" z="0.4" />
+                <translate x="0" y="2" z="0.2" />
                 <rotate axis="x" angle="265" />
-                <scale x="0.25" y="0.25" z="0.8" />
+                <scale x="0.5" y="0.5" z="0.8" />
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit" />
             <children>
-                <primitiveref id="cutTrapezoidCylindricShape" />
+                <componentref id="treeTrunk" />
             </children>
         </component>
         <component id="treeTopConnector">
@@ -2145,7 +2146,7 @@
         <component id="sand">
             <transformation>
                 <translate x="2.5" y="-0.8" z="2.5" />
-                <scale x="3" y="1" z="3" />
+                <scale x="6" y="1" z="6" />
                 <rotate axis="x" angle="270" />
             </transformation>
             <materials>
@@ -2155,7 +2156,7 @@
             </materials>
             <texture id="sandtex" />
             <children>
-                <primitiveref id="baseSquarePrimOutwards" />
+                <primitiveref id="patchedRectangle" />
             </children>
         </component>
         <component id="baseSupportCube">
@@ -2714,17 +2715,29 @@
                 <componentref id="sandbox" />
                 <componentref id="slide" />
                 <componentref id="rocks" />
-                <componentref id="barrel" />
             </children>
         </component>
-        <component id="barrel">
+        <component id="tent">
             <transformation>
-                <translate x="0" y="2" z="0" />
+                <scale x="5" y="1.5" z="0.8" />
             </transformation>
             <materials>
                 <material id="darkBrown" />
             </materials>
             <texture id="none"/>
+            <children>
+                <primitiveref id="patchedTent" />
+            </children>
+        </component>
+        <component id="treeTrunk">
+            <transformation>
+                <rotate axis="x" angle="90" />
+                <translate x="0" y="1" z="0" />
+            </transformation>
+            <materials>
+                <material id="darkBrown" />
+            </materials>
+            <texture id="wood"/>
             <children>
                 <componentref id="topBarrelCover" />
                 <componentref id="barrelBack" />
@@ -2740,7 +2753,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="barrelBack" />
             </children>
@@ -2753,7 +2766,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="patchedBarrelHalf" />
             </children>
@@ -2766,7 +2779,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="patchedSemiCircle" />
                 <componentref id="barrelCoverHalf" />
@@ -2779,7 +2792,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="patchedSemiCircle" />
             </children>
@@ -2792,7 +2805,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="barrelCover" />
             </children>
