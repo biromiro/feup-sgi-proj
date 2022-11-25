@@ -76,6 +76,7 @@
         <texture id="waves" file="scenes/images/waves.jpg" />
         <texture id="wood" file="scenes/images/wood.jpg" />
         <texture id="test" file="scenes/images/test.jpg" />
+        <texture id="cord" file="scenes/images/cord.png" />
     </textures>
 
     <materials>
@@ -290,6 +291,17 @@
                 <controlpoint x="-0.5" y="-0.5" z="-0.75" w="1" />
                 <controlpoint x="0" y="-0.5" z="0.75" w="1" />
                 <controlpoint x="0.5" y="-0.5" z="-0.75" w="1" />
+            </patch>
+        </primitive>
+        <primitive id="innerTent">
+            <patch degree_u="1" parts_u="10" degree_v="2" parts_v="10" >
+                <controlpoint x="0.5" y="0.5" z="-0.75" w="1" />
+                <controlpoint x="0" y="0.5" z="0.75" w="1" />
+                <controlpoint x="-0.5" y="0.5" z="-0.75" w="1" />
+
+                <controlpoint x="0.5" y="-0.5" z="-0.75" w="1" />
+                <controlpoint x="0" y="-0.5" z="0.75" w="1" />
+                <controlpoint x="-0.5" y="-0.5" z="-0.75" w="1" />
             </patch>
         </primitive>
         <primitive id="patchedBarrelHalf">
@@ -2715,173 +2727,23 @@
                 <componentref id="sandbox" />
                 <componentref id="slide" />
                 <componentref id="rocks" />
-                <componentref id="tent" />
+                <componentref id="hammock" />
             </children>
         </component>
-        <component id="tentRightSide">
+        <component id="hammock">
             <transformation>
-                <translate x="0" y="0.5" z="-1.25" />
-                <scale x="1" y="1" z="2.5" />
-                <rotate axis="y" angle="180" />
-                <rotate axis="x" angle="-90" />
-            </transformation>
-            <materials>
-                <material id="darkBrown" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="patchedSemiCircle" />
-            </children>
-        </component>
-        <component id="tentLeftSide">
-            <transformation>
-                <translate x="0" y="-0.5" z="-1.25" />
-                <scale x="1" y="1" z="2.5" />
-                <rotate axis="z" angle="180" />
-                <rotate axis="y" angle="180" />
-                <rotate axis="x" angle="-90" />
-            </transformation>
-            <materials>
-                <material id="darkBrown" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="patchedSemiCircle" />
-            </children>
-        </component>
-        <component id="fixLeftSideRect">
-            <transformation>
-                <translate x="0.5" y="0" z="-1" />
-                <scale x="1" y="1" z="0.5" />
-                <rotate axis="y" angle="90" />
-            </transformation>
-            <materials>
-                <material id="darkBrown" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="patchedRectangle" />
-            </children>
-        </component>
-        <component id="fixRightSideRect">
-            <transformation>
-                <translate x="-0.5" y="0" z="-1" />
-                <scale x="1" y="1" z="0.5" />
-                <rotate axis="y" angle="-90" />
-            </transformation>
-            <materials>
-                <material id="darkBrown" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="patchedRectangle" />
-            </children>
-        </component>
-        <component id="tentSides">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="darkBrown" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <componentref id="tentLeftSide" />
-                <componentref id="tentRightSide" />
-                <componentref id="fixLeftSideRect" />
-                <componentref id="fixRightSideRect" />
-            </children>
-        </component>
-        <component id="tentTop">
-            <transformation>
-                <translate x="0" y="2" z="0" />
-                <rotate axis="x" angle="-90" />
-                <scale x="3.5" y="3" z="0.8" />
-            </transformation>
-            <materials>
-                <material id="darkBrown" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="patchedTent" />
-                <componentref id="tentSides" />
-            </children>
-        </component>
-        <component id="tentLeftFrontSupport">
-            <transformation>
-                <translate x="-7.5" y="6" z="0" />
+                <translate x="-4.1" y="-0.6" z="-5.35" />
+                <rotate axis="y" angle="35" />
+                <rotate axis="z" angle="20" />
+                <rotate axis="x" angle="120" />
+                <scale x="1.8" y="0.6" z="0.6" />
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="cord"/>
             <children>
-                <primitiveref id="lowPolyCylinder" />
-            </children>
-        </component>
-        <component id="tentRightBackSupport">
-            <transformation>
-                <translate x="7.5" y="-6" z="0" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="lowPolyCylinder" />
-            </children>
-        </component>
-        <component id="tentLeftBackSupport">
-            <transformation>
-                <translate x="-7.5" y="-6" z="0" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="lowPolyCylinder" />
-            </children>
-        </component>
-        <component id="tentRightFrontSupport">
-            <transformation>
-                <translate x="7.5" y="6" z="0" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="lowPolyCylinder" />
-            </children>
-        </component>
-        <component id="tentSupports">
-            <transformation>
-                <translate x="0" y="1.4" z="0" />
-                <scale x="0.2" y="3" z="0.2" />
-                <rotate axis="x" angle="90" />
-            </transformation>
-            <materials>
-                <material id="steelGray" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <componentref id="tentRightBackSupport" />
-                <componentref id="tentLeftBackSupport" />
-                <componentref id="tentRightFrontSupport" />
-                <componentref id="tentLeftFrontSupport" />
-            </children>
-        </component>
-        <component id="tent">
-            <transformation>
-                <translate x="2" y="0" z="-3.5" />
-            </transformation>
-            <materials>
-                <material id="darkBrown" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <componentref id="tentSupports" />
-                <componentref id="tentTop" />
+                <primitiveref id="innerTent" />
             </children>
         </component>
         <component id="treeTrunk">
