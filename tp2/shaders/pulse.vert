@@ -1,11 +1,10 @@
-#version 300 es 
 precision highp float;
 
-#define NUMBER_OF_LIGHTS 4
+#define NUMBER_OF_LIGHTS 8
 
-in vec3 aVertexPosition;
-in vec3 aVertexNormal;
-in vec2 aTextureCoord;
+attribute vec3 aVertexPosition;
+attribute vec3 aVertexNormal;
+attribute vec2 aTextureCoord;
 
 uniform mat4 uMVMatrix;
 uniform mat4 uPMatrix;
@@ -30,10 +29,10 @@ uniform lightProperties uLight[NUMBER_OF_LIGHTS];
 uniform float normScale;
 uniform float timeFactor;
 
-out vec2 vTextureCoord;
-out vec3 vNormal;
-out vec3 vLightDir[NUMBER_OF_LIGHTS];
-out vec3 vEyeVec;
+varying vec2 vTextureCoord;
+varying vec3 vNormal;
+varying vec3 vLightDir[NUMBER_OF_LIGHTS];
+varying vec3 vEyeVec;
 
 
 void main() {

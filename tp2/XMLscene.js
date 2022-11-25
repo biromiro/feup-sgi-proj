@@ -110,6 +110,7 @@ export class XMLscene extends CGFscene {
         for (let i = 0; i < 8; i++) {
 
             const light = {
+                position: this.lights[i].position,
                 enabled: this.lights[i].enabled,
                 ambient: vec4.fromValues(...this.lights[i].ambient),
                 diffuse: vec4.fromValues(...this.lights[i].diffuse),
