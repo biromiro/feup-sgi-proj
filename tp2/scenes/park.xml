@@ -715,8 +715,8 @@
             </keyframe>
             
             <keyframe instant="0.05">
-                <rotate axis="z" angle="2" />
-                <rotate axis="y" angle="2" />
+                <rotate axis="z" angle="10" />
+                <rotate axis="y" angle="10" />
             </keyframe>
 
             <keyframe instant="0.1">
@@ -758,18 +758,15 @@
             </keyframe>
             
             <keyframe instant="7">
-                <rotate axis="y" angle="90" />
-                <translate x="-25" y="3" z="-43" />
+                <translate x="-50" y="10" z="80" />
             </keyframe>
 
             <keyframe instant="15">
-                <rotate axis="y" angle="90" />
-                <translate x="-53" y="20" z="-83" />
+                <translate x="0" y="20" z="65" />
             </keyframe>
 
             <keyframe instant="22">
-                <rotate axis="y" angle="90" />
-                <translate x="32" y="15" z="-25" />
+                <translate x="-25" y="15" z="35" />
             </keyframe>
 
             <keyframe instant="29"> 
@@ -777,22 +774,19 @@
         </keyframeanim>
 
         <keyframeanim id="beeMovement2" loop="true">        
-            <keyframe instant="3.6"> 
+             <keyframe instant="4"> 
             </keyframe>
             
             <keyframe instant="7">
-                <rotate axis="y" angle="90" />
-                <translate x="-49" y="3" z="-43" />
+                <translate x="-10" y="10" z="35" />
             </keyframe>
 
             <keyframe instant="15">
-                <rotate axis="y" angle="90" />
-                <translate x="-53" y="20" z="83" />
+                <translate x="-80" y="20" z="60" />
             </keyframe>
 
             <keyframe instant="22">
-                <rotate axis="y" angle="90" />
-                <translate x="39" y="15" z="105" />
+                <translate x="0" y="5" z="-5" />
             </keyframe>
 
             <keyframe instant="29"> 
@@ -800,22 +794,19 @@
         </keyframeanim>
 
         <keyframeanim id="beeMovement3" loop="true">        
-            <keyframe instant="3.5"> 
+            <keyframe instant="3.7"> 
             </keyframe>
             
             <keyframe instant="7">
-                <rotate axis="y" angle="90" />
-                <translate x="-25" y="6" z="-32" />
+                <translate x="-14" y="30" z="50" />
             </keyframe>
 
             <keyframe instant="15">
-                <rotate axis="y" angle="90" />
-                <translate x="81" y="5" z="34" />
+                <translate x="-40" y="5" z="60" />
             </keyframe>
 
             <keyframe instant="22">
-                <rotate axis="y" angle="90" />
-                <translate x="12" y="15" z="33" />
+                <translate x="-45" y="5" z="-5" />
             </keyframe>
 
             <keyframe instant="29"> 
@@ -823,22 +814,19 @@
         </keyframeanim>
 
         <keyframeanim id="beeMovement4" loop="true">        
-            <keyframe instant="3.5"> 
+            <keyframe instant="3.6"> 
             </keyframe>
             
             <keyframe instant="7">
-                <rotate axis="y" angle="90" />
-                <translate x="-49" y="3" z="-90" />
+                <translate x="-45" y="10" z="10" />
             </keyframe>
 
             <keyframe instant="15">
-                <rotate axis="y" angle="90" />
-                <translate x="-43" y="20" z="83" />
+                <translate x="-65" y="25" z="30" />
             </keyframe>
 
             <keyframe instant="22">
-                <rotate axis="y" angle="90" />
-                <translate x="6" y="15" z="-66" />
+                <translate x="-45" y="5" z="80" />
             </keyframe>
 
             <keyframe instant="29"> 
@@ -846,22 +834,19 @@
         </keyframeanim>
 
         <keyframeanim id="beeMovement5" loop="true">        
-            <keyframe instant="3.9"> 
+            <keyframe instant="3.8"> 
             </keyframe>
             
             <keyframe instant="7">
-                <rotate axis="y" angle="90" />
-                <translate x="-128" y="16" z="-23" />
+                <translate x="-5" y="30" z="25" />
             </keyframe>
 
             <keyframe instant="15">
-                <rotate axis="y" angle="90" />
-                <translate x="-23" y="20" z="-53" />
+                <translate x="-45" y="25" z="60" />
             </keyframe>
 
             <keyframe instant="22">
-                <rotate axis="y" angle="90" />
-                <translate x="21" y="15" z="-45" />
+                <translate x="-80" y="15" z="35" />
             </keyframe>
 
             <keyframe instant="29"> 
@@ -2916,7 +2901,7 @@
             </materials>
             <texture id="none"/>
             <children>
-                <!--<componentref id="platform" />
+                <componentref id="platform" />
                 <componentref id="seat" />
                 <componentref id="upAndDown" />
                 <componentref id="swing" />
@@ -2929,8 +2914,7 @@
                 <componentref id="rocks" />
                 <componentref id="hammock" />
                 <componentref id="bees" />
-                <componentref id="beeHive" />-->
-                <componentref id="bee1" />
+                <componentref id="beeHive" />
             </children>
         </component>
         <component id="beeHive">
@@ -3137,37 +3121,6 @@
                 <componentref id="rightEye" />
             </children>
         </component>
-        <component id="stems">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-            </children>
-        </component>
-        <component id="thorn">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-            </children>
-        </component>
-        <component id="forelegs">
-            <transformation>
-                <translate x="-0.6" y="-0.2" z="0" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-            </children>
-        </component>
         <component id="body">
             <transformation>
             </transformation>
@@ -3178,9 +3131,6 @@
             <children>
                 <componentref id="bodyComp" />
                 <componentref id="eyes" />
-                <componentref id="stems" />
-                <componentref id="thorn" />
-                <componentref id="forelegs" />
             </children>
         </component>
         <component id="beeWrapper">
@@ -3190,7 +3140,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="none"/>
-            <!--<animation id="beeTransAnim"/>-->
+            <animation id="beeTransAnim"/>
             <children>
                 <componentref id="body" />
                 <componentref id="rightWing" />
@@ -3199,13 +3149,13 @@
         </component>
          <component id="bee1">
             <transformation>
-                <!--<scale x="0.1" y="0.1" z="0.1" />-->
+                <scale x="0.1" y="0.1" z="0.1" />
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="none"/>
-            <!--<animation id="beeMovement1"/>-->
+            <animation id="beeMovement1"/>
             <children>
                 <componentref id="beeWrapper" />
             </children>
