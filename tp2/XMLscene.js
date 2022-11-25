@@ -42,6 +42,7 @@ export class XMLscene extends CGFscene {
         this.updatePeriod = 50;
         this.setUpdatePeriod(this.updatePeriod);
         this.instant = 0;
+        this.startTime = null;
     }
 
     /**
@@ -154,12 +155,19 @@ export class XMLscene extends CGFscene {
         // Dividing the time by 100 "slows down" the variation (i.e. in 100 ms timeFactor increases 1 unit).
         // Doing the modulus (%) by 100 makes the timeFactor loop between 0 and 99
         // ( so the loop period of timeFactor is 100 times 100 ms = 10s ; the actual animation loop depends on how timeFactor is used in the shader )
+        if (this.sceneInited) {
 
-        let t_ = (t / 10) % 314;
-        const timeFactor = (1.0 + Math.sin(2.0 * t_ * 0.01)) / 2.0;
-        this.shader.setUniformsValues({ timeFactor: timeFactor });
-        this.instant += this.updatePeriod;
-        this.graph.updateAnimations(this.instant * 0.001);
+            if (this.startTime == null)
+                this.startTime = t;
+
+
+            let t_ = ((t - this.startTime) / 10) % 314;
+            const timeFactor = (1.0 + Math.sin(2.0 * t_ * 0.01)) / 2.0;
+            this.shader.setUniformsValues({ timeFactor: timeFactor });
+            this.instant += this.updatePeriod;
+            this.graph.updateAnimations(this.instant * 0.001);
+        }
+
     }
 
     /**
