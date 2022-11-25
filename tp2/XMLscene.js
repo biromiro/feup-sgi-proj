@@ -110,16 +110,17 @@ export class XMLscene extends CGFscene {
         for (let i = 0; i < 8; i++) {
 
             const light = {
-                isDisabled: !this.lights[i].enabled,
-                isSpot: this.lights[i].isSpot,
+                position: this.lights[i].position,
+                enabled: this.lights[i].enabled,
                 ambient: vec4.fromValues(...this.lights[i].ambient),
                 diffuse: vec4.fromValues(...this.lights[i].diffuse),
                 specular: vec4.fromValues(...this.lights[i].specular),
-                position: vec3.fromValues(...this.lights[i].position),
-                direction: vec3.fromValues(...this.lights[i].spot_direction),
-                constant: this.lights[i].constant_attenuation,
-                linear: this.lights[i].linear_attenuation,
-                quadratic: this.lights[i].quadratic_attenuation
+                spot_direction: vec3.fromValues(...this.lights[i].spot_direction),
+                spot_exponent: this.lights[i].spot_exponent,
+                spot_cutoff: this.lights[i].spot_cutoff,
+                constant_attenuation: this.lights[i].constant_attenuation,
+                linear_attenuation: this.lights[i].linear_attenuation,
+                quadratic_attenuation: this.lights[i].quadratic_attenuation
             }
 
             lights.push(light);
