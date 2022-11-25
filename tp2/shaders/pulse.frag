@@ -1,111 +1,128 @@
-#ifdef GL_ES
+#version 300 es 
 precision highp float;
-#endif
 
-varying highp vec3 vNormal;
-varying highp vec3 vEyeVec;
-varying highp vec3 vFragPos;
-varying vec2 vTextureCoord;
+#define NUMBER_OF_LIGHTS 4
 
-struct MaterialProperties {
+struct lightProperties {
+    vec4 position;                  // Default: (0, 0, 1, 0)
     vec4 ambient;                   // Default: (0, 0, 0, 1)
     vec4 diffuse;                   // Default: (0, 0, 0, 1)
     vec4 specular;                  // Default: (0, 0, 0, 1)
+    vec4 half_vector;
+    vec3 spot_direction;            // Default: (0, 0, -1)
+    float spot_exponent;            // Default: 0 (possible values [0, 128]
+    float spot_cutoff;              // Default: 180 (possible values [0, 90] or 180)
+    float constant_attenuation;     // Default: 1 (value must be >= 0)
+    float linear_attenuation;       // Default: 0 (value must be >= 0)
+    float quadratic_attenuation;    // Default: 0 (value must be >= 0)
+    bool enabled;                   // Deafult: false
+};
+
+struct materialProperties {
+    vec4 ambient;                   // Default: (0, 0, 0, 1)
+    vec4 diffuse;                   // Default: (0, 0, 0, 1)
+    vec4 specular;                  // Default: (0, 0, 0, 1)
+    vec4 emission;                  // Default: (0, 0, 0, 1)
     float shininess;                // Default: 0 (possible values [0, 128])
 };
 
+uniform mat4 uPMatrix;
 
-struct Light {
-	bool isDisabled;
-	bool isSpot;    
-    vec3 position;
-    vec3 direction;
+uniform bool uLightEnabled;
+uniform bool uLightModelTwoSided;
 
-    float constant;
-    float linear;
-    float quadratic;  
+// uniform vec4 uGlobalAmbient;
 
-    vec4 ambient;
-    vec4 diffuse;
-    vec4 specular;
-};  
+uniform lightProperties uLight[NUMBER_OF_LIGHTS];
 
-
-#define NR_POINT_LIGHTS 8 
-uniform Light lights[NR_POINT_LIGHTS];
-uniform int nLights;
-uniform MaterialProperties uFrontMaterial;
+uniform materialProperties uFrontMaterial;
 uniform sampler2D uSampler;
 uniform float timeFactor;
 uniform vec3 targetColor;
 
-vec4 CalcLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir, bool target)
-{	
-	if (light.isDisabled) return vec4(0, 0, 0, 0);
-	vec3 lightDir;
-	if (light.isSpot) {
-		vec3 lightDir = normalize(-light.direction);
-	} else {
-		vec3 lightDir = normalize(light.position - fragPos);
-	}
+in vec3 vNormal;
+in vec3 vLightDir[NUMBER_OF_LIGHTS];
+in vec3 vEyeVec;
+in vec2 vTextureCoord;
 
-	
-	// diffuse shading
-	float diff = max(dot(normal, lightDir), 0.0);
-	// specular shading
-	vec3 reflectDir = reflect(-lightDir, normal);
-	
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), uFrontMaterial.shininess);
+out vec4 fragColor;
 
-	vec4 ambient, diffuse, specular;
+vec4 calcDirectionalLight(int i, vec3 E, vec3 L, vec3 N) {
+    float lambertTerm = dot(N, -L);
 
-	if (target) {
-		ambient  = light.ambient  * 0.1 * vec4(targetColor, 1.0);
-		diffuse  = light.diffuse  * diff * vec4(targetColor, 1.0);
-		specular = light.specular * spec * vec4(targetColor, 1.0);
-	} else {
-		ambient  = light.ambient  * 0.3 * uFrontMaterial.ambient;
-		diffuse  = light.diffuse  * diff * uFrontMaterial.diffuse;
-		specular = light.specular * spec * uFrontMaterial.specular;
-	}
-	
-	if (!light.isSpot) {
-		// attenuation
-		float distance    = length(light.position - fragPos);
-		float attenuation = 1.0 / (light.constant + light.linear * distance + 
-					light.quadratic * (distance * distance));    
-		ambient  *= attenuation;
-		diffuse  *= attenuation;
-		specular *= attenuation;
-	}
-	
-	
-	return (ambient + diffuse + specular);
-    
-}  
+    vec4 Ia = uLight[i].ambient * uFrontMaterial.ambient;
 
+    vec4 Id = vec4(0.0, 0.0, 0.0, 0.0);
 
+    vec4 Is = vec4(0.0, 0.0, 0.0, 0.0);
+
+    if (lambertTerm > 0.0) {
+        Id = uLight[i].diffuse * uFrontMaterial.diffuse * lambertTerm;
+
+        vec3 R = reflect(L, N);
+        float specular = pow( max( dot(R, E), 0.0 ), uFrontMaterial.shininess);
+
+        Is = uLight[i].specular * uFrontMaterial.specular * specular;
+    }
+    return Ia + Id + Is;
+}
+
+vec4 calcPointLight(int i, vec3 E, vec3 N) {
+    float dist = length(vLightDir[i]);
+    vec3 direction = normalize(vLightDir[i]);
+
+    vec4 color = calcDirectionalLight(i, E, vLightDir[i], N);
+    float att = 1.0 / (uLight[i].constant_attenuation + uLight[i].linear_attenuation * dist + uLight[i].quadratic_attenuation * dist * dist);
+    return color * att;
+}
+
+vec4 calcSpotLight(int i, vec3 E, vec3 N)
+{
+    vec3 direction = normalize(vLightDir[i]);
+    float spot_factor = dot(direction, uLight[i].spot_direction);
+
+    if (spot_factor > uLight[i].spot_cutoff) {
+        vec4 color = calcPointLight(i, E, N);
+        return color * (1.0 - (1.0 - spot_factor) * 1.0/(1.0 - uLight[i].spot_cutoff));
+    }
+    else {
+        return vec4(0,0,0,0);
+    }
+}
+
+vec4 lighting(vec3 E, vec3 N) {
+
+    vec4 result = vec4(0.0, 0.0, 0.0, 1.0);
+
+    for (int i = 0; i < NUMBER_OF_LIGHTS; i++) {
+        if (uLight[i].enabled) {
+            if (uLight[i].position.w == 0.0) {
+                // Directional Light
+                result += calcDirectionalLight(i, E, normalize(uLight[i].position.xyz), N);
+            } else if (uLight[i].spot_cutoff == 180.0) {
+                // Point Light
+                result += calcPointLight(i, E, N);
+            } else {
+                result += calcSpotLight(i, E, N);
+            }
+        }
+    }
+
+    return result;
+}
 
 void main() {
 
-	// properties
-    vec3 norm = normalize(vNormal);
-    vec3 viewDir = normalize(vEyeVec - vFragPos);
+    // Transformed normal position
+	vec3 N = normalize(vNormal);
 
-	vec4 result = vec4(0, 0, 0, 1);
-	vec4 resultTarget = vec4(0, 0, 0, 1);
+    vec3 E = normalize(vEyeVec);
+	
+	vec4 result = lighting(E, N);
 
-    for(int i = 0; i < NR_POINT_LIGHTS; i++)
-        result += CalcLight(lights[i], norm, vFragPos, viewDir, false);    
+	vec4 texColor = texture(uSampler, vTextureCoord+vec2(timeFactor*.01,0.0));
+    
+	vec4 color = result  + (vec4(targetColor, 1)  - result) * timeFactor;
 
-	for(int i = 0; i < NR_POINT_LIGHTS; i++)
-		resultTarget += CalcLight(lights[i], norm, vFragPos, viewDir, true);    
-
-	vec4 texColor = texture2D(uSampler, vTextureCoord+vec2(timeFactor*.01,0.0));
-
-	vec4 color = result  + (resultTarget  - result) * timeFactor;
-
-	gl_FragColor = texColor * color;
-
+	fragColor = color * texColor;
 }
-
