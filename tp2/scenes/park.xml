@@ -1,5 +1,5 @@
 <sxs>
-    <scene root="park" axis_length="0"/>
+    <scene root="park" axis_length="10"/>
 
     <views default="orthoCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -691,6 +691,56 @@
     </primitives>
 
     <animations>
+        <keyframeanim id="upAndDownAnim" loop="true">        
+            <keyframe instant="0"> 
+            </keyframe>
+
+            <keyframe instant="0.5">
+                <rotate axis="z" angle="-7" />
+            </keyframe>
+
+            <keyframe instant="1.5">
+                <rotate axis="z" angle="7" />
+            </keyframe>
+
+            <keyframe instant="2"> 
+            </keyframe>
+
+        </keyframeanim>
+        <keyframeanim id="bouncerRightAnim" loop="true">        
+            <keyframe instant="0"> 
+            </keyframe>
+
+            <keyframe instant="0.4">
+            </keyframe>
+            <keyframe instant="0.5">
+                <scale x="1" y="0.9" z="1" />
+            </keyframe>
+            <keyframe instant="0.8">
+            </keyframe>
+
+            <keyframe instant="2"> 
+            </keyframe>
+
+        </keyframeanim>
+
+        <keyframeanim id="bouncerLeftAnim" loop="true">        
+
+            <keyframe instant="0"> 
+            </keyframe>
+
+            <keyframe instant="1.4">
+            </keyframe>
+            <keyframe instant="1.5">
+                <scale x="1" y="0.9" z="1" />
+            </keyframe>
+            <keyframe instant="1.8">
+            </keyframe>
+
+            <keyframe instant="2"> 
+            </keyframe>
+
+        </keyframeanim>
         <keyframeanim id="beeHiveDrop">        
             <keyframe instant="0"> 
             </keyframe>
@@ -874,85 +924,105 @@
             </keyframe>
         </keyframeanim>
 
-        <keyframeanim id="swing" loop="true">        
+        <keyframeanim id="swingRight" loop="true">        
             <keyframe instant="0"> 
-                <translate x="0" y="-0.15" z="0" />
             </keyframe>
             <keyframe instant="0.5">
-                <translate x="0" y="1.5" z="0" />
                 <rotate axis="z" angle="25" />
-                <translate x="0" y="-1.5" z="0" />
             </keyframe>
             <keyframe instant="0.8">
-                <translate x="0" y="1.5" z="0" />
                 <rotate axis="z" angle="35" />
-                <translate x="0" y="-1.5" z="0" />
             </keyframe>
             <keyframe instant="1.1">
-                <translate x="0" y="1.5" z="0" />
                 <rotate axis="z" angle="40" />
-                <translate x="0" y="-1.5" z="0" />            
             </keyframe>
             <keyframe instant="1.3">
-                <translate x="0" y="1.5" z="0" />
                 <rotate axis="z" angle="45" />
-                <translate x="0" y="-1.5" z="0" />
             </keyframe>
             <keyframe instant="1.5">
-                <translate x="0" y="1.5" z="0" />
                 <rotate axis="z" angle="40" />
-                <translate x="0" y="-1.5" z="0" />            
             </keyframe>
             <keyframe instant="1.8">
-                <translate x="0" y="1.5" z="0" />
                 <rotate axis="z" angle="35" />
-                <translate x="0" y="-1.5" z="0" />
             </keyframe>
             <keyframe instant="2.1">
-                <translate x="0" y="1.5" z="0" />
                 <rotate axis="z" angle="25" />
-                <translate x="0" y="-1.5" z="0" />
             </keyframe>
             <keyframe instant="2.6"> 
-                <translate x="0" y="-0.15" z="0" />
             </keyframe>
             <keyframe instant="3.1">
-                <translate x="0" y="1.5" z="0" />
                 <rotate axis="z" angle="-25" />
-                <translate x="0" y="-1.5" z="0" />
             </keyframe>
             <keyframe instant="3.4">
-                <translate x="0" y="1.5" z="0" />
                 <rotate axis="z" angle="-35" />
-                <translate x="0" y="-1.5" z="0" />
             </keyframe>
             <keyframe instant="3.7">
-                <translate x="0" y="1.5" z="0" />
                 <rotate axis="z" angle="-40" />
-                <translate x="0" y="-1.5" z="0" />            
             </keyframe>
             <keyframe instant="3.9">
-                <translate x="0" y="1.5" z="0" />
                 <rotate axis="z" angle="-45" />
-                <translate x="0" y="-1.5" z="0" />
             </keyframe>
             <keyframe instant="4.1">
-                <translate x="0" y="1.5" z="0" />
                 <rotate axis="z" angle="-40" />
-                <translate x="0" y="-1.5" z="0" />            
             </keyframe>
             <keyframe instant="4.4">
-                <translate x="0" y="1.5" z="0" />
                 <rotate axis="z" angle="-35" />
-                <translate x="0" y="-1.5" z="0" />
             </keyframe>
             <keyframe instant="4.7">
-                <translate x="0" y="1.5" z="0" />
                 <rotate axis="z" angle="-25" />
-                <translate x="0" y="-1.5" z="0" />
             </keyframe>
             <keyframe instant="5"> 
-                <translate x="0" y="-0.15" z="0" />
+            </keyframe>
+        </keyframeanim>
+
+        <keyframeanim id="swingLeft" loop="true">        
+            <keyframe instant="0"> 
+            </keyframe>
+            <keyframe instant="0.5">
+                <rotate axis="z" angle="-25" />
+            </keyframe>
+            <keyframe instant="0.8">
+                <rotate axis="z" angle="-35" />
+            </keyframe>
+            <keyframe instant="1.1">
+                <rotate axis="z" angle="-40" />
+            </keyframe>
+            <keyframe instant="1.3">
+                <rotate axis="z" angle="-45" />
+            </keyframe>
+            <keyframe instant="1.5">
+                <rotate axis="z" angle="-40" />
+            </keyframe>
+            <keyframe instant="1.8">
+                <rotate axis="z" angle="-35" />
+            </keyframe>
+            <keyframe instant="2.1">
+                <rotate axis="z" angle="-25" />
+            </keyframe>
+            <keyframe instant="2.6"> 
+            </keyframe>
+            <keyframe instant="3.1">
+                <rotate axis="z" angle="25" />
+            </keyframe>
+            <keyframe instant="3.4">
+                <rotate axis="z" angle="35" />
+            </keyframe>
+            <keyframe instant="3.7">
+                <rotate axis="z" angle="40" />
+            </keyframe>
+            <keyframe instant="3.9">
+                <rotate axis="z" angle="45" />
+            </keyframe>
+            <keyframe instant="4.1">
+                <rotate axis="z" angle="40" />
+            </keyframe>
+            <keyframe instant="4.4">
+                <rotate axis="z" angle="35" />
+            </keyframe>
+            <keyframe instant="4.7">
+                <rotate axis="z" angle="25" />
+            </keyframe>
+            <keyframe instant="5"> 
             </keyframe>
         </keyframeanim>
     </animations>
@@ -1299,6 +1369,7 @@
                 <material id="winterBrown" />
             </materials>
             <texture id="none" />
+            <animation id="upAndDownAnim" />
             <children>
                 <componentref id="upAndDownBar" />
                 <componentref id="rightSeat" />
@@ -1313,6 +1384,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="inherit" />
+            <animation id="bouncerRightAnim" />
             <children>
                 <primitiveref id="baseSpherePrim" />
             </children>
@@ -1325,6 +1397,7 @@
                 <material id="inherit" />
             </materials>
             <texture id="inherit" />
+            <animation id="bouncerLeftAnim" />
             <children>
                 <primitiveref id="baseSpherePrim" />
             </children>
@@ -1568,9 +1641,9 @@
                 <componentref id="cube" />
             </children>
         </component>
-        <component id="swingFun">
+        <component id="swingFunWrapper">
             <transformation>
-                <translate x="0" y="0.3" z="0" />
+                <translate x="0" y="-1.6" z="0" />
             </transformation>
             <materials>
                 <material id="darkAutumnOrange" />
@@ -1578,33 +1651,49 @@
                 <material id="iceGreen" />
             </materials>
             <texture id="none" />
-            <animation id="swing" />
             <children>
                 <componentref id="swingRopeLeft" />
                 <componentref id="swingRopeRight" />
                 <componentref id="swingSeat" />
             </children>
         </component>
+
+        <component id="swingFun">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="darkAutumnOrange" />
+                <material id="springWhite" />
+                <material id="iceGreen" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="swingFunWrapper" />
+            </children>
+        </component>
         <component id="swingFunLeft">
             <transformation>
-                <translate x="0" y="0" z="0.6" />
+                <translate x="0" y="1.8" z="0.6" />
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="none" />
+            <animation id="swingLeft" />
+                <animation id="swingLeft" />
             <children>
                 <componentref id="swingFun" />
             </children>
         </component>
         <component id="swingFunRight">
             <transformation>
-                <translate x="0" y="0" z="-0.6" />
+                <translate x="0" y="1.8" z="-0.6" />
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="none" />
+            <animation id="swingRight" />
             <children>
                 <componentref id="swingFun" />
             </children>
