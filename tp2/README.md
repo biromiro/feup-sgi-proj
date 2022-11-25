@@ -37,8 +37,8 @@ The swings, up-and-down, bouncers, beehive and bees are all animated and looping
 - A hammock
 - A beehive
 - Several bees
-- 3 distinct seasons ([winter](screenshots/winter_defaultCamera.jpg), [spring](screenshots/spring_baseLightjpg.jpg) and [autumn](screenshots/autumn_day.png))
-- Lights on the sandbox to give a [darker/night feel to the scene](screenshots/autumn_night.jpg)
+- 3 distinct seasons ([winter](screenshots/winter_moody.png), [spring](screenshots/spring_moody.png) and [autumn](screenshots/autumn_moody.png))
+- Lights on the sandbox to give a [darker/night feel to the scene](screenshots/autumn_moody.png)
 
 ## Issues/Problems
 
