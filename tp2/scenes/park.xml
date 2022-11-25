@@ -1057,15 +1057,15 @@
                 <componentref id="upAndDown" />
                 <componentref id="swing" />
                 <componentref id="cubeMap" />
-                <componentref id="sandbox" />
-                <componentref id="slide" />
-                <componentref id="hammock" />
-                <componentref id="bees" />
-                <componentref id="beeHive" />
-                <componentref id="rocks" />
                 <componentref id="tree1" />
                 <componentref id="tree2" />
                 <componentref id="tree3" />
+                <componentref id="sandbox" />
+                <componentref id="slide" />
+                <componentref id="rocks" />
+                <componentref id="hammock" />
+                <componentref id="bees" />
+                <componentref id="beeHive" />
             </children>
         </component>
 
