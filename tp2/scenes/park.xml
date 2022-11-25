@@ -874,7 +874,7 @@
             </keyframe>
         </keyframeanim>
 
-        <keyframeanim id="swing">        
+        <keyframeanim id="swing" loop="true">        
             <keyframe instant="0"> 
                 <translate x="0" y="-0.15" z="0" />
             </keyframe>
