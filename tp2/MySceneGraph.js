@@ -842,9 +842,6 @@ export class MySceneGraph {
                     controlPoints.push(vPoints);
                 }
 
-                console.log(primitiveId);
-                console.log(controlPoints);
-
                 const patchPrim = new MyPatch(this.scene, ...Object.values(patch), controlPoints);
                 this.primitives[primitiveId] = patchPrim;
             }
@@ -870,7 +867,7 @@ export class MySceneGraph {
     multiplexComponentPrimitives() {
 
         const updatedPrimitives = {};
-        const primitivesToUpdate = ['MyRectangle', 'MyTriangle']
+        const primitivesToUpdate = ['MyRectangle', 'MyTriangle'];
 
         for (let [componentID, component] of Object.entries(this.components)) {
             const componentChildren = component.children

@@ -30,7 +30,6 @@ export class MyKeyframeAnimation extends MyAnimation {
             this.currentIndex = 0;
         }
         let t_ = this.loop ? t % this.instants.at(-1) : t;
-        console.log(t_, this.currentIndex)
         while (this.instants[this.currentIndex] < t_ && this.currentIndex < this.instants.length) {
             this.prevKeyframeInitialTime = this.instants[this.currentIndex++]
         }
