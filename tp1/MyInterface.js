@@ -36,7 +36,7 @@ export class MyInterface extends CGFinterface {
     }
 
     setLightCheckboxes() {
-        
+
         let f0 = this.gui.addFolder('Lights')
         for (let lightID in this.scene.graph.lights) {
             let light = this.scene.graph.lights[lightID];
@@ -48,17 +48,17 @@ export class MyInterface extends CGFinterface {
      * initKeys
      */
     initKeys() {
-        this.scene.gui=this;
-        this.processKeyboard=function(){};
-        this.activeKeys={};
+        this.scene.gui = this;
+        this.processKeyboard = function () { };
+        this.activeKeys = {};
     }
 
     processKeyDown(event) {
-        this.activeKeys[event.code]=true;
+        this.activeKeys[event.code] = true;
     };
 
     processKeyUp(event) {
-        this.activeKeys[event.code]=false;
+        this.activeKeys[event.code] = false;
     };
 
     isKeyPressed(keyCode) {

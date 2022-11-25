@@ -44,7 +44,7 @@ export class MyTriangle extends CGFobject {
         const v2 = [this.x3 - this.x2, this.y3 - this.y2, this.z3 - this.z2]
         const normal =  [v1[1] * v2[2] - v1[2] * v2[1], v1[2] * v2[0] - v1[0] * v2[2], v1[0] * v2[1] - v1[1] * v2[0]]
 
-           // normalization
+        // normalization
         let nsize = Math.sqrt(
             normal[0] * normal[0] +
             normal[1] * normal[1] +
@@ -60,18 +60,6 @@ export class MyTriangle extends CGFobject {
             ...normal,
             ...normal
         ]
-		
-		/*
-		Texture coords (s,t)
-		+----------> s
-        |
-        |
-		|
-		v
-        t
-        */
-
-        // ajustar
 
         this.a = Math.sqrt(Math.pow(this.x2 - this.x1, 2) + Math.pow(this.y2 - this.y1, 2) + Math.pow(this.z2 - this.z1, 2))
         this.b = Math.sqrt(Math.pow(this.x3 - this.x2, 2) + Math.pow(this.y3 - this.y2, 2) + Math.pow(this.z3 - this.z2, 2))

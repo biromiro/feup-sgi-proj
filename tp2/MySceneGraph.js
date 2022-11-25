@@ -869,7 +869,7 @@ export class MySceneGraph {
         const updatedPrimitives = {};
         const primitivesToUpdate = ['MyRectangle', 'MyTriangle'];
 
-        for (let [componentID, component] of Object.entries(this.components)) {
+        for (let [_componentID, component] of Object.entries(this.components)) {
             const componentChildren = component.children
             const newComponentChildren = component.children
             for (let child of componentChildren) {
@@ -1396,7 +1396,6 @@ export class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        //To do: Create display loop for transversing the scene graph
 
         if (this.changeMaterial()) {
             for (const component of Object.values(this.components)) {
@@ -1451,10 +1450,10 @@ export class MySceneGraph {
 
             if (!component.animation || this.animations[component.animation].isActive) {
 
-                if (component.animation){
+                if (component.animation) {
                     this.animations[component.animation].apply(this.scene);
                 }
-    
+
 
                 for (const child of component.children) {
                     this.displayComponent(child, {

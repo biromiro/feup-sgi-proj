@@ -162,8 +162,8 @@ export class XMLscene extends CGFscene {
                 this.startTime = t;
 
 
-            let t_ = ((t - this.startTime) / 10) % 314;
-            const timeFactor = (1.0 + Math.sin(2.0 * t_ * 0.01)) / 2.0;
+            let t_sine = ((t - this.startTime) / 10) % 314;
+            const timeFactor = (1.0 + Math.sin(2.0 * t_sine * 0.01)) / 2.0;
             this.shader.setUniformsValues({ timeFactor: timeFactor });
             this.instant += this.updatePeriod;
             this.graph.updateAnimations(this.instant * 0.001);

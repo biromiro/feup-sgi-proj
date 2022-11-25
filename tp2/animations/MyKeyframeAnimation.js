@@ -16,20 +16,22 @@ export class MyKeyframeAnimation extends MyAnimation {
         this.prevKeyframeInitialTime = 0;
         this.currentIndex = 0;
         this.isActive = false;
-
     }
 
     update(t) {
 
-        if (this.currentTime >= this.instants.at(-1)) return;
+        const tStart = this.instants.at(0);
+        const tEnd = this.instants.at(-1);
 
-        if (!this.isActive && t > this.instants.at(0))
+        if (this.currentTime >= tEnd) return;
+
+        if (!this.isActive && t > tStart)
             this.isActive = true;
-        if (t / this.instants.at(-1) >= this.loops) {
+        if (t / tEnd >= this.loops) {
             this.loops++;
             this.currentIndex = 0;
         }
-        let t_ = this.loop ? t % this.instants.at(-1) : t;
+        let t_ = this.loop ? t % tEnd : t;
         while (this.instants[this.currentIndex] < t_ && this.currentIndex < this.instants.length) {
             this.prevKeyframeInitialTime = this.instants[this.currentIndex++]
         }
