@@ -35,6 +35,7 @@ The swings, up-and-down, bouncers, beehive and bees are all animated and looping
 #### Strong Points
 
 - Improved engaging visuals, with appealing use of textures and animations
+- Traverses the component tree twice to reduce the impact of applying the shader, by displaying non-shaded elements first and then all shaded elements, allowing for a single call to _setActiveShader_()
 - Pulsar shader uses Phong's reflection model
 - Animations accept any order of transformations and support looping
 - Clean and refactored XML and code.
