@@ -78,6 +78,8 @@
         <texture id="test" file="scenes/images/test.jpg" />
         <texture id="cord" file="scenes/images/cord.png" />
         <texture id="hive" file="scenes/images/hive.png" />
+        <texture id="wing" file="scenes/images/wing.png" />
+        <texture id="bee" file="scenes/images/bee.jpg" />
     </textures>
 
     <materials>
@@ -93,11 +95,11 @@
             <diffuse r="0.82" g="0.75" b="0.82" a="1.0" />
             <specular r="0.82" g="0.75" b="0.82" a="1.0" />
         </material>
-        <material id="blackMaterial" shininess="10">
+        <material id="eyeMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="0" g="0" b="0" a="1.0" />
-            <diffuse r="0.09" g="0.05" b="0.02" a="1.0" />
-            <specular r="0.3" g="0.3" b="0.3" a="1.0" />
+            <ambient r="0.9" g="0.9" b="0.9" a="1.0" />
+            <diffuse r="0.90" g="0.90" b="0.90" a="1.0" />
+            <specular r="1" g="1" b="1" a="1.0" />
         </material>
         <material id="platformMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
@@ -751,7 +753,7 @@
 
         </keyframeanim>
 
-        <keyframeanim id="beeMovement" loop="true">        
+        <keyframeanim id="beeMovement1" loop="true">        
             <keyframe instant="3.5"> 
             </keyframe>
             
@@ -771,6 +773,119 @@
             </keyframe>
 
             <keyframe instant="29"> 
+            </keyframe>
+        </keyframeanim>
+
+        <keyframeanim id="beeMovement2" loop="true">        
+            <keyframe instant="3.6"> 
+            </keyframe>
+            
+            <keyframe instant="7">
+                <rotate axis="y" angle="90" />
+                <translate x="-49" y="3" z="-43" />
+            </keyframe>
+
+            <keyframe instant="15">
+                <rotate axis="y" angle="90" />
+                <translate x="-53" y="20" z="83" />
+            </keyframe>
+
+            <keyframe instant="22">
+                <rotate axis="y" angle="90" />
+                <translate x="39" y="15" z="105" />
+            </keyframe>
+
+            <keyframe instant="29"> 
+            </keyframe>
+        </keyframeanim>
+
+        <keyframeanim id="beeMovement3" loop="true">        
+            <keyframe instant="3.5"> 
+            </keyframe>
+            
+            <keyframe instant="7">
+                <rotate axis="y" angle="90" />
+                <translate x="-25" y="6" z="-32" />
+            </keyframe>
+
+            <keyframe instant="15">
+                <rotate axis="y" angle="90" />
+                <translate x="81" y="5" z="34" />
+            </keyframe>
+
+            <keyframe instant="22">
+                <rotate axis="y" angle="90" />
+                <translate x="12" y="15" z="33" />
+            </keyframe>
+
+            <keyframe instant="29"> 
+            </keyframe>
+        </keyframeanim>
+
+        <keyframeanim id="beeMovement4" loop="true">        
+            <keyframe instant="3.5"> 
+            </keyframe>
+            
+            <keyframe instant="7">
+                <rotate axis="y" angle="90" />
+                <translate x="-49" y="3" z="-90" />
+            </keyframe>
+
+            <keyframe instant="15">
+                <rotate axis="y" angle="90" />
+                <translate x="-43" y="20" z="83" />
+            </keyframe>
+
+            <keyframe instant="22">
+                <rotate axis="y" angle="90" />
+                <translate x="6" y="15" z="-66" />
+            </keyframe>
+
+            <keyframe instant="29"> 
+            </keyframe>
+        </keyframeanim>
+
+        <keyframeanim id="beeMovement5" loop="true">        
+            <keyframe instant="3.9"> 
+            </keyframe>
+            
+            <keyframe instant="7">
+                <rotate axis="y" angle="90" />
+                <translate x="-128" y="16" z="-23" />
+            </keyframe>
+
+            <keyframe instant="15">
+                <rotate axis="y" angle="90" />
+                <translate x="-23" y="20" z="-53" />
+            </keyframe>
+
+            <keyframe instant="22">
+                <rotate axis="y" angle="90" />
+                <translate x="21" y="15" z="-45" />
+            </keyframe>
+
+            <keyframe instant="29"> 
+            </keyframe>
+        </keyframeanim>
+
+        <keyframeanim id="beesAnimation" loop="true">        
+            <keyframe instant="3.9"> 
+            </keyframe>
+            
+            <keyframe instant="30">
+                <rotate axis="y" angle="-90" />
+            </keyframe>
+
+            <keyframe instant="60">
+                <rotate axis="y" angle="-180" />
+            </keyframe>
+
+            <keyframe instant="90">
+                <rotate axis="y" angle="-270" />
+            </keyframe>
+
+            <keyframe instant="120"> 
+                <rotate axis="y" angle="-360" />
             </keyframe>
         </keyframeanim>
 
@@ -2801,7 +2916,7 @@
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="platform" />
+                <!--<componentref id="platform" />
                 <componentref id="seat" />
                 <componentref id="upAndDown" />
                 <componentref id="swing" />
@@ -2813,8 +2928,9 @@
                 <componentref id="slide" />
                 <componentref id="rocks" />
                 <componentref id="hammock" />
-                <componentref id="bee" />
-                <componentref id="beeHive" />
+                <componentref id="bees" />
+                <componentref id="beeHive" />-->
+                <componentref id="bee1" />
             </children>
         </component>
         <component id="beeHive">
@@ -2838,7 +2954,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="patchedSemiCircle" />
             </children>
@@ -2850,7 +2966,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="patchedSemiCircle" />
             </children>
@@ -2861,7 +2977,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="wingComp1" />
                 <componentref id="wingComp2" />
@@ -2874,7 +2990,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="wingComp1" />
                 <componentref id="wingComp2" />
@@ -2887,7 +3003,7 @@
             <materials>
                 <material id="wingMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="sideWing1" />
                 <componentref id="sideWing2" />
@@ -2896,12 +3012,13 @@
         <component id="rightWingWrapper">
             <transformation>
                 <translate x="0" y="0.5" z="-0.3" />
+                <rotate axis="z" angle="45" />
                 <rotate axis="x" angle="-45" />
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="wing" />
             </children>
@@ -2921,12 +3038,13 @@
         <component id="leftWingWrapper">
             <transformation>
                 <translate x="0" y="0.5" z="0.3" />
+                <rotate axis="z" angle="45" />
                 <rotate axis="x" angle="45" />
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="wing" />
             </children>
@@ -2943,7 +3061,20 @@
                 <componentref id="leftWingWrapper" />
             </children>
         </component>
-        <component id="bodyComp">
+        <component id="lowerBody">
+            <transformation>
+                <translate x="-0.2" y="0.5" z="0" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="bee"/>
+            <children>
+                <componentref id="barrel" />
+            </children>
+        </component>
+        <component id="upperBody">
             <transformation>
                 <scale x="0.8" y="0.5" z="0.5" />
             </transformation>
@@ -2953,6 +3084,18 @@
             <texture id="none"/>
             <children>
                 <primitiveref id="baseSpherePrim" />
+            </children>
+        </component>
+        <component id="bodyComp">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="bee"/>
+            <children>
+                <componentref id="upperBody" />
+                <componentref id="lowerBody" />
             </children>
         </component>
         <component id="rightEye">
@@ -2986,12 +3129,43 @@
                 <translate x="-0.6" y="-0.2" z="0" />
             </transformation>
             <materials>
-                <material id="blackMaterial" />
+                <material id="eyeMaterial" />
             </materials>
             <texture id="none"/>
             <children>
                 <componentref id="leftEye" />
                 <componentref id="rightEye" />
+            </children>
+        </component>
+        <component id="stems">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+            </children>
+        </component>
+        <component id="thorn">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+            </children>
+        </component>
+        <component id="forelegs">
+            <transformation>
+                <translate x="-0.6" y="-0.2" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
             </children>
         </component>
         <component id="body">
@@ -3004,6 +3178,9 @@
             <children>
                 <componentref id="bodyComp" />
                 <componentref id="eyes" />
+                <componentref id="stems" />
+                <componentref id="thorn" />
+                <componentref id="forelegs" />
             </children>
         </component>
         <component id="beeWrapper">
@@ -3013,25 +3190,93 @@
                 <material id="inherit" />
             </materials>
             <texture id="none"/>
-            <animation id="beeTransAnim"/>
+            <!--<animation id="beeTransAnim"/>-->
             <children>
                 <componentref id="body" />
                 <componentref id="rightWing" />
                 <componentref id="leftWing" />
             </children>
         </component>
-         <component id="bee">
+         <component id="bee1">
             <transformation>
-                <translate x="5" y="-1" z="-4.5" />
+                <!--<scale x="0.1" y="0.1" z="0.1" />-->
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <!--<animation id="beeMovement1"/>-->
+            <children>
+                <componentref id="beeWrapper" />
+            </children>
+        </component>
+        <component id="bee2">
+            <transformation>
                 <scale x="0.1" y="0.1" z="0.1" />
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="none"/>
-            <animation id="beeMovement"/>
+            <animation id="beeMovement2"/>
             <children>
                 <componentref id="beeWrapper" />
+            </children>
+        </component>
+        <component id="bee3">
+            <transformation>
+                <scale x="0.1" y="0.1" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <animation id="beeMovement3"/>
+            <children>
+                <componentref id="beeWrapper" />
+            </children>
+        </component>
+        <component id="bee4">
+            <transformation>
+                <scale x="0.1" y="0.1" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <animation id="beeMovement4"/>
+            <children>
+                <componentref id="beeWrapper" />
+            </children>
+        </component>
+        <component id="bee5">
+            <transformation>
+                <scale x="0.1" y="0.1" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <animation id="beeMovement5"/>
+            <children>
+                <componentref id="beeWrapper" />
+            </children>
+        </component>
+        <component id="bees">
+            <transformation>
+                <translate x="5" y="-1" z="-4.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <animation id="beesAnimation"/>
+            <children>
+                <componentref id="bee1" />
+                <componentref id="bee2" />
+                <componentref id="bee3" />
+                <componentref id="bee4" />
+                <componentref id="bee5" />
             </children>
         </component>
         <component id="tentRightSide">
