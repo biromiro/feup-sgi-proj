@@ -967,11 +967,14 @@ export class MySceneGraph {
                 if (typeof transfMatrix === 'string')
                     return transfMatrix;
 
+
                 const mykeyframe = new MyKeyframe(instant, transfMatrix);
                 keyframeList.push(mykeyframe);
             }
 
-            this.animations[animationID] = new MyKeyframeAnimation(this.scene, keyframeList);
+            const loop = this.reader.getBoolean(animation, 'loop', false) || false;
+
+            this.animations[animationID] = new MyKeyframeAnimation(this.scene, keyframeList, loop);
         }
 
         return null;

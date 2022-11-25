@@ -86,6 +86,18 @@
             <diffuse r="1" g="1" b="1" a="1.0" />
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
+        <material id="wingMaterial" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
+            <diffuse r="0.82" g="0.75" b="0.82" a="1.0" />
+            <specular r="0.82" g="0.75" b="0.82" a="1.0" />
+        </material>
+        <material id="blackMaterial" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="0.09" g="0.05" b="0.02" a="1.0" />
+            <specular r="0.3" g="0.3" b="0.3" a="1.0" />
+        </material>
         <material id="platformMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.9" g="0.71" b="0.47" a="1.0" />
@@ -676,19 +688,62 @@
     </primitives>
 
     <animations>
-        <keyframeanim id="animExample">        
-            <keyframe instant="2"> 
-                <translate x="3" y="3" z="3" />
+        <keyframeanim id="beeWingAnim" loop="true">        
+            <keyframe instant="0"> 
             </keyframe>
-            <keyframe instant="5">
-                <translate x="3" y="3" z="3" />
-                <rotate axis="x" angle="180" />
+            
+            <keyframe instant="0.05">
+                <rotate axis="z" angle="2" />
+                <rotate axis="y" angle="2" />
+            </keyframe>
 
+            <keyframe instant="0.1">
             </keyframe>
-            <keyframe instant="10">
-                <translate x="3" y="3" z="3" />
+
+        </keyframeanim>
+        <keyframeanim id="beeTransAnim" loop="true">        
+            <keyframe instant="0"> 
+            </keyframe>
+            
+            <keyframe instant="4">
+                <rotate axis="z" angle="25" />
+                <translate x="0" y="1" z="0" />
+            </keyframe>
+
+            <keyframe instant="8">
+                <rotate axis="y" angle="45" />
+                <translate x="0" y="-1" z="0" />
+            </keyframe>
+
+            <keyframe instant="16">
+                <rotate axis="x" angle="15" />
+                <rotate axis="y" angle="25" />
+                <translate x="0" y="1" z="0" />
+            </keyframe>
+
+            <keyframe instant="20">
+                <rotate axis="z" angle="35" />
+                <translate x="0" y="-1" z="0" />
+            </keyframe>
+
+            <keyframe instant="24">
+            </keyframe>
+
+        </keyframeanim>
+
+        <keyframeanim id="beeMovement" loop="true">        
+            <keyframe instant="0"> 
+            </keyframe>
+            
+            <keyframe instant="7">
+                <rotate axis="y" angle="90" />
+                <translate x="10" y="1" z="4" />
+            </keyframe>
+
+            <keyframe instant="15">
             </keyframe>
         </keyframeanim>
+
         <keyframeanim id="swing">        
             <keyframe instant="0"> 
                 <translate x="0" y="-0.15" z="0" />
@@ -2728,6 +2783,320 @@
                 <componentref id="slide" />
                 <componentref id="rocks" />
                 <componentref id="hammock" />
+                <componentref id="bee" />
+            </children>
+        </component>
+        <component id="wingComp2">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="patchedSemiCircle" />
+            </children>
+        </component>
+        <component id="wingComp1">
+            <transformation>
+                <rotate axis="y" angle="180" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="patchedSemiCircle" />
+            </children>
+        </component>
+        <component id="sideWing1">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="wingComp1" />
+                <componentref id="wingComp2" />
+            </children>
+        </component>
+        <component id="sideWing2">
+            <transformation>
+                <rotate axis="x" angle="180" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="wingComp1" />
+                <componentref id="wingComp2" />
+            </children>
+        </component>
+        <component id="wing">
+            <transformation>
+                <scale x="1" y="0.3" z="1" />
+            </transformation>
+            <materials>
+                <material id="wingMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="sideWing1" />
+                <componentref id="sideWing2" />
+            </children>
+        </component>
+        <component id="rightWingWrapper">
+            <transformation>
+                <translate x="0" y="0.5" z="-0.3" />
+                <rotate axis="x" angle="-45" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="wing" />
+            </children>
+        </component>
+        <component id="rightWing">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <animation id="beeWingAnim"/>
+            <children>
+                <componentref id="rightWingWrapper" />
+            </children>
+        </component>
+        <component id="leftWingWrapper">
+            <transformation>
+                <translate x="0" y="0.5" z="0.3" />
+                <rotate axis="x" angle="45" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="wing" />
+            </children>
+        </component>
+        <component id="leftWing">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <animation id="beeWingAnim" />
+            <children>
+                <componentref id="leftWingWrapper" />
+            </children>
+        </component>
+        <component id="bodyComp">
+            <transformation>
+                <scale x="0.8" y="0.5" z="0.5" />
+            </transformation>
+            <materials>
+                <material id="autumnYellow" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="baseSpherePrim" />
+            </children>
+        </component>
+        <component id="rightEye">
+            <transformation>
+                <translate x="0" y="0.1" z="0.35" />
+                <scale x="0.1" y="0.1" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="baseSpherePrim" />
+            </children>
+        </component>
+        <component id="leftEye">
+            <transformation>
+                <translate x="0" y="0.1" z="-0.35" />
+                <scale x="0.1" y="0.1" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="baseSpherePrim" />
+            </children>
+        </component>
+        <component id="eyes">
+            <transformation>
+                <translate x="-0.6" y="-0.2" z="0" />
+            </transformation>
+            <materials>
+                <material id="blackMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="leftEye" />
+                <componentref id="rightEye" />
+            </children>
+        </component>
+        <component id="body">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="bodyComp" />
+                <componentref id="eyes" />
+            </children>
+        </component>
+        <component id="beeWrapper">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <animation id="beeTransAnim"/>
+            <children>
+                <componentref id="body" />
+                <componentref id="rightWing" />
+                <componentref id="leftWing" />
+            </children>
+        </component>
+         <component id="bee">
+            <transformation>
+                <scale x="0.1" y="0.1" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <animation id="beeMovement"/>
+            <children>
+                <componentref id="beeWrapper" />
+            </children>
+        </component>
+        <component id="tentRightSide">
+            <transformation>
+                <translate x="0" y="0.5" z="-1.25" />
+                <scale x="1" y="1" z="2.5" />
+                <rotate axis="y" angle="180" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="darkBrown" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="patchedSemiCircle" />
+            </children>
+        </component>
+        <component id="tentLeftSide">
+            <transformation>
+                <translate x="0" y="-0.5" z="-1.25" />
+                <scale x="1" y="1" z="2.5" />
+                <rotate axis="z" angle="180" />
+                <rotate axis="y" angle="180" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="darkBrown" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="patchedSemiCircle" />
+            </children>
+        </component>
+        <component id="fixLeftSideRect">
+            <transformation>
+                <translate x="0.5" y="0" z="-1" />
+                <scale x="1" y="1" z="0.5" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="darkBrown" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="patchedRectangle" />
+            </children>
+        </component>
+        <component id="fixRightSideRect">
+            <transformation>
+                <translate x="-0.5" y="0" z="-1" />
+                <scale x="1" y="1" z="0.5" />
+                <rotate axis="y" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="darkBrown" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="patchedRectangle" />
+            </children>
+        </component>
+        <component id="tentSides">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="darkBrown" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="tentLeftSide" />
+                <componentref id="tentRightSide" />
+                <componentref id="fixLeftSideRect" />
+                <componentref id="fixRightSideRect" />
+            </children>
+        </component>
+        <component id="tentTop">
+            <transformation>
+                <translate x="0" y="2" z="0" />
+                <rotate axis="x" angle="-90" />
+                <scale x="3.5" y="3" z="0.8" />
+            </transformation>
+            <materials>
+                <material id="darkBrown" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="patchedTent" />
+                <componentref id="tentSides" />
+            </children>
+        </component>
+        <component id="tentLeftFrontSupport">
+            <transformation>
+                <translate x="-7.5" y="6" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="lowPolyCylinder" />
+            </children>
+        </component>
+        <component id="tentRightBackSupport">
+            <transformation>
+                <translate x="7.5" y="-6" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="lowPolyCylinder" />
             </children>
         </component>
         <component id="hammock">
