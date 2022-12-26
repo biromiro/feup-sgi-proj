@@ -71,6 +71,7 @@
         <texture id="hive" file="scenes/images/hive.png" />
         <texture id="wing" file="scenes/images/wing.png" />
         <texture id="bee" file="scenes/images/bee.jpg" />
+        <texture id="checkers" file="scenes/images/board.jpg" />
     </textures>
 
     <materials>
@@ -1054,6 +1055,7 @@
             <children>
                 <componentref id="platform" />
                 <componentref id="seat" />
+                <componentref id="checkers" />
                 <componentref id="table" />
                 <componentref id="upAndDown" />
                 <componentref id="swing" />
@@ -1182,11 +1184,26 @@
         </component>
         <!-- </platform> -->
 
+        <!-- <checkers> -->
+
+        <component id="checkers">
+            <transformation>
+                <scale x="1" y="0.1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="checkers" length_s="2" length_t="2"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+
         <!-- <table> -->
         <component id="table">
             <transformation>
-                <translate x="-2.5" y="-0.5" z="5" />
-                <rotate axis="y" angle="35" />
+                <!--<translate x="-2.5" y="-0.5" z="5" />
+                <rotate axis="y" angle="35" />-->
             </transformation>
             <materials>
                 <material id="lightBrown" />

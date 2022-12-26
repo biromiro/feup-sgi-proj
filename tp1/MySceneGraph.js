@@ -1257,6 +1257,7 @@ export class MySceneGraph {
                 material.setTextureWrap('MIRRORED_REPEAT', 'MIRRORED_REPEAT');
                 material.apply();
             }
+            
             length_s = component.length_s != -1 ? component.length_s : length_s;
             length_t = component.length_t != -1 ? component.length_s : length_s;
             

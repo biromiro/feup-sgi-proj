@@ -865,16 +865,46 @@ export class MySceneGraph {
     }
 
     multiplexComponentPrimitives() {
-
         const updatedPrimitives = {};
         const primitivesToUpdate = ['MyRectangle', 'MyTriangle'];
+        const componentList = Object.entries(this.components)
+
+        while (componentList.length > 0) {
+            let [_componentID, component] = componentList.shift();
+            const componentChildren = component.children
+            for (let child of componentChildren) {
+                if (child.type == 'component') {
+                    const childComponent = {
+                        ...this.components[child.id]
+                    }
+                    const newChildID = child.id + '_of_' + _componentID
+                    childComponent.id = newChildID
+                    if (childComponent.length_s == -1 || !childComponent.length_s) {
+                        childComponent.length_s = component.length_s
+
+                    }
+                    if (childComponent.length_t == -1 || !childComponent.length_t) {
+                        childComponent.length_t = component.length_t
+                    }
+                    if (childComponent.length_t != this.components[child.id].length_t
+                        || childComponent.length_s != this.components[child.id].length_s) {
+                        this.components[newChildID] = childComponent
+                        component.children = component.children.filter(c => c.id != child.id)
+                        component.children.push({ id: newChildID, type: 'component' })
+                        componentList.push([newChildID, childComponent])
+                    }
+                    continue
+                }
+            }
+            
+        }
+        
 
         for (let [_componentID, component] of Object.entries(this.components)) {
-            const componentChildren = component.children
-            const newComponentChildren = component.children
+            const componentChildren = [...component.children]
+            const newComponentChildren = [...component.children]
             for (let child of componentChildren) {
                 if (child.type != 'primitive') continue
-
                 if (child.id in updatedPrimitives) {
                     const origPrimitive = this.primitives[child.id]
 
@@ -911,6 +941,7 @@ export class MySceneGraph {
 
             component.children = newComponentChildren
         }
+        console.log(this.components)
     }
 
     /**
@@ -1008,7 +1039,6 @@ export class MySceneGraph {
         // Any number of components.
         for (const component of components) {
 
-
             const componentID = this.reader.getString(component, 'id');
             if (componentID == null)
                 return "no ID defined for componentID";
@@ -1097,9 +1127,9 @@ export class MySceneGraph {
             if (textureID != "none") {
 
                 let length_s = this.reader.getString(texture, 'length_s', false);
-                if (length_s == null) length_s = (textureID == 'inherit' ? '-1' : '1')
+                if (!length_s) length_s = (textureID == 'inherit' ? '-1' : '1')
                 let length_t = this.reader.getString(texture, 'length_t', false);
-                if (length_t == null) length_t = (textureID == 'inherit' ? '-1' : '1')
+                if (!length_t) length_t = (textureID == 'inherit' ? '-1' : '1')
 
                 sceneTexture = {
                     id: textureID,
@@ -1131,6 +1161,7 @@ export class MySceneGraph {
                     if (componentIDs.indexOf(childID) == -1)
                         return "no such component with ID " + childID + " to be child of component " + componentID
                     type = "component"
+
                 } else {
                     if (this.primitives[childID] == null)
                         return "no such primitive with ID " + childID + " to be child of component " + componentID
