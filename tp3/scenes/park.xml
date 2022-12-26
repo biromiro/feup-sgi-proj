@@ -11,6 +11,18 @@
             <to x="0" y="0" z="0" />
             <up x="0" y="1" z="0" />
         </ortho>
+        <perspective id="player1Camera" near="0.01" far="50" angle="12">
+            <from x="-0.4" y="2" z="8" />
+            <to x="-9.5" y="-9" z="-5" />
+        </perspective>
+        <perspective id="player2Camera" near="0.01" far="50" angle="12">
+            <from x="-4.5" y="2" z="2.2" />
+            <to x="4.6" y="-9" z="15.2" />
+        </perspective>
+        <perspective id="overviewGameCamera" near="0.01" far="500" angle="50">
+            <from x="-2.5" y="1" z="4.9" />
+            <to x="-2.5" y="0" z="5" />
+        </perspective>
     </views>
 
     <ambient>
@@ -1055,7 +1067,6 @@
             <children>
                 <componentref id="platform" />
                 <componentref id="seat" />
-                <componentref id="checkers" />
                 <componentref id="table" />
                 <componentref id="upAndDown" />
                 <componentref id="swing" />
@@ -1188,7 +1199,8 @@
 
         <component id="checkers">
             <transformation>
-                <scale x="1" y="0.1" z="1" />
+                <translate x="0" y="0.05" z="0.1" />
+                <scale x="0.4" y="0.05" z="0.4" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1202,8 +1214,8 @@
         <!-- <table> -->
         <component id="table">
             <transformation>
-                <!--<translate x="-2.5" y="-0.5" z="5" />
-                <rotate axis="y" angle="35" />-->
+                <translate x="-2.5" y="-0.5" z="5" />
+                <rotate axis="y" angle="35" />
             </transformation>
             <materials>
                 <material id="lightBrown" />
@@ -1212,6 +1224,7 @@
             </materials>
             <texture id="none" />
             <children>
+                <componentref id="checkers" />
                 <componentref id="tableBaseSupport" />
                 <componentref id="tableGroundBase" />
             </children>
