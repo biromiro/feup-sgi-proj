@@ -1214,6 +1214,10 @@ export class MySceneGraph {
             if (highlighted != undefined) {
                 this.highlightedComponents.push(componentID);
             }
+
+            // right now it is removing the underlying cube, should add a flag on the component
+            // so that it can be drawn or not, whether it has a checker or not
+            
             let match = componentID.match(/^piece([0-9]+)/)
             if (match) {
                 this.gamePieces[componentID] = this.components[componentID];
