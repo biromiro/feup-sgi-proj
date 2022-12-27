@@ -172,25 +172,16 @@ export class XMLscene extends CGFscene {
 
     }
 
-    logPicking() {
-        if (this.pickMode == false) {
-            if (this.pickResults != null && this.pickResults.length > 0) { // are there picking results?
-                for (var i=0; i< this.pickResults.length; i++) { // for each result....
-                    let obj = this.pickResults[i][0]; // get the nth pickable result object
-                    if (obj !== null) { // is this object valid?
-                        var customId = this.pickResults[i][1]; // retrieve the ID from the result
-                        console.log("Picked object: " + obj + ", with pick id " + customId); // do something with the id
-                    }
-                }
-                this.pickResults.splice(0,this.pickResults.length); // empty pickResults array
-            }
-        }
-    }
-
     /**
      * Displays the scene.
      */
     display() {
+
+        this.graph.logPicking();
+
+		// this resets the picking buffer (association between objects and ids)
+		this.clearPickRegistration();
+
         // ---- BEGIN Background, camera and axis setup
 
         // Clear image and depth buffer everytime we update the scene
@@ -221,9 +212,6 @@ export class XMLscene extends CGFscene {
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
         }
-
-        this.logPicking();
-        this.clearPickRegistration();
 
         this.popMatrix();
         // ---- END Background, camera and axis setup

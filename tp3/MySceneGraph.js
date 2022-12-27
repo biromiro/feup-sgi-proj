@@ -9,6 +9,8 @@ import { SceneComponent } from './sceneObjects/SceneComponent.js';
 import { SceneLight } from './sceneObjects/SceneLight.js';
 import { MyKeyframe } from './animations/MyKeyframe.js';
 import { MyKeyframeAnimation } from './animations/MyKeyframeAnimation.js';
+import { CheckersGame } from './game/CheckersGame.js';
+import { Piece } from './sceneObjects/Piece.js';
 
 const DEGREE_TO_RAD = Math.PI / 180;
 
@@ -61,6 +63,8 @@ export class MySceneGraph {
          * If any error occurs, the reader calls onXMLError on this object, with an error message
          */
         this.reader.open('scenes/' + filename, this);
+
+        this.game = new CheckersGame();
     }
 
     /*
@@ -1016,6 +1020,7 @@ export class MySceneGraph {
         const components = componentsNode.children;
 
         this.components = {};
+        this.gamePieces = {};
         this.highlightedComponents = [];
         const componentIDs = [];
         for (const component of components) {
@@ -1208,6 +1213,18 @@ export class MySceneGraph {
 
             if (highlighted != undefined) {
                 this.highlightedComponents.push(componentID);
+            }
+            let match = componentID.match(/^piece([0-9]+)/)
+            if (match) {
+                this.gamePieces[componentID] = this.components[componentID];
+                if ((match[1] >=1 && match[1] <= 12) || (match[1] >= 21 && match[1] <= 32)){
+                    this.components[componentID].children = [{ id: componentID + "_checker", type: "primitive"}]
+                    this.primitives[componentID + "_checker"] = new Piece(this.scene, componentID + "_checker", this.gamePieces[componentID]);
+                }
+                if (match[1] >= 1 && match[1] <= 12)
+                    this.components[componentID].materials = ["checker"]
+                else if (match[1] >= 21 && match[1] <= 32)
+                    this.components[componentID].materials = ["checker_white"]
             }
         }
 
@@ -1423,11 +1440,47 @@ export class MySceneGraph {
         }
     }
 
+    logPicking() {
+        if (!this.gamePieces) return;
+		if (this.scene.pickMode == false) {
+            let pickedPiece = undefined;
+			// results can only be retrieved when picking mode is false
+			if (this.scene.pickResults != null && this.scene.pickResults.length > 0) {
+				for (var i=0; i< this.scene.pickResults.length; i++) {
+					pickedPiece = this.scene.pickResults[i][0];
+					if (pickedPiece != undefined) {
+						console.log(pickedPiece)
+                        pickedPiece.pick()
+					}
+				}
+				this.scene.pickResults.splice(0,this.scene.pickResults.length);
+
+                // handle possible movement of piece, two pieces may be picked
+
+                // unpick all pieces except the picked one
+                for (const piece of Object.values(this.gamePieces)) 
+                    if (piece?.id != pickedPiece?.id){
+                        piece.unpick();
+                    }
+			}
+		}
+	}
+
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
 
+		// When picking is enabled, the scene's display method is called once for picking, 
+		// and then again for rendering.
+		// logPicking does nothing in the beginning of the first pass (when pickMode is true)
+		// during the first pass, a picking buffer is filled.
+		// in the beginning of the second pass (pickMode false), logPicking checks the buffer and
+		// collects the id's of the picked object(s) 
+		this.logPicking();
+
+        this.pickingID = 1;
+        
         if (this.changeMaterial()) {
             for (const component of Object.values(this.components)) {
                 component.materialIndex = (component.materialIndex + 1) % component.materials.length;
@@ -1437,7 +1490,7 @@ export class MySceneGraph {
         this.displayComponent({ id: this.idRoot, type: 'component' }, {
             material: undefined,
             texture: undefined,
-            highlighted: undefined,
+            highlighted: undefined
         }, false);
 
         this.scene.setActiveShader(this.scene.shader);
@@ -1479,6 +1532,10 @@ export class MySceneGraph {
                 material.apply();
             }
 
+            if (this.gamePieces[component.id]) {
+                this.scene.registerForPick(this.pickingID++, component);
+            }
+
             if (!component.animation || this.animations[component.animation].isActive) {
 
                 if (component.animation) {
@@ -1493,6 +1550,9 @@ export class MySceneGraph {
                         highlighted: component.isHighlighted ? component.highlighted : undefined,
                     }, highlightedOnly);
                 }
+            }
+            if (this.gamePieces[component.id]) {
+                this.scene.clearPickRegistration();
             }
 
             this.scene.popMatrix();

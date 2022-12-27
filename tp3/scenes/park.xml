@@ -93,6 +93,18 @@
             <diffuse r="1" g="1" b="1" a="1.0" />
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
+        <material id="checker" shininess="0">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.15" g="0.06" b="0.02" a="1.0" />
+            <diffuse r="0.15" g="0.06" b="0.02" a="1.0" />
+            <specular r="0.15" g="0.06" b="0.02" a="1.0" />
+        </material>
+        <material id="checker_white" shininess="0">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.57" g="0.41" b="0.27" a="1.0" />
+            <diffuse r="0.57" g="0.41" b="0.27" a="1.0" />
+            <specular r="0.57" g="0.41" b="0.27" a="1.0" />
+        </material>
         <material id="wingMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
@@ -1244,11 +1256,11 @@
 
         <component id="pieces">
             <transformation>
-                <!--<translate x="0" y="0.05" z="0.1" />
-                <scale x="0.4" y="0.05" z="0.4" />-->
+                <translate x="0" y="-0.028" z="0" />
+                <!--<scale x="0.4" y="0.05" z="0.4" />-->
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="checker" />
             </materials>
             <texture id="none"/>
             <children>
@@ -1302,7 +1314,7 @@
         
         <component id="piece2">
             <transformation>
-                <translate x="-0.1325" y="0" z="0.4" />
+                <translate x="-0.132" y="0" z="0.4" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1315,7 +1327,7 @@
         
         <component id="piece3">
             <transformation>
-                <translate x="0.04" y="0" z="0.4" />
+                <translate x="0.0405" y="0" z="0.4" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1328,7 +1340,7 @@
         
         <component id="piece4">
             <transformation>
-                <translate x="0.2125" y="0" z="0.4" />
+                <translate x="0.2135" y="0" z="0.4" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1341,7 +1353,7 @@
         
          <component id="piece5">
             <transformation>
-                <translate x="-0.21875" y="0" z="0.315" />
+                <translate x="-0.21875" y="0" z="0.314" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1354,7 +1366,7 @@
         
         <component id="piece6">
             <transformation>
-                <translate x="-0.04625" y="0" z="0.315" />
+                <translate x="-0.04625" y="0" z="0.314" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1367,7 +1379,7 @@
         
         <component id="piece7">
             <transformation>
-                <translate x="0.12625" y="0" z="0.315" />
+                <translate x="0.12625" y="0" z="0.314" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1380,7 +1392,7 @@
         
         <component id="piece8">
             <transformation>
-                <translate x="0.29875" y="0" z="0.315" />
+                <translate x="0.29875" y="0" z="0.314" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1393,7 +1405,7 @@
         
         <component id="piece9">
             <transformation>
-                <translate x="-0.305" y="0" z="0.23" />
+                <translate x="-0.305" y="0" z="0.228" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1406,7 +1418,7 @@
         
         <component id="piece10">
             <transformation>
-                <translate x="-0.1325" y="0" z="0.23" />
+                <translate x="-0.132" y="0" z="0.228" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1419,7 +1431,7 @@
         
         <component id="piece11">
             <transformation>
-                <translate x="0.04" y="0" z="0.23" />
+                <translate x="0.0405" y="0" z="0.228" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1432,7 +1444,7 @@
         
         <component id="piece12">
             <transformation>
-                <translate x="0.2125" y="0" z="0.23" />
+                <translate x="0.2135" y="0" z="0.228" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1445,7 +1457,7 @@
         
          <component id="piece13">
             <transformation>
-                <translate x="-0.21875" y="0" z="0.145" />
+                <translate x="-0.21875" y="0" z="0.142" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1458,7 +1470,7 @@
         
         <component id="piece14">
             <transformation>
-                <translate x="-0.04625" y="0" z="0.145" />
+                <translate x="-0.04625" y="0" z="0.142" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1471,7 +1483,7 @@
         
         <component id="piece15">
             <transformation>
-                <translate x="0.12625" y="0" z="0.145" />
+                <translate x="0.12625" y="0" z="0.142" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1484,7 +1496,7 @@
         
         <component id="piece16">
             <transformation>
-                <translate x="0.29875" y="0" z="0.145" />
+                <translate x="0.29875" y="0" z="0.142" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1497,7 +1509,7 @@
         
                 <component id="piece17">
             <transformation>
-                <translate x="-0.305" y="0" z="0.06" />
+                <translate x="-0.305" y="0" z="0.056" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1510,7 +1522,7 @@
         
         <component id="piece18">
             <transformation>
-                <translate x="-0.1325" y="0" z="0.06" />
+                <translate x="-0.132" y="0" z="0.056" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1523,7 +1535,7 @@
         
         <component id="piece19">
             <transformation>
-                <translate x="0.04" y="0" z="0.06" />
+                <translate x="0.0405" y="0" z="0.056" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1536,7 +1548,7 @@
         
         <component id="piece20">
             <transformation>
-                <translate x="0.2125" y="0" z="0.06" />
+                <translate x="0.2135" y="0" z="0.056" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1549,7 +1561,7 @@
         
          <component id="piece21">
             <transformation>
-                <translate x="-0.21875" y="0" z="-0.025" />
+                <translate x="-0.21875" y="0" z="-0.03" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1562,7 +1574,7 @@
         
         <component id="piece22">
             <transformation>
-                <translate x="-0.04625" y="0" z="-0.025" />
+                <translate x="-0.04625" y="0" z="-0.03" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1575,7 +1587,7 @@
         
         <component id="piece23">
             <transformation>
-                <translate x="0.12625" y="0" z="-0.025" />
+                <translate x="0.12625" y="0" z="-0.03" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1588,7 +1600,7 @@
         
         <component id="piece24">
             <transformation>
-                <translate x="0.29875" y="0" z="-0.025" />
+                <translate x="0.29875" y="0" z="-0.03" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1601,7 +1613,7 @@
         
         <component id="piece25">
             <transformation>
-                <translate x="-0.305" y="0" z="-0.11" />
+                <translate x="-0.305" y="0" z="-0.116" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1614,7 +1626,7 @@
         
         <component id="piece26">
             <transformation>
-                <translate x="-0.1325" y="0" z="-0.11" />
+                <translate x="-0.132" y="0" z="-0.116" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1627,7 +1639,7 @@
         
         <component id="piece27">
             <transformation>
-                <translate x="0.04" y="0" z="-0.11" />
+                <translate x="0.0405" y="0" z="-0.116" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1640,7 +1652,7 @@
         
         <component id="piece28">
             <transformation>
-                <translate x="0.2125" y="0" z="-0.11" />
+                <translate x="0.2135" y="0" z="-0.116" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1653,7 +1665,7 @@
         
          <component id="piece29">
             <transformation>
-                <translate x="-0.21875" y="0" z="-0.195" />
+                <translate x="-0.21875" y="0" z="-0.202" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1666,7 +1678,7 @@
         
         <component id="piece30">
             <transformation>
-                <translate x="-0.04625" y="0" z="-0.195" />
+                <translate x="-0.04625" y="0" z="-0.202" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1679,7 +1691,7 @@
         
         <component id="piece31">
             <transformation>
-                <translate x="0.12625" y="0" z="-0.195" />
+                <translate x="0.12625" y="0" z="-0.202" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1692,7 +1704,7 @@
         
         <component id="piece32">
             <transformation>
-                <translate x="0.29875" y="0" z="-0.195" />
+                <translate x="0.29875" y="0" z="-0.202" />
             </transformation>
             <materials>
                 <material id="inherit" />

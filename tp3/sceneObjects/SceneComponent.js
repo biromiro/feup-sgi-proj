@@ -17,6 +17,15 @@ export class SceneComponent {
         this.highlighted = highlighted;
         this.isHighlighted = false;
         this.animation = animation ? animation :  undefined;
+        this.picked = false;
+    }
+
+    pick() {
+        this.picked = true;
+    }
+
+    unpick() {  
+        this.picked = false;
     }
 
 }
