@@ -13,16 +13,17 @@ const states = {
 
 export class CheckersGame {
     constructor(graph) {
-        this.players = ['white', 'black'];
+        this.players = ['black', 'white'];
         this.graph = graph;
         this.state = states.initial;
         this.selected = null;
+        this.componentToTile = {}
     }
 
     init(gamePickables) {
-        console.log(gamePickables)
         this.board = new Array(8);
         this.currentPlayer = this.players[0];
+
         for (const pickable of Object.values(gamePickables)) {
             const id = pickable.id;
             let match = id.match(/^piece([0-9]+)/)
@@ -43,38 +44,48 @@ export class CheckersGame {
                 );
             }
             if (match[1] >= 1 && match[1] <= 12)
-                this.graph.components[id + "_checker"].materials = ["checker"]
+                this.graph.components[id + "_checker"].materials = ["checker_black"]
             else if (match[1] >= 21 && match[1] <= 32)
                 this.graph.components[id + "_checker"].materials = ["checker_white"]
-            
         }
+
         let counter = 1;
         for (let i = 0; i < this.board.length; i++) {
             this.board[i] = new Array(8);
             for (let j = 0; j < this.board.length; j+=2) {
-                let col = i%2 == 1 ? j : j+1;
-                if (counter <= 12)
-                    this.board[i][col] = new Checker('black', i, col, gamePickables["piece" + counter++]);
-                else if (counter >= 21)
-                    this.board[i][col] = new Checker('white', i, col, gamePickables["piece" + counter++]);
-                else
-                    this.board[i][col] = new Tile(i, col, gamePickables["piece" + counter++]);
+                let col = i%2 == 0 ? j : j+1;
+                const pickable = this.graph.components["piece" + counter];
+                if (counter <= 12){
+                    const checker = this.graph.components[pickable.id + "_checker"];
+                    this.board[i][col] = new Checker('black', i, col, pickable, checker);
+                }
+                else if (counter >= 21){
+                    const checker = this.graph.components[pickable.id + "_checker"];
+                    this.board[i][col] = new Checker('white', i, col, pickable, checker);
+                }
+                else {
+                    this.board[i][col] = new Tile(i, col, pickable);
+                }
+                this.componentToTile["piece" + counter++] = [i, col]
             }
         }
+
         console.log(this.board)
+        this.state = states.playing;
 
     }
 
     getAvailableMoves(checker) {
-        const isWhite = checker.color === 'white'; 
+        const isBlack = checker.color === 'black'; 
 
-        const moves = [[(isWhite ? 1 : -1), -1], [(isWhite ? 1 : -1), 1]]
+        const moves = [[(isBlack ? 1 : -1), -1], [(isBlack ? 1 : -1), 1]]
         if (checker.isKing())
-            moves.push([(isWhite ? -1 : 1), -1], [(isWhite ? -1 : 1), 1]);
+            moves.push([(isBlack ? -1 : 1), -1], [(isBlack ? -1 : 1), 1]);
         
         const possibleMoves = []
-        for (const move of [forwardLeftPos, forwardRightPos]) {
+        for (const move of moves) {
             const pos = this.board[checker.row + move[0]][checker.column + move[1]];
+            if (!pos) continue
             if (!pos.isChecker()) 
                 possibleMoves.push(pos);
             else if (pos.color !== checker.color) {
@@ -83,7 +94,7 @@ export class CheckersGame {
                     possibleMoves.push(jump);
             }
         }
-
+        console.log(possibleMoves)
         return possibleMoves
     }
 
@@ -106,13 +117,21 @@ export class CheckersGame {
         if ((this.state === states.initial) || (this.state === states.finished))
             return
         
+        const tile = this.componentToTile[selected];
+        selected = this.board[tile[0]][tile[1]];
+        
         if (this.state === states.playing) {
-            if (this.selected.isChecker() && this.selected.color === this.currentPlayer) {
+            if (selected.isChecker() && selected.color === this.currentPlayer) {
                 this.state = states.checkerSelected;
+                const moves = this.getAvailableMoves(selected);
+                if (moves.length === 0) {
+                    this.state = states.playing;
+                    return;
+                }
+
                 this.selected = selected;
                 this.selected.select();
                 // highlight available moves
-                const moves = this.getAvailableMoves(this.selected);
                 for (const move of moves) {
                     move.highlight();
                 }

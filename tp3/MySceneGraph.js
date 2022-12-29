@@ -1452,12 +1452,16 @@ export class MySceneGraph {
 				this.scene.pickResults.splice(0,this.scene.pickResults.length);
 
                 // handle possible movement of piece, two pieces may be picked
-
+                if (pickedPiece) {
+                    this.game.play(pickedPiece.id);
+                }
                 // unpick all pieces except the picked one
                 for (const piece of Object.values(this.gamePieces)) 
                     if (piece?.id != pickedPiece?.id){
                         piece.unpick();
                     }
+                
+                console.log(this.components)
 			}
 		}
 	}
@@ -1540,10 +1544,11 @@ export class MySceneGraph {
 
 
                 for (const child of component.children) {
+
                     this.displayComponent(child, {
                         material: material,
                         texture: texture,
-                        highlighted: component.isHighlighted ? component.highlighted : undefined,
+                        highlighted: component.isHighlighted ? component.highlighted : inheritance.highlighted,
                     }, highlightedOnly);
                 }
             }
