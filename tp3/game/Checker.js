@@ -1,8 +1,9 @@
-export class Checker {
-    constructor(color, row, column) {
+import { Tile } from './Tile.js';
+
+export class Checker extends Tile {
+    constructor(color, row, column, clickableObject) {
+        super(row, column, clickableObject);
         this.color = color;
-        this.row = row;
-        this.column = column;
         this.king = false;
     }
 
@@ -12,5 +13,9 @@ export class Checker {
 
     setKing() {
         this.king = true;
+    }
+
+    isChecker() {
+        return true;
     }
 }

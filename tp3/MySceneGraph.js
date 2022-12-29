@@ -64,7 +64,7 @@ export class MySceneGraph {
          */
         this.reader.open('scenes/' + filename, this);
 
-        this.game = new CheckersGame();
+        this.game = new CheckersGame(this);
     }
 
     /*
@@ -86,6 +86,7 @@ export class MySceneGraph {
 
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
         this.scene.onGraphLoaded();
+        this.game.init(this.gamePieces)
     }
 
     /**
@@ -1219,17 +1220,8 @@ export class MySceneGraph {
             // so that it can be drawn or not, whether it has a checker or not
             
             let match = componentID.match(/^piece([0-9]+)/)
-            if (match) {
+            if (match)
                 this.gamePieces[componentID] = this.components[componentID];
-                if ((match[1] >=1 && match[1] <= 12) || (match[1] >= 21 && match[1] <= 32)){
-                    this.components[componentID].children = [{ id: componentID + "_checker", type: "primitive"}]
-                    this.primitives[componentID + "_checker"] = new Piece(this.scene, componentID + "_checker", this.gamePieces[componentID]);
-                }
-                if (match[1] >= 1 && match[1] <= 12)
-                    this.components[componentID].materials = ["checker"]
-                else if (match[1] >= 21 && match[1] <= 32)
-                    this.components[componentID].materials = ["checker_white"]
-            }
         }
 
         let circularDependency = "";
