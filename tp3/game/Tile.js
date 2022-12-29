@@ -18,6 +18,6 @@ export class Tile {
     unhighlight() {
         //this.clickableObject.isHighlighted = false;
         //this.clickableObject.highlighted = {color: [0.15,0.06,0.02], scale_h: 0}
-        this.clickableObject.materials = ['checker']
+        this.clickableObject.materials = ['tile']
     }
 }
