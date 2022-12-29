@@ -7,6 +7,7 @@ const states = {
     initial: 'initial',
     playing: 'playing',
     checkerSelected: 'checkerSelected',
+    onCombo: 'onCombo',
     animating: 'animating',
     finished: 'finished'
 }
@@ -212,7 +213,7 @@ export class CheckersGame {
                         console.log("It was a jump, checking for chained jumps")
                         const moves = this.getAvailableMoves(this.selectedTile);
                         if (moves.type === 'jump' && moves.moves.length > 0) {
-                            this.state = states.checkerSelected;
+                            this.state = states.onCombo;
                             this.selectedTile.select();
                             for (const move of moves.moves) {
                                 move.highlight();
@@ -225,12 +226,38 @@ export class CheckersGame {
                     this.currentPlayer = this.currentPlayer === 'black' ? 'white' : 'black';
                 }   
             }
+        } else if (this.state === states.onCombo) {
+            const moves = this.getAvailableMoves(this.selectedTile);
+            if (moves.moves.includes(selectedTile)) {
+                for (const move of moves.moves) {
+                    move.unhighlight();
+                }
+                this.selectedTile.deselect();
+                this.selectedTile = await this.move(this.selectedTile, selectedTile);
+                if (moves.type === 'jump') {
+                    console.log("It was a jump, checking for chained jumps")
+                    const moves = this.getAvailableMoves(this.selectedTile);
+                    if (moves.type === 'jump' && moves.moves.length > 0) {
+                        this.state = states.onCombo;
+                        this.selectedTile.select();
+                        for (const move of moves.moves) {
+                            move.highlight();
+                        }
+                        return
+                    }
+                }
+                this.state = states.playing;
+                this.selectedTile = undefined;
+                this.currentPlayer = this.currentPlayer === 'black' ? 'white' : 'black';
+            }   
         }
 
         const availableCheckers = this.getAvailableCheckers();
         if (availableCheckers.length === 0) {
             this.state = states.finished;
-            console.log("Game finished, no checkers available, player " + this.currentPlayer === 'black' ? 'white' : 'black' + " wins")
+            console.log("Game finished, no checkers available")
+            console.log(`${this.currentPlayer === 'black' ? 'White' : 'Black'} wins!`)
+            console.log(this)
         }
         
 
