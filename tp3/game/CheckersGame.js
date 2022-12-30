@@ -160,6 +160,7 @@ export class CheckersGame {
         }
 
         this.state = states.playing;
+        this.currBoard = JSON.stringify(this.board);
     }
 
     getTile(row, column) {
@@ -320,6 +321,10 @@ export class CheckersGame {
     undo(player) {
         this.genClick(`undoButton${player}`)
         if (this.currentPlayer !== player.toLowerCase()) return
+        if (this.state === states.canLock || this.state === states.onCombo) {
+            // undo last move
+            
+        }
     }
 
     lock(player) {
