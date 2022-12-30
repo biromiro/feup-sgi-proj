@@ -1834,7 +1834,7 @@
             <children>
                 <componentref id="gameMarker" />
                 <componentref id="undoButtonBlack" />
-                <componentref id="nextButtonBlack" />
+                <componentref id="lockButtonBlack" />
             </children>
         </component>
 
@@ -1850,7 +1850,7 @@
             <children>
                 <componentref id="gameMarker" />
                 <componentref id="undoButtonWhite" />
-                <componentref id="nextButtonWhite" />
+                <componentref id="lockButtonWhite" />
             </children>
         </component>
 
@@ -1870,7 +1870,7 @@
             </children>
         </component>
 
-        <component id="nextButtonBlack">
+        <component id="lockButtonBlack">
             <transformation>
             </transformation>
             <materials>
@@ -1878,11 +1878,11 @@
             </materials>
             <texture id="inherit" length_t="1" length_s="1"/>
             <children>
-                <componentref id="nextButton" />
+                <componentref id="lockButton" />
             </children>
         </component>
 
-        <component id="nextButtonWhite">
+        <component id="lockButtonWhite">
             <transformation>
             </transformation>
             <materials>
@@ -1890,11 +1890,11 @@
             </materials>
             <texture id="inherit" length_t="1" length_s="1"/>
             <children>
-                <componentref id="nextButton" />
+                <componentref id="lockButton" />
             </children>
         </component>
 
-        <component id="nextButton">
+        <component id="lockButton">
             <transformation>
             </transformation>
             <materials>
@@ -1902,8 +1902,8 @@
             </materials>
             <texture id="inherit" />
             <children>
-                <componentref id="nextText" />
-                <componentref id="nextBox" />
+                <componentref id="lockText" />
+                <componentref id="lockBox" />
             </children>
         </component>
 
@@ -1958,7 +1958,7 @@
             </children>
         </component>
 
-        <component id="nextText" text="LOCK">
+        <component id="lockText" text="LOCK">
             <transformation>
                 <translate x="0.22" y="0.006" z="0.25" />
             </transformation>
@@ -1984,7 +1984,7 @@
             </children>
         </component>
 
-        <component id="nextBox">
+        <component id="lockBox">
             <transformation>
                 <translate x="0.11" y="0.01" z="0.25" />
             </transformation>

@@ -45,7 +45,6 @@ export class CheckersGame {
 
     switchPlayers() {
         this.currentPlayer = this.currentPlayer === 'black' ? 'white' : 'black';
-        this.gameInfo[this.currentPlayer].turn = this.turnTime;
 
         const midAnim = this.graph.camAnimations['overviewGame']
         const targetAnim = this.graph.camAnimations[this.cameras[this.currentPlayer]]
@@ -54,6 +53,7 @@ export class CheckersGame {
 
         setTimeout(() => {
             this.state = states.playing;
+            this.gameInfo[this.currentPlayer].turn = this.turnTime;
         }, (midAnim.duration + targetAnim.duration + this.animTime) * 1000);
 
     }
@@ -220,6 +220,18 @@ export class CheckersGame {
         return vec3.fromValues(x, y, z);
     }
 
+    genClick(object) {
+        const clickedObject = this.graph.components[object];
+        const keyframes = []
+        const currAnimTime = this.graph.scene.animTime;
+        keyframes.push(new MyKeyframe(currAnimTime - 1 , mat4.create()));
+        keyframes.push(new MyKeyframe(currAnimTime, mat4.create()));
+        keyframes.push(new MyKeyframe(currAnimTime + 0.1, mat4.translate(mat4.create(), mat4.create(), vec3.fromValues(0, -0.0025, 0))));
+        keyframes.push(new MyKeyframe(currAnimTime + 0.2, mat4.create()));
+        this.graph.animations["button" + clickedObject.id] = new MyKeyframeAnimation(this.graph.scene, keyframes)
+        clickedObject.animation = "button" + clickedObject.id;
+    }
+
     genAnimation(checker, targetTile, jump) {
         const checkerObject = checker.checkerObject;
         const target = targetTile.clickableObject;
@@ -306,16 +318,20 @@ export class CheckersGame {
     }
 
     undo(player) {
-        if (this.currentPlayer !== player) return
+        this.genClick(`undoButton${player}`)
+        if (this.currentPlayer !== player.toLowerCase()) return
     }
 
     lock(player) {
-        if (this.currentPlayer !== player) return
-        setTimeout(() => {
-            this.selectedTile.removeAnimation();
-            this.selectedTile = undefined;
-            this.switchPlayers()
-        }, this.timeout);
+        this.genClick(`lockButton${player}`)
+        if (this.currentPlayer !== player.toLowerCase()) return
+        if (this.state === states.canLock || this.state === states.onCombo) {
+            setTimeout(() => {
+                this.selectedTile.removeAnimation();
+                this.selectedTile = undefined;
+                this.switchPlayers()
+            }, this.timeout);
+        }
     }
 
     async play(selected) {

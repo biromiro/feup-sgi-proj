@@ -1277,7 +1277,7 @@ export class MySceneGraph {
             if (match)
                 this.gamePieces[componentID] = this.components[componentID];
 
-            if (componentID == "nextButtonWhite" || componentID == "nextButtonBlack") {
+            if (componentID == "lockButtonWhite" || componentID == "lockButtonBlack") {
                 this.gamePieces[componentID] = this.components[componentID];
             }
 
@@ -1519,9 +1519,9 @@ export class MySceneGraph {
                 // handle possible movement of piece, two pieces may be picked
                 if (pickedPiece) {
                     if (pickedPiece.id.startsWith("undoButton")) {
-                        this.game.undo(pickedPiece.id.slice(-5).toLowerCase())
-                    } else if (pickedPiece.id.startsWith("nextButton")) {
-                        this.game.lock(pickedPiece.id.slice(-5).toLowerCase())
+                        this.game.undo(pickedPiece.id.slice(-5))
+                    } else if (pickedPiece.id.startsWith("lockButton")) {
+                        this.game.lock(pickedPiece.id.slice(-5))
                     } else {
                         this.game.play(pickedPiece.id);
                     }
@@ -1658,13 +1658,14 @@ export class MySceneGraph {
 
                 if (component.animation) {
                     const animation = this.animations[component.animation].get();
-                    
-                    modelMatrix_ = mat4.multiply(
-                        modelMatrix_,
-                        inheritance.modelMatrix, 
-                        animation);
-
-                    this.scene.multMatrix(animation);
+                    if (animation) {
+                        modelMatrix_ = mat4.multiply(
+                            modelMatrix_,
+                            inheritance.modelMatrix, 
+                            animation);
+    
+                        this.scene.multMatrix(animation);
+                    }
                 }
 
                 if (component.id == "gameMarkerBlack_of_table") {
