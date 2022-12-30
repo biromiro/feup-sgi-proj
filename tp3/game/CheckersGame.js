@@ -10,6 +10,7 @@ const states = {
     playing: 'playing',
     checkerSelected: 'checkerSelected',
     onCombo: 'onCombo',
+    canLock: 'canLock',
     animating: 'animating',
     finished: 'finished'
 }
@@ -305,15 +306,16 @@ export class CheckersGame {
     }
 
     undo(player) {
-        console.log("undo" + player)
         if (this.currentPlayer !== player) return
-        console.log("undo")
     }
 
     lock(player) {
-        console.log("lock" + player)
         if (this.currentPlayer !== player) return
-        console.log("lock")
+        setTimeout(() => {
+            this.selectedTile.removeAnimation();
+            this.selectedTile = undefined;
+            this.switchPlayers()
+        }, this.timeout);
     }
 
     async play(selected) {
@@ -378,11 +380,7 @@ export class CheckersGame {
                             return
                         }
                     }
-                    setTimeout(() => {
-                        this.selectedTile.removeAnimation();
-                        this.selectedTile = undefined;
-                        this.switchPlayers()
-                    }, this.timeout);
+                    this.state = states.canLock;
                 }   
             }
         } else if (this.state === states.onCombo) {
@@ -408,11 +406,7 @@ export class CheckersGame {
                         return
                     }
                 }
-                setTimeout(() => {
-                    this.selectedTile.removeAnimation();
-                    this.selectedTile = undefined;
-                    this.switchPlayers()
-                }, this.timeout);
+                this.state = states.canLock;
             }   
         }
 

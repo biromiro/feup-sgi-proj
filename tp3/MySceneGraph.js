@@ -19,8 +19,8 @@ TODO:
 [X] - spotlight tracking animated piece
 [ ] - undo
 [X] - rotate camera between player turns
-[ ] - game results marker
-[ ] - time control marker
+[X] - game results marker
+[X] - time control marker
 [ ] - game movie
 
 */

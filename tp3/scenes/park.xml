@@ -1958,7 +1958,7 @@
             </children>
         </component>
 
-        <component id="nextText" text="NEXT">
+        <component id="nextText" text="LOCK">
             <transformation>
                 <translate x="0.22" y="0.006" z="0.25" />
             </transformation>
