@@ -39,6 +39,7 @@ export class MyInterface extends CGFinterface {
 
         let f0 = this.gui.addFolder('Lights')
         for (let lightID in this.scene.graph.lights) {
+            if (lightID == "trackingLight") continue
             let light = this.scene.graph.lights[lightID];
             const field = f0.add(light, 'isEnabled').name(lightID);
             field.onChange(() => {

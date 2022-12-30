@@ -60,6 +60,8 @@ export class XMLscene extends CGFscene {
 
             let light = this.graph.lights[key];
 
+            if (key == "trackingLight") this.trackingLight = this.lights[i];
+
             this.lights[i].setPosition(...light.typeInfo.location);
             this.lights[i].setAmbient(...light.typeInfo.ambient);
             this.lights[i].setDiffuse(...light.typeInfo.diffuse);

@@ -165,15 +165,12 @@ export class CheckersGame {
             (firstPosition[1] + finalPosition[1])/2 + (jump ? 0.05 : 0),
             (firstPosition[2] + finalPosition[2])/2
         );
-        console.log(firstPosition, midPosition, finalPosition)
         const diff = vec3.subtract(vec3.create(), firstPosition, finalPosition);
         const currAnimTime = this.graph.scene.animTime;
         
         const targetTime = currAnimTime + time;
         const keyframes = []
         
-        console.log(currAnimTime, targetTime)
-
         let matrix = mat4.create(); 
         matrix = mat4.translate(matrix, matrix, diff);
         keyframes.push(new MyKeyframe(currAnimTime, matrix));
@@ -217,9 +214,9 @@ export class CheckersGame {
             const jumpedCheckerPickable = jumpedChecker.clickableObject;
             jumpedCheckerPickable.children = jumpedCheckerPickable.children.filter(child => child.id !== jumpedChecker.checkerObject.id);
             this.board[jumpedChecker.row][jumpedChecker.column] = new Tile(jumpedChecker.row, jumpedChecker.column, jumpedCheckerPickable);
-            checkerObject.animation = this.genAnimation(checker, tile, true)
+            checker.addAnimation(this.genAnimation(checker, tile, true));
         } else {
-            checkerObject.animation = this.genAnimation(checker, tile, false)
+            checker.addAnimation(this.genAnimation(checker, tile, false));
         }
 
         const newChecker = new Checker(checker.color, tile.row, tile.column, tilePickable, checkerObject, checker.king);
@@ -338,9 +335,8 @@ export class CheckersGame {
         const availableCheckers = this.getAvailableCheckers();
         if (availableCheckers.length === 0) {
             this.state = states.finished;
-            console.log("Game finished, no checkers available")
+            console.log("Game finished, no play available")
             console.log(`${this.currentPlayer === 'black' ? 'White' : 'Black'} wins!`)
-            console.log(this)
         }
         
 

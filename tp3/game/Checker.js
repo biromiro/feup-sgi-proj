@@ -41,7 +41,13 @@ export class Checker extends Tile {
         this.checkerObject.materials = ['checker_' + this.color]
     }
 
+    addAnimation(animation) {
+        this.checkerObject.animation = animation
+        this.checkerObject.isTargetForLight = true
+    }
+
     removeAnimation() {
         this.checkerObject.animation = undefined
+        this.checkerObject.isTargetForLight = undefined
     }
 }

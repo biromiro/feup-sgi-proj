@@ -39,7 +39,7 @@ export class MyKeyframeAnimation extends MyAnimation {
         this.currentTime = t_;
     }
 
-    apply(scene) {
+    get() {
         let percentage = 1;
 
         if (this.currentTime < this.instants.at(-1)) {
@@ -50,6 +50,6 @@ export class MyKeyframeAnimation extends MyAnimation {
         const prevKeyframe = this.keyframes[this.currentIndex - 1]
         const keyframe = this.keyframes[this.currentIndex]
         if (keyframe)
-            scene.multMatrix(keyframe.getTransformationMatrix(prevKeyframe, percentage))
+            return keyframe.getTransformationMatrix(prevKeyframe, percentage)
     }
 }

@@ -10,7 +10,21 @@ import { SceneLight } from './sceneObjects/SceneLight.js';
 import { MyKeyframe } from './animations/MyKeyframe.js';
 import { MyKeyframeAnimation } from './animations/MyKeyframeAnimation.js';
 import { CheckersGame } from './game/CheckersGame.js';
-import { Piece } from './sceneObjects/Piece.js';
+import { MyCameraAnimation } from './animations/MyCameraAnimation.js';
+
+/*
+TODO:
+[ ] - auxiliary board
+[ ] - animate dead piece to auxiliary board
+[X] - spotlight tracking animated piece
+[ ] - undo
+[ ] - rotate camera between player turns
+[ ] - game results marker
+[ ] - time control marker
+[ ] - game movie
+
+*/
+
 
 const DEGREE_TO_RAD = Math.PI / 180;
 
@@ -87,6 +101,10 @@ export class MySceneGraph {
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
         this.scene.onGraphLoaded();
         this.game.init(this.gamePieces)
+
+        setTimeout(() => {
+            this.camAnimations['player1Camera'].start(this.scene.animTime, this.scene.camera)
+        }, 5000);
     }
 
     /**
@@ -946,7 +964,32 @@ export class MySceneGraph {
 
             component.children = newComponentChildren
         }
-        console.log(this.components)
+    }
+
+    parseCameraAnimation(animationsNode) {
+        const gameCamera = this.views['gameCamera'];
+        if (gameCamera == null)
+            return "gameCamera does not exist";
+
+        // Get id of the current transformation.
+        const target = this.reader.getString(animationsNode, 'to');
+        if (target == null)
+            return "no target defined for camera animation";
+
+        // Checks for repeated IDs.
+        if (this.camAnimations[target] != null)
+            return "target must be unique for each camera animation (conflict: to = " + target + ")";
+
+        const duration = this.reader.getFloat(animationsNode, 'duration');
+        if (duration == null)
+            return "no duration defined for camera animation";
+
+        const targetCamera = this.views[target];
+        if (targetCamera == null)
+            return "target camera does not exist";
+
+        this.camAnimations[target] = new MyCameraAnimation(this.scene, gameCamera, targetCamera, duration);
+
     }
 
     /**
@@ -957,9 +1000,15 @@ export class MySceneGraph {
         const animations = animationsNode.children;
 
         this.animations = {};
+        this.camAnimations = {};
 
         // Any number of animations.
         for (const animation of animations) {
+
+            if (animation.nodeName == "camanim") {
+                this.parseCameraAnimation(animation);
+                continue;
+            }
 
             if (animation.nodeName != "keyframeanim") {
                 this.onXMLMinorError("unknown tag <" + transformation.nodeName + ">");
@@ -1009,8 +1058,8 @@ export class MySceneGraph {
 
             this.animations[animationID] = new MyKeyframeAnimation(this.scene, keyframeList, loop);
         }
-        console.log(this.animations)
 
+        console.log(this.camAnimations)
         return null;
     }
 
@@ -1435,6 +1484,9 @@ export class MySceneGraph {
         for (let key in this.animations) {
             this.animations[key].update(t);
         }
+        for (let key in this.camAnimations) {
+            this.camAnimations[key].update(t);
+        }
     }
 
     logPicking() {
@@ -1446,7 +1498,6 @@ export class MySceneGraph {
 				for (var i=0; i< this.scene.pickResults.length; i++) {
 					pickedPiece = this.scene.pickResults[i][0];
 					if (pickedPiece != undefined) {
-						console.log(pickedPiece)
                         pickedPiece.pick()
 					}
 				}
@@ -1461,11 +1512,26 @@ export class MySceneGraph {
                     if (piece?.id != pickedPiece?.id){
                         piece.unpick();
                     }
-                
-                console.log(this.components)
 			}
 		}
 	}
+
+    updateTrackingLight(component, modelMatrix){
+        this.scene.trackingLight.enable();
+
+        const currentPos = vec3.fromValues(modelMatrix[12], modelMatrix[13], modelMatrix[14]);
+
+        modelMatrix = mat4.translate(modelMatrix, modelMatrix, [0, 0.13, 0]);
+        modelMatrix = mat4.scale(modelMatrix, modelMatrix, [0.018, 0.018, 0.018]);
+
+        let x1, x2, y1, y2, z1, z2, dx, dy, dz;
+        [x1, y1, z1] = this.scene.trackingLight.position;
+        [x2, y2, z2] = currentPos;
+        [dx, dy, dz] = [x2 - x1, y2 - y1, z2 - z1];
+        const norm = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        this.scene.trackingLight.setSpotDirection(dx / norm, dy / norm, dz / norm);
+        this.mustDisableTrackingLight = false;
+    }
 
     /**
      * Displays the scene, processing each node, starting in the root node.
@@ -1481,7 +1547,12 @@ export class MySceneGraph {
 		this.logPicking();
 
         this.pickingID = 1;
-        
+        this.mustDisableTrackingLight = true;
+
+        for (const key in this.camAnimations) {
+            this.camAnimations[key].apply();
+        }
+
         if (this.changeMaterial()) {
             for (const component of Object.values(this.components)) {
                 component.materialIndex = (component.materialIndex + 1) % component.materials.length;
@@ -1491,7 +1562,8 @@ export class MySceneGraph {
         this.displayComponent({ id: this.idRoot, type: 'component' }, {
             material: undefined,
             texture: undefined,
-            highlighted: undefined
+            highlighted: undefined,
+            modelMatrix: mat4.create(),
         }, false);
 
         this.scene.setActiveShader(this.scene.shader);
@@ -1500,10 +1572,13 @@ export class MySceneGraph {
             material: undefined,
             texture: undefined,
             highlighted: undefined,
+            modelMatrix: mat4.create(),
         }, true);
 
         this.scene.setActiveShader(this.scene.defaultShader);
 
+        if (this.mustDisableTrackingLight) this.scene.trackingLight.disable();
+            
     }
 
     displayComponent(info, inheritance, highlightedOnly) {
@@ -1512,6 +1587,8 @@ export class MySceneGraph {
             const component = this.components[info.id];
             this.scene.pushMatrix();
             this.scene.multMatrix(component.transformation);
+
+            let modelMatrix_ = mat4.multiply(mat4.create(), inheritance.modelMatrix, component.transformation);
 
             if (component.materials.length > 0) {
 
@@ -1540,8 +1617,18 @@ export class MySceneGraph {
             if (!component.animation || this.animations[component.animation].isActive) {
 
                 if (component.animation) {
-                    this.animations[component.animation].apply(this.scene);
+                    const animation = this.animations[component.animation].get();
+                    
+                    modelMatrix_ = mat4.multiply(
+                        modelMatrix_,
+                        inheritance.modelMatrix, 
+                        animation);
+
+                    this.scene.multMatrix(animation);
                 }
+
+                if (component.isTargetForLight)
+                    this.updateTrackingLight(component, modelMatrix_);
 
 
                 for (const child of component.children) {
@@ -1550,6 +1637,7 @@ export class MySceneGraph {
                         material: material,
                         texture: texture,
                         highlighted: component.isHighlighted ? component.highlighted : inheritance.highlighted,
+                        modelMatrix: modelMatrix_
                     }, highlightedOnly);
                 }
             }
