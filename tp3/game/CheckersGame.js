@@ -17,12 +17,21 @@ const states = {
 export class CheckersGame {
     constructor(graph) {
         this.players = ['black', 'white'];
+        this.cameras = {'black': 'player1', 'white':'player2'};
         this.graph = graph;
         this.state = states.initial;
         this.selectedTile = null;
         this.componentToTile = {}
         this.timeout = 700;
         this.animTime = 0.5;
+    }
+
+    switchPlayers() {
+        this.currentPlayer = this.currentPlayer === 'black' ? 'white' : 'black';
+        const midAnim = this.graph.camAnimations['overviewGame']
+        const targetAnim = this.graph.camAnimations[this.cameras[this.currentPlayer]]
+        midAnim.start(this.graph.scene.animTime)
+        targetAnim.start(this.graph.scene.animTime + midAnim.duration + this.animTime)
     }
 
     init(gamePickables) {
@@ -296,7 +305,7 @@ export class CheckersGame {
                         this.state = states.playing;
                         this.selectedTile.removeAnimation();
                         this.selectedTile = undefined;
-                        this.currentPlayer = this.currentPlayer === 'black' ? 'white' : 'black';
+                        this.switchPlayers()
                     }, this.timeout);
                 }   
             }
@@ -327,7 +336,7 @@ export class CheckersGame {
                     this.state = states.playing;
                     this.selectedTile.removeAnimation();
                     this.selectedTile = undefined;
-                    this.currentPlayer = this.currentPlayer === 'black' ? 'white' : 'black';
+                    this.switchPlayers()
                 }, this.timeout);
             }   
         }

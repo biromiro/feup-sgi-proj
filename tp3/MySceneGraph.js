@@ -18,7 +18,7 @@ TODO:
 [ ] - animate dead piece to auxiliary board
 [X] - spotlight tracking animated piece
 [ ] - undo
-[ ] - rotate camera between player turns
+[X] - rotate camera between player turns
 [ ] - game results marker
 [ ] - time control marker
 [ ] - game movie
@@ -103,7 +103,7 @@ export class MySceneGraph {
         this.game.init(this.gamePieces)
 
         setTimeout(() => {
-            this.camAnimations['player1Camera'].start(this.scene.animTime, this.scene.camera)
+            this.camAnimations['player1'].start(this.scene.animTime, this.scene.camera)
         }, 5000);
     }
 

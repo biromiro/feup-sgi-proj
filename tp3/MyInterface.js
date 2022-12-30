@@ -27,19 +27,22 @@ export class MyInterface extends CGFinterface {
         // add a group of controls (and open/expand by defult)
 
         this.initKeys();
-
+        this.lockedLights = ['trackingLight'];
+        this.lockedCameras = ['player1', 'player2', 'overviewGame'];
         return true;
     }
 
     setCameraDropdown() {
-        this.gui.add(this.scene.graph, 'currentView', Object.keys(this.scene.graph.views)).name('Camera').onChange(this.scene.graph.updateCamera.bind(this.scene.graph));
+        this.gui.add(this.scene.graph, 'currentView', Object.keys(this.scene.graph.views).filter(
+            view => !this.lockedCameras.includes(view)
+        )).name('Camera').onChange(this.scene.graph.updateCamera.bind(this.scene.graph));
     }
 
     setLightCheckboxes() {
 
         let f0 = this.gui.addFolder('Lights')
         for (let lightID in this.scene.graph.lights) {
-            if (lightID == "trackingLight") continue
+            if (this.lockedLights.includes(lightID)) continue
             let light = this.scene.graph.lights[lightID];
             const field = f0.add(light, 'isEnabled').name(lightID);
             field.onChange(() => {
