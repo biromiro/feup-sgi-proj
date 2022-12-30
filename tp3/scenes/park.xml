@@ -11,19 +11,19 @@
             <to x="0" y="0" z="0" />
             <up x="0" y="1" z="0" />
         </ortho>
-        <perspective id="player1" near="0.01" far="50" angle="12">
+        <perspective id="player1" near="0.01" far="500" angle="12">
             <from x="-0.4" y="2" z="8" />
             <to x="-9.5" y="-9" z="-5" />
         </perspective>
-        <perspective id="player1Camera" near="0.01" far="50" angle="12">
+        <perspective id="player1Camera" near="0.01" far="500" angle="12">
             <from x="-0.4" y="2" z="8" />
             <to x="-9.5" y="-9" z="-5" />
         </perspective>
-        <perspective id="player2" near="0.01" far="50" angle="12">
+        <perspective id="player2" near="0.01" far="500" angle="12">
             <from x="-4.5" y="2" z="2.2" />
             <to x="4.6" y="-9" z="15.2" />
         </perspective>
-        <perspective id="player2Camera" near="0.01" far="50" angle="12">
+        <perspective id="player2Camera" near="0.01" far="500" angle="12">
             <from x="-4.5" y="2" z="2.2" />
             <to x="4.6" y="-9" z="15.2" />
         </perspective>
@@ -327,6 +327,9 @@
         </primitive>
         <primitive id="baseSquarePrimInwards">
             <rectangle x1="-1" y1="-1" x2="1" y2="1" />
+        </primitive>
+        <primitive id="letter">
+            <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
         <primitive id="baseTrianglePrim">
             <triangle x1="0" y1="0" z1="0" x2="10" y2="0" z2="0" x3="5" y3="10" z3="0" />
@@ -1787,6 +1790,8 @@
                 <componentref id="checkers" />
                 <componentref id="tableBaseSupport" />
                 <componentref id="tableGroundBase" />
+                <componentref id="gameMarkerBlack" />
+                <componentref id="gameMarkerWhite" />
             </children>
         </component>
         <component id="tableBaseSupport">
@@ -1817,11 +1822,556 @@
             </children>
         </component>
         
+        <!-- game markers -->
+        <component id="gameMarkerBlack">
+            <transformation>
+                <translate x="0.65" y="0.05" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarker" />
+                <componentref id="undoButtonBlack" />
+                <componentref id="nextButtonBlack" />
+            </children>
+        </component>
+
+        <component id="gameMarkerWhite">
+            <transformation>
+                <rotate axis="y" angle="180" />
+                <translate x="0.65" y="0.05" z="-0.1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarker" />
+                <componentref id="undoButtonWhite" />
+                <componentref id="nextButtonWhite" />
+            </children>
+        </component>
+
+        <component id="gameMarker">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="tile" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerBoard" />
+                <componentref id="gameMarkerTakenPieces" />
+                <componentref id="gameMarkerQueens" />
+                <componentref id="gameMarkerTurnTime" />
+                <componentref id="gameMarkerFullTime" />
+            </children>
+        </component>
+
+        <component id="nextButtonBlack">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="springGreen" />
+            </materials>
+            <texture id="inherit" length_t="1" length_s="1"/>
+            <children>
+                <componentref id="nextButton" />
+            </children>
+        </component>
+
+        <component id="nextButtonWhite">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="springGreen" />
+            </materials>
+            <texture id="inherit" length_t="1" length_s="1"/>
+            <children>
+                <componentref id="nextButton" />
+            </children>
+        </component>
+
+        <component id="nextButton">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="nextText" />
+                <componentref id="nextBox" />
+            </children>
+        </component>
+
+        <component id="undoButtonWhite">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="tile" />
+            </materials>
+            <texture id="inherit" length_t="1" length_s="1"/>
+            <children>
+                <componentref id="undoBox" />
+                <componentref id="undoText" />
+            </children>
+        </component>
+
+        <component id="undoButtonBlack">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="tile" />
+            </materials>
+            <texture id="inherit" length_t="1" length_s="1"/>
+            <children>
+                <componentref id="undoButton" />
+            </children>
+        </component>
+
+        <component id="undoButton">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="undoBox" />
+                <componentref id="undoText" />
+            </children>
+        </component>
+
+        <component id="undoText" text="UNDO">
+            <transformation>
+                <translate x="0" y="0.006" z="0.25" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerWord4" />
+            </children>
+        </component>
+
+        <component id="nextText" text="NEXT">
+            <transformation>
+                <translate x="0.22" y="0.006" z="0.25" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerWord4" />
+            </children>
+        </component>
+
+        <component id="undoBox">
+            <transformation>
+                <translate x="-0.11" y="0.01" z="0.25" />
+            </transformation>
+            <materials>
+                <material id="tile" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="buttonBox" />
+            </children>
+        </component>
+
+        <component id="nextBox">
+            <transformation>
+                <translate x="0.11" y="0.01" z="0.25" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="buttonBox" />
+            </children>
+        </component>
+
+        <component id="buttonBox">
+            <transformation>
+                <scale x="0.08" y="0.005" z="0.03" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+    
+
+        <component id="gameMarkerBoard">
+            <transformation>
+                <scale x="0.2" y="0.01" z="0.3" />
+            </transformation>
+            <materials>
+                <material id="darkAutumnOrange" />
+                <material id="springWhite" />
+                <material id="iceGreen" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+
+        <component id="gameMarkerTakenPieces">
+            <transformation>
+                <translate x="0" y="0" z="-0.2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerTakenText" />
+                <componentref id="gameMarkerResultTaken" />
+            </children>
+        </component>
+
+        <component id="gameMarkerTakenText" text="TAKEN">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerWord5" />
+            </children>
+        </component>
+
+        <component id="gameMarkerQueens">
+            <transformation>
+                <translate x="0" y="0" z="-0.12" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerQueensText" />
+                <componentref id="gameMarkerResultQueens" />
+            </children>
+        </component>
+
+        <component id="gameMarkerQueensText" text="QUEENS">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerWord6" />
+            </children>
+        </component>
+
+        <component id="gameMarkerTurnTime">
+            <transformation>
+                <translate x="0" y="0" z="-0.04" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerTurnText" />
+                <componentref id="gameMarkerTimeText" />
+                <componentref id="gameMarkerTimeTurn" />
+            </children>
+        </component>
+
+        <component id="gameMarkerTurnText" text="TURN">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerWord4" />
+            </children>
+        </component>
+
+        <component id="gameMarkerTimeText" text="TIME">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerWord4Under" />
+            </children>
+        </component>
+
+
+        <component id="gameMarkerFullTime">
+            <transformation>
+                <translate x="0" y="0" z="0.08" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerFullText" />
+                <componentref id="gameMarkerTimeText" />
+                <componentref id="gameMarkerTimeFull" />
+            </children>
+        </component>
+
+        <component id="gameMarkerFullText" text="FULL">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerWord4" />
+            </children>
+        </component>
+
+        <component id="gameMarkerWord5">
+            <transformation>
+                <translate x="-0.17" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerLetter1" />
+                <componentref id="gameMarkerLetter2" />
+                <componentref id="gameMarkerLetter3" />
+                <componentref id="gameMarkerLetter4" />
+                <componentref id="gameMarkerLetter5" />
+            </children>
+        </component>
+
+         <component id="gameMarkerWord6">
+            <transformation>
+                <translate x="-0.17" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerLetter1" />
+                <componentref id="gameMarkerLetter2" />
+                <componentref id="gameMarkerLetter3" />
+                <componentref id="gameMarkerLetter4" />
+                <componentref id="gameMarkerLetter5" />
+                <componentref id="gameMarkerLetter6" />
+            </children>
+        </component>
+
+        <component id="gameMarkerWord4">
+            <transformation>
+                <translate x="-0.17" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerLetter1" />
+                <componentref id="gameMarkerLetter2" />
+                <componentref id="gameMarkerLetter3" />
+                <componentref id="gameMarkerLetter4" />
+            </children>
+        </component>
+
+        <component id="gameMarkerWord4Under">
+            <transformation>
+                <translate x="-0.17" y="0" z="0.05" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerLetter1" />
+                <componentref id="gameMarkerLetter2" />
+                <componentref id="gameMarkerLetter3" />
+                <componentref id="gameMarkerLetter4" />
+            </children>
+        </component>
+
+        <component id="gameMarkerResultTaken" type="taken">
+            <transformation>
+                <translate x="0.13" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerLetter1" />
+                <componentref id="gameMarkerLetter2" />
+            </children>
+        </component>
+
+        <component id="gameMarkerResultQueens" type="queens">
+            <transformation>
+                <translate x="0.13" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerLetter1" />
+                <componentref id="gameMarkerLetter2" />
+            </children>
+        </component>
+
+        <component id="gameMarkerTimeTurn" type="turn">
+            <transformation>
+                <translate x="0.01" y="0" z="0.025" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerLetter1" />
+                <componentref id="gameMarkerLetter2" />
+                <componentref id="gameMarkerLetter3" />
+                <componentref id="gameMarkerLetter4" />
+                <componentref id="gameMarkerLetter5" />
+
+            </children>
+        </component>
+
+        <component id="gameMarkerTimeFull" type="full">
+            <transformation>
+                <translate x="0.01" y="0" z="0.025" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="gameMarkerLetter1" />
+                <componentref id="gameMarkerLetter2" />
+                <componentref id="gameMarkerLetter3" />
+                <componentref id="gameMarkerLetter4" />
+                <componentref id="gameMarkerLetter5" />
+
+            </children>
+        </component>
+
+        <component id="gameMarkerLetter1">
+            <transformation>
+                <rotate axis="x" angle="270" />
+                <scale x="0.04" y="0.04" z="0.04" />
+                <translate x="0" y="0" z="0.26" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="letter"/>
+            </children>
+        </component>
+
+        <component id="gameMarkerLetter2">
+            <transformation>
+                <rotate axis="x" angle="270" />
+                <scale x="0.04" y="0.04" z="0.04" />
+                <translate x="1" y="0" z="0.26" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="letter"/>
+            </children>
+        </component>
+
+        <component id="gameMarkerLetter3">
+            <transformation>
+                <rotate axis="x" angle="270" />
+                <scale x="0.04" y="0.04" z="0.04" />
+                <translate x="2" y="0" z="0.26" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="letter"/>
+            </children>
+        </component>
+
+        <component id="gameMarkerLetter4">
+            <transformation>
+                <rotate axis="x" angle="270" />
+                <scale x="0.04" y="0.04" z="0.04" />
+                <translate x="3" y="0" z="0.26" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="letter"/>
+            </children>
+        </component>
+
+        <component id="gameMarkerLetter5">
+            <transformation>
+                <rotate axis="x" angle="270" />
+                <scale x="0.04" y="0.04" z="0.04" />
+                <translate x="4" y="0" z="0.26" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="letter"/>
+            </children>
+        </component>
+
+        <component id="gameMarkerLetter6">
+            <transformation>
+                <rotate axis="x" angle="270" />
+                <scale x="0.04" y="0.04" z="0.04" />
+                <translate x="5" y="0" z="0.26" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="letter"/>
+            </children>
+        </component>
+
+
         <!-- wooden support -->
         <component id="tableSupportWood">
             <transformation>
                 <translate x="0" y="0" z="0.12" />
-                <scale x="1" y="0.03" z="0.5" />
+                <scale x="1.85" y="0.03" z="0.5" />
             </transformation>
             <materials>
                 <material id="inherit" />

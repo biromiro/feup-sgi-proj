@@ -24,14 +24,72 @@ export class CheckersGame {
         this.componentToTile = {}
         this.timeout = 700;
         this.animTime = 0.5;
+        this.turnTime = 30;
+        this.fullTime = 180;
+        this.gameInfo = {
+            'black': {
+                'turn': this.turnTime,
+                'full': this.fullTime,
+                'queens': 0,
+                'taken': 0
+            },
+            'white': {
+                'turn': this.turnTime,
+                'full': this.fullTime,
+                'queens': 0,
+                'taken': 0
+            }
+        }
     }
 
     switchPlayers() {
         this.currentPlayer = this.currentPlayer === 'black' ? 'white' : 'black';
+        this.gameInfo[this.currentPlayer].turn = this.turnTime;
+
         const midAnim = this.graph.camAnimations['overviewGame']
         const targetAnim = this.graph.camAnimations[this.cameras[this.currentPlayer]]
         midAnim.start(this.graph.scene.animTime)
         targetAnim.start(this.graph.scene.animTime + midAnim.duration + this.animTime)
+
+        setTimeout(() => {
+            this.state = states.playing;
+        }, (midAnim.duration + targetAnim.duration + this.animTime) * 1000);
+
+    }
+
+    update() {
+        if (this.state === states.initial || this.state === states.finished || this.state === states.animating) return;
+        this.gameInfo[this.currentPlayer].turn -= 1;
+        this.gameInfo[this.currentPlayer].full -= 1;
+        if (this.gameInfo[this.currentPlayer].turn <= 0) {
+            this.state = states.finished;
+            this.graph.gameOver(this.currentPlayer === 'black' ? 'white' : 'black');
+        }
+        if (this.gameInfo[this.currentPlayer].full <= 0) {
+            this.state = states.finished;
+            this.graph.gameOver(this.currentPlayer === 'black' ? 'white' : 'black');
+        }
+
+
+    }
+
+    getTime(seconds) {
+        const date = new Date(seconds * 1000);
+        return date.toISOString().slice(14, 19);
+    }
+
+    pad(d) {
+        return (d < 10) ? '0' + d.toString() : d.toString();
+    }
+
+    getInfo(player) {
+        const info = this.gameInfo[player];
+        return {
+            'turn': this.getTime(info.turn),
+            'full': this.getTime(info.full),
+            'queens': this.pad(info.queens),
+            'taken': this.pad(info.taken)
+        };
     }
 
     init(gamePickables) {
@@ -41,6 +99,7 @@ export class CheckersGame {
         for (const pickable of Object.values(gamePickables)) {
             const id = pickable.id;
             let match = id.match(/^piece([0-9]+)/)
+            if (!match) continue;
             if ((match[1] >=1 && match[1] <= 12) || (match[1] >= 21 && match[1] <= 32)){
                 this.graph.components[id].children.push({ id: id + "_checker", type: "component"})
                 this.graph.primitives[id + "_checker"] = new Piece(
@@ -100,7 +159,6 @@ export class CheckersGame {
         }
 
         this.state = states.playing;
-
     }
 
     getTile(row, column) {
@@ -224,6 +282,8 @@ export class CheckersGame {
             jumpedCheckerPickable.children = jumpedCheckerPickable.children.filter(child => child.id !== jumpedChecker.checkerObject.id);
             this.board[jumpedChecker.row][jumpedChecker.column] = new Tile(jumpedChecker.row, jumpedChecker.column, jumpedCheckerPickable);
             checker.addAnimation(this.genAnimation(checker, tile, true));
+            this.gameInfo[this.currentPlayer].taken++;
+            if (jumpedChecker.isKing()) this.gameInfo[this.currentPlayer === "black" ? "white" : "black"].queens--;
         } else {
             checker.addAnimation(this.genAnimation(checker, tile, false));
         }
@@ -232,18 +292,36 @@ export class CheckersGame {
         this.board[tile.row][tile.column] = newChecker;
 
         // if checker reached the other side, make it a king
-        if (newChecker.color === 'black' && newChecker.row === 7)
+        if (newChecker.color === 'black' && newChecker.row === 7){
             newChecker.setKing();
-        else if (newChecker.color === 'white' && newChecker.row === 0)
+            this.gameInfo['black'].queens++;
+        }
+        else if (newChecker.color === 'white' && newChecker.row === 0){
             newChecker.setKing();
+            this.gameInfo['black'].queens++;
+        }
 
         return newChecker;
+    }
+
+    undo(player) {
+        console.log("undo" + player)
+        if (this.currentPlayer !== player) return
+        console.log("undo")
+    }
+
+    lock(player) {
+        console.log("lock" + player)
+        if (this.currentPlayer !== player) return
+        console.log("lock")
     }
 
     async play(selected) {
         if ((this.state === states.initial) || (this.state === states.finished) || (this.state === states.animating))
             return
         
+
+
         const tile = this.componentToTile[selected];
         const selectedTile = this.board[tile[0]][tile[1]];
         
@@ -285,7 +363,6 @@ export class CheckersGame {
                     this.selectedTile.deselect();
                     this.selectedTile = await this.move(this.selectedTile, selectedTile);
                     this.state = states.animating;
-                    let timeout = 700;
                     if (moves.type === 'jump') {
                         console.log("It was a jump, checking for chained jumps")
                         const moves = this.getAvailableMoves(this.selectedTile);
@@ -302,7 +379,6 @@ export class CheckersGame {
                         }
                     }
                     setTimeout(() => {
-                        this.state = states.playing;
                         this.selectedTile.removeAnimation();
                         this.selectedTile = undefined;
                         this.switchPlayers()
@@ -333,7 +409,6 @@ export class CheckersGame {
                     }
                 }
                 setTimeout(() => {
-                    this.state = states.playing;
                     this.selectedTile.removeAnimation();
                     this.selectedTile = undefined;
                     this.switchPlayers()
@@ -344,8 +419,7 @@ export class CheckersGame {
         const availableCheckers = this.getAvailableCheckers();
         if (availableCheckers.length === 0) {
             this.state = states.finished;
-            console.log("Game finished, no play available")
-            console.log(`${this.currentPlayer === 'black' ? 'White' : 'Black'} wins!`)
+            this.graph.gameOver(this.currentPlayer === 'black' ? 'white' : 'black');
         }
         
 

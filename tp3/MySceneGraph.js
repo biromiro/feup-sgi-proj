@@ -102,9 +102,9 @@ export class MySceneGraph {
         this.scene.onGraphLoaded();
         this.game.init(this.gamePieces)
 
-        setTimeout(() => {
+        /*setTimeout(() => {
             this.camAnimations['player1'].start(this.scene.animTime, this.scene.camera)
-        }, 5000);
+        }, 5000);*/
     }
 
     /**
@@ -964,6 +964,7 @@ export class MySceneGraph {
 
             component.children = newComponentChildren
         }
+        console.log(this.components)
     }
 
     parseCameraAnimation(animationsNode) {
@@ -1266,12 +1267,23 @@ export class MySceneGraph {
                 this.highlightedComponents.push(componentID);
             }
 
+            this.components[componentID].text = this.reader.getString(component, 'text', false);
+            this.components[componentID].type = this.reader.getString(component, 'type', false);
+
             // right now it is removing the underlying cube, should add a flag on the component
             // so that it can be drawn or not, whether it has a checker or not
             
             let match = componentID.match(/^piece([0-9]+)/)
             if (match)
                 this.gamePieces[componentID] = this.components[componentID];
+
+            if (componentID == "nextButtonWhite" || componentID == "nextButtonBlack") {
+                this.gamePieces[componentID] = this.components[componentID];
+            }
+
+            if (componentID == "undoButtonWhite" || componentID == "undoButtonBlack") {
+                this.gamePieces[componentID] = this.components[componentID];
+            }
         }
 
         let circularDependency = "";
@@ -1280,6 +1292,7 @@ export class MySceneGraph {
 
         this.multiplexComponentPrimitives();
         this.scene.interface.setShaderCheckboxes();
+        console.log(this.gamePieces)
         return null;
 
     }
@@ -1502,10 +1515,16 @@ export class MySceneGraph {
 					}
 				}
 				this.scene.pickResults.splice(0,this.scene.pickResults.length);
-
+                console.log(pickedPiece);
                 // handle possible movement of piece, two pieces may be picked
                 if (pickedPiece) {
-                    this.game.play(pickedPiece.id);
+                    if (pickedPiece.id.startsWith("undoButton")) {
+                        this.game.undo(pickedPiece.id.slice(-5).toLowerCase())
+                    } else if (pickedPiece.id.startsWith("nextButton")) {
+                        this.game.lock(pickedPiece.id.slice(-5).toLowerCase())
+                    } else {
+                        this.game.play(pickedPiece.id);
+                    }
                 }
                 // unpick all pieces except the picked one
                 for (const piece of Object.values(this.gamePieces)) 
@@ -1531,6 +1550,11 @@ export class MySceneGraph {
         const norm = Math.sqrt(dx * dx + dy * dy + dz * dz);
         this.scene.trackingLight.setSpotDirection(dx / norm, dy / norm, dz / norm);
         this.mustDisableTrackingLight = false;
+    }
+    
+    gameOver(winner) {
+        console.log("Game finished, no play available")
+        console.log(`${winner === 'black' ? 'Black' : 'White'} wins!`)
     }
 
     /**
@@ -1564,7 +1588,9 @@ export class MySceneGraph {
             texture: undefined,
             highlighted: undefined,
             modelMatrix: mat4.create(),
-        }, false);
+            gameInfo: undefined,
+            letterVal: undefined,
+        }, false, false);
 
         this.scene.setActiveShader(this.scene.shader);
 
@@ -1573,7 +1599,21 @@ export class MySceneGraph {
             texture: undefined,
             highlighted: undefined,
             modelMatrix: mat4.create(),
-        }, true);
+            gameInfo: undefined,
+            letterVal: undefined,
+        }, true, false);
+
+
+        this.scene.setActiveShader(this.scene.textShader);
+
+        this.displayComponent({ id: this.idRoot, type: 'component' }, {
+            material: undefined,
+            texture: undefined,
+            highlighted: undefined,
+            modelMatrix: mat4.create(),
+            gameInfo: undefined,
+            letterVal: undefined,
+        }, false, true);
 
         this.scene.setActiveShader(this.scene.defaultShader);
 
@@ -1581,7 +1621,7 @@ export class MySceneGraph {
             
     }
 
-    displayComponent(info, inheritance, highlightedOnly) {
+    displayComponent(info, inheritance, highlightedOnly, lettersOnly) {
         let { material, texture } = inheritance;
         if (info.type === 'component') {
             const component = this.components[info.id];
@@ -1590,7 +1630,7 @@ export class MySceneGraph {
 
             let modelMatrix_ = mat4.multiply(mat4.create(), inheritance.modelMatrix, component.transformation);
 
-            if (component.materials.length > 0) {
+            if (component.materials.length > 0 && !lettersOnly) {
 
                 const sceneMaterial = component.materials[component.materialIndex];
                 if (sceneMaterial != "inherit") {
@@ -1627,18 +1667,37 @@ export class MySceneGraph {
                     this.scene.multMatrix(animation);
                 }
 
+                if (component.id == "gameMarkerBlack_of_table") {
+                    inheritance.gameInfo = this.game.getInfo('black')
+                } else if (component.id == "gameMarkerWhite_of_table") {
+                    inheritance.gameInfo = this.game.getInfo('white')
+                }
+
                 if (component.isTargetForLight)
                     this.updateTrackingLight(component, modelMatrix_);
 
-
+                let i = 0;
                 for (const child of component.children) {
+                    let letterVal = undefined;
+
+                    if (component.type){
+                        //handle type
+                       letterVal = inheritance.gameInfo[component.type].charAt(i++);
+                    }
+                    else if (component.text){
+                        //handle text
+                        letterVal = component.text;
+                    }
 
                     this.displayComponent(child, {
                         material: material,
                         texture: texture,
                         highlighted: component.isHighlighted ? component.highlighted : inheritance.highlighted,
-                        modelMatrix: modelMatrix_
-                    }, highlightedOnly);
+                        modelMatrix: modelMatrix_,
+                        gameInfo: inheritance.gameInfo,
+                        letterVal: letterVal ? letterVal : (inheritance.letterVal ? inheritance.letterVal.charAt(i++) : undefined),
+                    }, highlightedOnly, lettersOnly);
+
                 }
             }
             if (this.gamePieces[component.id]) {
@@ -1647,7 +1706,12 @@ export class MySceneGraph {
 
             this.scene.popMatrix();
         } else {
-            if (inheritance.highlighted && highlightedOnly) {
+            if (lettersOnly && info.id.startsWith('letter')) {
+                this.scene.activeShader.setUniformsValues({'charCoords': this.scene.charMap[inheritance.letterVal]});
+                this.scene.appearance.apply();
+                this.primitives[info.id].display();
+            }
+            else if (inheritance.highlighted && highlightedOnly) {
                 this.scene.shader.setUniformsValues({
                     normScale: inheritance.highlighted.scale_h,
                     targetColor: vec3.fromValues(...inheritance.highlighted.color)
@@ -1655,7 +1719,7 @@ export class MySceneGraph {
 
                 this.scene.texture = inheritance.texture;
                 this.primitives[info.id].display();
-            } else if (inheritance.highlighted == undefined && !highlightedOnly) {
+            } else if (inheritance.highlighted == undefined && !highlightedOnly && !lettersOnly && !info.id.startsWith('letter')) {
                 this.primitives[info.id].display();
             }
         }

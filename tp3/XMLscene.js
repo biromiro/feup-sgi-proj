@@ -1,4 +1,4 @@
-import { CGFscene, CGFshader } from '../lib/CGF.js';
+import { CGFscene, CGFshader, CGFappearance, CGFtexture } from '../lib/CGF.js';
 import { CGFaxis, CGFcamera } from '../lib/CGF.js';
 
 
@@ -16,6 +16,10 @@ export class XMLscene extends CGFscene {
         super();
         this.nightMode = false;
         this.interface = myinterface;
+
+        this.texture = null;
+		this.appearance = null;
+		this.textShader = null;
     }
 
     /**
@@ -43,7 +47,121 @@ export class XMLscene extends CGFscene {
         this.setUpdatePeriod(this.updatePeriod);
         this.instant = 0;
         this.startTime = null;
+        this.count = 0;
         this.setPickEnabled(true);
+
+        this.appearance = new CGFappearance(this);
+
+		// font texture: 16 x 16 characters
+		// http://jens.ayton.se/oolite/files/font-tests/rgba/oolite-font.png
+		this.fontTexture = new CGFtexture(this, "scenes/images/font_spritesheet.png");
+		this.appearance.setTexture(this.fontTexture);
+		
+		// instatiate text shader (used to simplify access via row/column coordinates)
+		// check the two files to see how it is done
+		this.textShader=new CGFshader(this.gl, "shaders/font.vert", "shaders/font.frag");
+
+		// set number of rows and columns in font texture
+		this.textShader.setUniformsValues({'dims': [16, 16]});
+
+        this.charMap = {
+            ' ': [0, 2],
+            '!': [1, 2],
+            '"': [2, 2],
+            '#': [3, 2],
+            '$': [4, 2],
+            '%': [5, 2],
+            '&': [6, 2],
+            '\'': [7, 2],
+            '(': [8, 2],
+            ')': [9, 2],
+            '*': [10, 2],
+            '+': [11, 2],
+            ',': [12, 2],
+            '-': [13, 2],
+            '.': [14, 2],
+            '/': [15, 2],
+            '0': [0, 3],
+            '1': [1, 3],
+            '2': [2, 3],
+            '3': [3, 3],
+            '4': [4, 3],
+            '5': [5, 3],
+            '6': [6, 3],
+            '7': [7, 3],
+            '8': [8, 3],
+            '9': [9, 3],
+            ':': [10, 3],
+            ';': [11, 3],
+            '<': [12, 3],
+            '=': [13, 3],
+            '>': [14, 3],
+            '?': [15, 3],
+            '@': [0, 4],
+            'A': [1, 4],
+            'B': [2, 4],
+            'C': [3, 4],
+            'D': [4, 4],
+            'E': [5, 4],
+            'F': [6, 4],
+            'G': [7, 4],
+            'H': [8, 4],
+            'I': [9, 4],
+            'J': [10, 4],
+            'K': [11, 4],
+            'L': [12, 4],
+            'M': [13, 4],
+            'N': [14, 4],
+            'O': [15, 4],
+            'P': [0, 5],
+            'Q': [1, 5],
+            'R': [2, 5],
+            'S': [3, 5],
+            'T': [4, 5],
+            'U': [5, 5],
+            'V': [6, 5],
+            'W': [7, 5],
+            'X': [8, 5],
+            'Y': [9, 5],
+            'Z': [10, 5],
+            '[': [11, 5],
+            '\\': [12, 5],
+            ']': [13, 5],
+            '^': [14, 5],
+            '_': [15, 5],
+            '`': [0, 6],
+            'a': [1, 6],
+            'b': [2, 6],
+            'c': [3, 6],
+            'd': [4, 6],
+            'e': [5, 6],
+            'f': [6, 6],
+            'g': [7, 6],
+            'h': [8, 6],
+            'i': [9, 6],
+            'j': [10, 6],
+            'k': [11, 6],
+            'l': [12, 6],
+            'm': [13, 6],
+            'n': [14, 6],
+            'o': [15, 6],
+            'p': [0, 7],
+            'q': [1, 7],
+            'r': [2, 7],
+            's': [3, 7],
+            't': [4, 7],
+            'u': [5, 7],
+            'v': [6, 7],
+            'w': [7, 7],
+            'x': [8, 7],
+            'y': [9, 7],
+            'z': [10, 7],
+            '{': [11, 7],
+            '|': [12, 7],
+            '}': [13, 7],
+            '~': [14, 7]
+        };
+
     }
 
     /**
@@ -171,6 +289,13 @@ export class XMLscene extends CGFscene {
             this.instant += this.updatePeriod;
             this.animTime = this.instant * 0.001;
             this.graph.updateAnimations(this.animTime);
+
+            this.count++
+            if (this.count == 20) {
+                this.count = 0
+                this.graph.game.update()
+            }
+            
         }
 
     }
