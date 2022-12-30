@@ -40,4 +40,8 @@ export class Checker extends Tile {
     unwarn() {
         this.checkerObject.materials = ['checker_' + this.color]
     }
+
+    removeAnimation() {
+        this.checkerObject.animation = undefined
+    }
 }

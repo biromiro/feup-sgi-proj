@@ -2,6 +2,8 @@ import { Tile } from './Tile.js';
 import { Checker } from './Checker.js';
 import { Piece } from '../sceneObjects/Piece.js';
 import { SceneComponent } from '../sceneObjects/SceneComponent.js';
+import { MyKeyframe } from '../animations/MyKeyframe.js';
+import { MyKeyframeAnimation } from '../animations/MyKeyframeAnimation.js';
 
 const states = {
     initial: 'initial',
@@ -19,6 +21,8 @@ export class CheckersGame {
         this.state = states.initial;
         this.selectedTile = null;
         this.componentToTile = {}
+        this.timeout = 700;
+        this.animTime = 0.5;
     }
 
     init(gamePickables) {
@@ -86,7 +90,6 @@ export class CheckersGame {
             }
         }
 
-        console.log(this.board)
         this.state = states.playing;
 
     }
@@ -115,11 +118,9 @@ export class CheckersGame {
 
         const moves = [[(isBlack ? 1 : -1), -1], [(isBlack ? 1 : -1), 1]]
         if (checker.isKing()){
-            console.log("Is king, adding moves")
             moves.push([(isBlack ? -1 : 1), -1]);
             moves.push([(isBlack ? -1 : 1), 1]);
         }
-        console.log(moves)
         const possibleMoves = []
         const jumpingMoves = []
         for (const move of moves) {
@@ -133,8 +134,71 @@ export class CheckersGame {
                     jumpingMoves.push(jump);
             }
         }
-        console.log(possibleMoves, jumpingMoves)
         return jumpingMoves.length == 0 ? {moves: possibleMoves, type: 'move'} : {moves: jumpingMoves, type: 'jump'};
+    }
+
+    easeInCubic(x){
+        return x * x * x;
+    }
+
+    easeOutCubic(x) {
+        return 1 - Math.pow(1 - x, 3);
+    }
+
+    getLerp(start, end, p, ease) {
+        const x = start[0] + (end[0] - start[0]) * p;
+        const y = start[1] + (end[1] - start[1]) * (ease == 'in' ? this.easeInCubic(p) : this.easeOutCubic(p));
+        const z = start[2] + (end[2] - start[2]) * p;
+        return vec3.fromValues(x, y, z);
+    }
+
+    genAnimation(checker, targetTile, jump) {
+        const checkerObject = checker.checkerObject;
+        const target = targetTile.clickableObject;
+        const orig = checker.clickableObject;
+        const time = this.animTime + (jump ? 0.1 : 0);
+        const firstMatrix = orig.transformation, finalMatrix = target.transformation;
+        let firstPosition = vec3.fromValues(firstMatrix[12], firstMatrix[13], firstMatrix[14]);
+        let finalPosition = vec3.fromValues(finalMatrix[12], finalMatrix[13], finalMatrix[14]);
+        let midPosition = vec3.fromValues(
+            (firstPosition[0] + finalPosition[0])/2, 
+            (firstPosition[1] + finalPosition[1])/2 + (jump ? 0.05 : 0),
+            (firstPosition[2] + finalPosition[2])/2
+        );
+        console.log(firstPosition, midPosition, finalPosition)
+        const diff = vec3.subtract(vec3.create(), firstPosition, finalPosition);
+        const currAnimTime = this.graph.scene.animTime;
+        
+        const targetTime = currAnimTime + time;
+        const keyframes = []
+        
+        console.log(currAnimTime, targetTime)
+
+        let matrix = mat4.create(); 
+        matrix = mat4.translate(matrix, matrix, diff);
+        keyframes.push(new MyKeyframe(currAnimTime, matrix));
+
+        for (let i = 1; i <= 3; i++) {
+            let matrix_ = mat4.translate(mat4.create(), mat4.create(), diff)
+            const vec = this.getLerp(firstPosition, midPosition, i/3, 'out');
+            const diff_ = vec3.subtract(vec3.create(), vec, firstPosition);
+            matrix_ = mat4.translate(matrix_, matrix_, diff_);
+            keyframes.push(new MyKeyframe(currAnimTime + (time * i) / 7, matrix_));
+        }
+
+        for (let i = 1; i <= 3; i++) {
+            let matrix_ = mat4.translate(mat4.create(), mat4.create(), diff)
+            const vec = this.getLerp(midPosition, finalPosition, i/3, 'in');
+            const diff_ = vec3.subtract(vec3.create(), vec, firstPosition);
+            matrix_ = mat4.translate(matrix_, matrix_, diff_);
+            keyframes.push(new MyKeyframe(currAnimTime + (time * (i+3)) / 7, matrix_));
+        }
+
+        keyframes.push(new MyKeyframe(targetTime, mat4.create()));
+
+        this.graph.animations["checker" + checkerObject.id] = new MyKeyframeAnimation(this.graph.scene, keyframes)
+        checkerObject.animation = "checker" + checkerObject.id;
+        return "checker" + checkerObject.id;
     }
 
     async move(checker, tile) {
@@ -147,14 +211,19 @@ export class CheckersGame {
         tilePickable.children.push({id: checkerObject.id, type: "component"});
         
         this.board[checker.row][checker.column] = new Tile(checker.row, checker.column, checkerPickable);
-        const newChecker = new Checker(checker.color, tile.row, tile.column, tilePickable, checkerObject, checker.king);
-        this.board[tile.row][tile.column] = newChecker;
+       
         if (Math.abs(checker.row - tile.row) === 2) {
             const jumpedChecker = this.board[(checker.row + tile.row) / 2][(checker.column + tile.column) / 2];
             const jumpedCheckerPickable = jumpedChecker.clickableObject;
             jumpedCheckerPickable.children = jumpedCheckerPickable.children.filter(child => child.id !== jumpedChecker.checkerObject.id);
             this.board[jumpedChecker.row][jumpedChecker.column] = new Tile(jumpedChecker.row, jumpedChecker.column, jumpedCheckerPickable);
+            checkerObject.animation = this.genAnimation(checker, tile, true)
+        } else {
+            checkerObject.animation = this.genAnimation(checker, tile, false)
         }
+
+        const newChecker = new Checker(checker.color, tile.row, tile.column, tilePickable, checkerObject, checker.king);
+        this.board[tile.row][tile.column] = newChecker;
 
         // if checker reached the other side, make it a king
         if (newChecker.color === 'black' && newChecker.row === 7)
@@ -209,21 +278,29 @@ export class CheckersGame {
                     this.state = states.targetChosen;
                     this.selectedTile.deselect();
                     this.selectedTile = await this.move(this.selectedTile, selectedTile);
+                    this.state = states.animating;
+                    let timeout = 700;
                     if (moves.type === 'jump') {
                         console.log("It was a jump, checking for chained jumps")
                         const moves = this.getAvailableMoves(this.selectedTile);
                         if (moves.type === 'jump' && moves.moves.length > 0) {
-                            this.state = states.onCombo;
-                            this.selectedTile.select();
-                            for (const move of moves.moves) {
-                                move.highlight();
-                            }
+                            setTimeout(() => {
+                                this.state = states.onCombo;
+                                this.selectedTile.select();
+                                this.selectedTile.removeAnimation();
+                                for (const move of moves.moves) {
+                                    move.highlight();
+                                }
+                            }, this.timeout);
                             return
                         }
                     }
-                    this.state = states.playing;
-                    this.selectedTile = undefined;
-                    this.currentPlayer = this.currentPlayer === 'black' ? 'white' : 'black';
+                    setTimeout(() => {
+                        this.state = states.playing;
+                        this.selectedTile.removeAnimation();
+                        this.selectedTile = undefined;
+                        this.currentPlayer = this.currentPlayer === 'black' ? 'white' : 'black';
+                    }, this.timeout);
                 }   
             }
         } else if (this.state === states.onCombo) {
@@ -238,17 +315,23 @@ export class CheckersGame {
                     console.log("It was a jump, checking for chained jumps")
                     const moves = this.getAvailableMoves(this.selectedTile);
                     if (moves.type === 'jump' && moves.moves.length > 0) {
-                        this.state = states.onCombo;
-                        this.selectedTile.select();
-                        for (const move of moves.moves) {
-                            move.highlight();
-                        }
+                        setTimeout(() => {
+                            this.state = states.onCombo;
+                            this.selectedTile.select();
+                            this.selectedTile.removeAnimation();
+                            for (const move of moves.moves) {
+                                move.highlight();
+                            }
+                        }, this.timeout);
                         return
                     }
                 }
-                this.state = states.playing;
-                this.selectedTile = undefined;
-                this.currentPlayer = this.currentPlayer === 'black' ? 'white' : 'black';
+                setTimeout(() => {
+                    this.state = states.playing;
+                    this.selectedTile.removeAnimation();
+                    this.selectedTile = undefined;
+                    this.currentPlayer = this.currentPlayer === 'black' ? 'white' : 'black';
+                }, this.timeout);
             }   
         }
 

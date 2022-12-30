@@ -1009,6 +1009,7 @@ export class MySceneGraph {
 
             this.animations[animationID] = new MyKeyframeAnimation(this.scene, keyframeList, loop);
         }
+        console.log(this.animations)
 
         return null;
     }

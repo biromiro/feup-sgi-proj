@@ -48,7 +48,8 @@ export class MyKeyframeAnimation extends MyAnimation {
                 (this.instants[this.currentIndex] - this.prevKeyframeInitialTime);
         }
         const prevKeyframe = this.keyframes[this.currentIndex - 1]
-        const transfMatrix = this.keyframes[this.currentIndex].getTransformationMatrix(prevKeyframe, percentage)
-        scene.multMatrix(transfMatrix)
+        const keyframe = this.keyframes[this.currentIndex]
+        if (keyframe)
+            scene.multMatrix(keyframe.getTransformationMatrix(prevKeyframe, percentage))
     }
 }
