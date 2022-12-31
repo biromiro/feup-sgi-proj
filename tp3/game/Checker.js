@@ -1,24 +1,29 @@
 import { Tile } from './Tile.js';
 
 export class Checker extends Tile {
-    constructor(color, row, column, clickableObject, checkerObject, king = false) {
+    constructor(color, row, column, clickableObject, checkerObject, queen = false) {
         super(row, column, clickableObject);
         this.color = color;
-        this.king = king;
+        this.queen = queen;
         this.checkerObject = checkerObject;
+        console.log(this.checkerObject)
     }
 
-    isKing() {
-        return this.king;
+    isQueen() {
+        return this.queen;
     }
 
-    setKing() {
-        this.king = true;
-        this.checkerObject.children = [{id: this.clickableObject.id + '_king', type: 'component'}];
+    setQueen() {
+        this.queen = true;
+        this.checkerObject.children = [{id: this.checkerObject.id.slice(0, -8) + '_queen', type: 'primitive'}];
     }
 
     isChecker() {
         return true;
+    }
+
+    clone() {
+        return new Checker(this.color, this.row, this.column, this.clickableObject, this.checkerObject, this.queen);
     }
 
     select() {

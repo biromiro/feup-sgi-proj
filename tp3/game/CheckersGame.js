@@ -27,6 +27,8 @@ export class CheckersGame {
         this.animTime = 0.5;
         this.turnTime = 30;
         this.fullTime = 180;
+        this.currBoard = undefined;
+        this.changedObjects = [];
         this.gameInfo = {
             'black': {
                 'turn': this.turnTime,
@@ -50,6 +52,8 @@ export class CheckersGame {
         const targetAnim = this.graph.camAnimations[this.cameras[this.currentPlayer]]
         midAnim.start(this.graph.scene.animTime)
         targetAnim.start(this.graph.scene.animTime + midAnim.duration + this.animTime)
+        this.currBoard = undefined
+        this.changedObjects = []
 
         setTimeout(() => {
             this.state = states.playing;
@@ -109,9 +113,9 @@ export class CheckersGame {
                     pickable
                 );
 
-                this.graph.primitives[id + "_king"] = new Piece(
+                this.graph.primitives[id + "_queen"] = new Piece(
                     this.graph.scene,
-                    id + "_king",
+                    id + "_queen",
                     pickable,
                     true
                 );
@@ -124,11 +128,11 @@ export class CheckersGame {
                     false
                 );
 
-                this.graph.components[id + "_king"] = new SceneComponent(
-                    id + "_king",
+                this.graph.components[id + "_queen"] = new SceneComponent(
+                    id + "_queen",
                     mat4.create(), 
                     [], "none", 
-                    [{id: id + "_king", type: "primitive"}], 
+                    [{id: id + "_queen", type: "primitive"}], 
                     false
                 );
             }
@@ -186,7 +190,7 @@ export class CheckersGame {
         const isBlack = checker.color === 'black'; 
 
         const moves = [[(isBlack ? 1 : -1), -1], [(isBlack ? 1 : -1), 1]]
-        if (checker.isKing()){
+        if (checker.isQueen()){
             moves.push([(isBlack ? -1 : 1), -1]);
             moves.push([(isBlack ? -1 : 1), 1]);
         }
@@ -279,7 +283,7 @@ export class CheckersGame {
         return "checker" + checkerObject.id;
     }
 
-    async move(checker, tile) {
+    move(checker, tile) {
         const checkerObject = checker.checkerObject;
         const checkerPickable = checker.clickableObject;
         const tilePickable = tile.clickableObject;
@@ -287,43 +291,127 @@ export class CheckersGame {
         // remove checker from checkerPickable and add it to tilePickable
         checkerPickable.children = checkerPickable.children.filter(child => child.id !== checkerObject.id);
         tilePickable.children.push({id: checkerObject.id, type: "component"});
+
+        this.changedObjects.unshift({
+            type: 'move',
+            from: checkerPickable,
+            to: tilePickable,
+            checker: checkerObject.id
+        })
         
         this.board[checker.row][checker.column] = new Tile(checker.row, checker.column, checkerPickable);
        
         if (Math.abs(checker.row - tile.row) === 2) {
             const jumpedChecker = this.board[(checker.row + tile.row) / 2][(checker.column + tile.column) / 2];
             const jumpedCheckerPickable = jumpedChecker.clickableObject;
+
             jumpedCheckerPickable.children = jumpedCheckerPickable.children.filter(child => child.id !== jumpedChecker.checkerObject.id);
+            
+            this.changedObjects.unshift({
+                from: jumpedCheckerPickable,
+                to: null,
+                checker: jumpedChecker.checkerObject.id
+            })
+            
             this.board[jumpedChecker.row][jumpedChecker.column] = new Tile(jumpedChecker.row, jumpedChecker.column, jumpedCheckerPickable);
             checker.addAnimation(this.genAnimation(checker, tile, true));
             this.gameInfo[this.currentPlayer].taken++;
-            if (jumpedChecker.isKing()) this.gameInfo[this.currentPlayer === "black" ? "white" : "black"].queens--;
+            if (jumpedChecker.isQueen()) this.gameInfo[this.currentPlayer === "black" ? "white" : "black"].queens--;
         } else {
             checker.addAnimation(this.genAnimation(checker, tile, false));
         }
 
-        const newChecker = new Checker(checker.color, tile.row, tile.column, tilePickable, checkerObject, checker.king);
+        const newChecker = new Checker(checker.color, tile.row, tile.column, tilePickable, checkerObject, checker.queen);
         this.board[tile.row][tile.column] = newChecker;
 
-        // if checker reached the other side, make it a king
+        // if checker reached the other side, make it a queen
         if (newChecker.color === 'black' && newChecker.row === 7){
-            newChecker.setKing();
+            this.changedObjects.push({
+                type: 'queen',
+                target: checkerObject
+            })
+            newChecker.setQueen();
             this.gameInfo['black'].queens++;
         }
         else if (newChecker.color === 'white' && newChecker.row === 0){
-            newChecker.setKing();
+            this.changedObjects.push({
+                type: 'queen',
+                target: checkerObject
+            })
+            newChecker.setQueen();
             this.gameInfo['black'].queens++;
         }
 
         return newChecker;
     }
 
+    verifyGameInfo() {
+        // checks if the game info is correct and if not, corrects it
+        let blackTaken = 12;
+        let whiteTaken = 12;
+        let blackQueens = 0;
+        let whiteQueens = 0;
+
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+                const tile = this.board[i][j];
+                if (tile?.isChecker()) {
+                    if (tile.color === "black") {
+                        blackTaken--;
+                        if (tile.isQueen()) blackQueens++;
+                    } else {
+                        whiteTaken--;
+                        if (tile.isQueen()) whiteQueens++;
+                    }
+                }
+            }
+        }
+
+        if (blackTaken !== this.gameInfo.black.taken) this.gameInfo.black.taken = blackTaken;
+        if (whiteTaken !== this.gameInfo.white.taken) this.gameInfo.white.taken = whiteTaken;
+        if (blackQueens !== this.gameInfo.black.queens) this.gameInfo.black.queens = blackQueens;
+        if (whiteQueens !== this.gameInfo.white.queens) this.gameInfo.white.queens = whiteQueens;
+    }
+
     undo(player) {
         this.genClick(`undoButton${player}`)
         if (this.currentPlayer !== player.toLowerCase()) return
+        if (!this.currBoard) return
         if (this.state === states.canLock || this.state === states.onCombo) {
             // undo last move
-            
+            console.log(this.currBoard)
+            console.log(this.changedObjects)
+
+            this.board = this.currBoard;
+            this.currBoard = undefined;
+
+            this.changedObjects.forEach(obj => {
+                if (obj.type === 'queen') {
+                    obj.target.children = [{id: obj.target.id, type: 'primitive'}];
+                }
+                else if (obj.to) {
+                    obj.from.children.push({id: obj.checker, type: "component"});
+                    obj.to.children = obj.to.children.filter(child => child.id !== obj.checker);
+                } else {
+                    obj.from.children.push({id: obj.checker, type: "component"});
+                }
+            })
+            this.changedObjects = [];
+
+            for (let i=0; i<8; i++){
+                for (let j=0; j<8; j++){
+                    const tile = this.board[i][j];
+                    if (!tile) continue;
+                    if (tile.isChecker())
+                        tile.deselect();
+                    else tile.unhighlight();
+                }
+            }
+
+            this.verifyGameInfo();
+            this.selectedTile.removeAnimation();
+            this.selectedTile = undefined;
+            this.state = states.playing;
         }
     }
 
@@ -336,15 +424,23 @@ export class CheckersGame {
                 this.selectedTile = undefined;
                 this.switchPlayers()
             }, this.timeout);
+
+            for (let i=0; i<8; i++){
+                for (let j=0; j<8; j++){
+                    const tile = this.board[i][j];
+                    if (!tile) continue;
+                    if (tile.isChecker())
+                        tile.deselect();
+                    else tile.unhighlight();
+                }
+            }
         }
     }
 
-    async play(selected) {
+    play(selected) {
         if ((this.state === states.initial) || (this.state === states.finished) || (this.state === states.animating))
             return
         
-
-
         const tile = this.componentToTile[selected];
         const selectedTile = this.board[tile[0]][tile[1]];
         
@@ -384,7 +480,8 @@ export class CheckersGame {
                 if (moves.moves.includes(selectedTile)) {
                     this.state = states.targetChosen;
                     this.selectedTile.deselect();
-                    this.selectedTile = await this.move(this.selectedTile, selectedTile);
+                    this.currBoard = this.board.map(row => row?.map(tile => tile?.clone()));
+                    this.selectedTile = this.move(this.selectedTile, selectedTile);
                     this.state = states.animating;
                     if (moves.type === 'jump') {
                         console.log("It was a jump, checking for chained jumps")
@@ -411,7 +508,7 @@ export class CheckersGame {
                     move.unhighlight();
                 }
                 this.selectedTile.deselect();
-                this.selectedTile = await this.move(this.selectedTile, selectedTile);
+                this.selectedTile = this.move(this.selectedTile, selectedTile);
                 if (moves.type === 'jump') {
                     console.log("It was a jump, checking for chained jumps")
                     const moves = this.getAvailableMoves(this.selectedTile);

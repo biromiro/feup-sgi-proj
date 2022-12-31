@@ -5,6 +5,10 @@ export class Tile {
         this.clickableObject = clickableObject;
     }
 
+    clone() {
+        return new Tile(this.row, this.column, this.clickableObject);
+    }
+
     isChecker() {
         return false;
     }

@@ -15,19 +15,19 @@ import {CGFOBJModel} from "../CGFOBJModel.js";
 
 export class Piece extends CGFOBJModel {
 
-	constructor(scene, id, parentComponent, king = false) 
+	constructor(scene, id, parentComponent, queen = false) 
 	{
         super(scene, "models/piece.obj");
         this.scene = scene;
         this.id = id;
         this.parentComponent = parentComponent;
-        this.king = king;
+        this.queen = queen;
 	};
 
     display() {
         this.scene.pushMatrix();
         this.scene.translate(0, 0.13, 0);
-        this.scene.scale(0.018, this.king ? 0.04 : 0.018, 0.018);
+        this.scene.scale(0.018, this.queen ? 0.04 : 0.018, 0.018);
         super.display();
         this.scene.popMatrix();
     }
