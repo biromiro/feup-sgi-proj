@@ -25,8 +25,8 @@ export class CheckersGame {
         this.componentToTile = {}
         this.timeout = 700;
         this.animTime = 0.5;
-        this.turnTime = 30;
-        this.fullTime = 180;
+        this.turnTime = 45;
+        this.fullTime = 300;
         this.currBoard = undefined;
         this.changedObjects = [];
         this.gameInfo = {
@@ -434,6 +434,8 @@ export class CheckersGame {
                     else tile.unhighlight();
                 }
             }
+
+            this.state = states.animating;
         }
     }
 
