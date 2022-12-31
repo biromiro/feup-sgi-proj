@@ -17,11 +17,12 @@ TODO:
 [ ] - auxiliary board
 [ ] - animate dead piece to auxiliary board
 [X] - spotlight tracking animated piece
-[ ] - undo
+[X] - undo
 [X] - rotate camera between player turns
 [X] - game results marker
 [X] - time control marker
 [ ] - game movie
+[ ] - overlay for game start/game end
 
 */
 

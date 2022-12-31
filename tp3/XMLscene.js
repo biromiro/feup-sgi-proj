@@ -1,6 +1,8 @@
 import { CGFscene, CGFshader, CGFappearance, CGFtexture } from '../lib/CGF.js';
 import { CGFaxis, CGFcamera } from '../lib/CGF.js';
-
+import { MyRectangle } from './primitives/MyRectangle.js';
+import { MySphere } from './primitives/MySphere.js';
+import { MyPatch } from './primitives/MyPatch.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -300,11 +302,48 @@ export class XMLscene extends CGFscene {
 
     }
 
+    drawText() {
+        this.appearance.apply();
+
+        		// activate shader for rendering text characters
+        this.setActiveShader(this.textShader);
+
+        this.pushMatrix();
+
+        // 	Reset transf. matrix to draw independent of camera
+            this.loadIdentity();
+
+            this.rotate(-Math.PI, 0, 0, 1);
+            // transform as needed to place on screen
+            this.translate(-4,1,-5);
+
+            // set character to display to be in the Nth column, Mth line (0-based)
+            // the shader will take care of computing the correct texture coordinates 
+            // of that character inside the font texture (check shaders/font.vert )
+            // Homework: This should be wrapped in a function/class for displaying a full string
+
+            this.activeShader.setUniformsValues({'charCoords': this.charMap['B']});	// S
+            this.graph?.primitives['letter'].display();
+
+            this.translate(1,0,0);
+            this.activeShader.setUniformsValues({'charCoords': [7,4]});	// G
+            this.graph?.primitives['letter'].display();
+
+            this.translate(1,0,0);
+            this.activeShader.setUniformsValues({'charCoords': [9,4]}); // I
+            this.graph?.primitives['letter'].display();
+    
+        this.popMatrix()
+        this.setActiveShader(this.defaultShader);
+
+
+
+    }
+
     /**
      * Displays the scene.
      */
     display() {
-
         this.graph.logPicking();
 
 		// this resets the picking buffer (association between objects and ids)
@@ -320,9 +359,11 @@ export class XMLscene extends CGFscene {
         if (this.camera) {
             this.updateProjectionMatrix();
             this.loadIdentity();
-
+            
             // Apply transformations corresponding to the camera position relative to the origin
             this.applyViewMatrix();
+            
+            //this.drawText();
         }
 
         this.pushMatrix();
