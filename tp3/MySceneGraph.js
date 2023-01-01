@@ -103,9 +103,15 @@ export class MySceneGraph {
         this.scene.onGraphLoaded();
         this.game.init(this.gamePieces)
 
-        /*setTimeout(() => {
+        setTimeout(() => {
             this.camAnimations['player1'].start(this.scene.animTime, this.scene.camera)
-        }, 5000);*/
+            this.game.start()
+        }, 3000);
+
+        setTimeout(() => {
+            console.log("GAME MOVIE!!!!!")
+            this.game.getGameMovie();
+        }, 10000);
     }
 
     /**

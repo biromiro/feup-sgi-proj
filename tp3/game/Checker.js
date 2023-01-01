@@ -6,7 +6,6 @@ export class Checker extends Tile {
         this.color = color;
         this.queen = queen;
         this.checkerObject = checkerObject;
-        console.log(this.checkerObject)
     }
 
     isQueen() {

@@ -19,6 +19,7 @@ export class CheckersGame {
     constructor(graph) {
         this.players = ['black', 'white'];
         this.cameras = {'black': 'player1', 'white':'player2'};
+        this.gamePickables = undefined
         this.graph = graph;
         this.state = states.initial;
         this.selectedTile = null;
@@ -29,6 +30,8 @@ export class CheckersGame {
         this.fullTime = 300;
         this.currBoard = undefined;
         this.changedObjects = [];
+        this.turnMoves = [];
+        this.gameMoves = [];
         this.gameInfo = {
             'black': {
                 'turn': this.turnTime,
@@ -98,6 +101,7 @@ export class CheckersGame {
     }
 
     init(gamePickables) {
+        this.gamePickables = gamePickables;
         this.board = new Array(8);
         this.currentPlayer = this.players[0];
 
@@ -162,9 +166,10 @@ export class CheckersGame {
                 this.componentToTile["piece" + counter++] = [i, col]
             }
         }
+    }
 
+    start() {
         this.state = states.playing;
-        this.currBoard = JSON.stringify(this.board);
     }
 
     getTile(row, column) {
@@ -315,11 +320,17 @@ export class CheckersGame {
             
             this.board[jumpedChecker.row][jumpedChecker.column] = new Tile(jumpedChecker.row, jumpedChecker.column, jumpedCheckerPickable);
             checker.addAnimation(this.genAnimation(checker, tile, true));
+
             this.gameInfo[this.currentPlayer].taken++;
             if (jumpedChecker.isQueen()) this.gameInfo[this.currentPlayer === "black" ? "white" : "black"].queens--;
         } else {
             checker.addAnimation(this.genAnimation(checker, tile, false));
         }
+
+        this.turnMoves.push({
+            from: [checker.row, checker.column],
+            to: [tile.row, tile.column],
+        })
 
         const newChecker = new Checker(checker.color, tile.row, tile.column, tilePickable, checkerObject, checker.queen);
         this.board[tile.row][tile.column] = newChecker;
@@ -379,9 +390,6 @@ export class CheckersGame {
         if (!this.currBoard) return
         if (this.state === states.canLock || this.state === states.onCombo) {
             // undo last move
-            console.log(this.currBoard)
-            console.log(this.changedObjects)
-
             this.board = this.currBoard;
             this.currBoard = undefined;
 
@@ -436,7 +444,24 @@ export class CheckersGame {
             }
 
             this.state = states.animating;
+            this.gameMoves.push(...this.turnMoves);
         }
+    }
+
+    async getGameMovie() {
+        if (this.state === states.animating) return;
+        const currentState = this.state;
+        this.state = states.animating;
+        this.init(this.gamePickables);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        for (const move of this.gameMoves) {
+            console.log("moving" + move)
+            const from = this.board[move.from[0]][move.from[1]];
+            const to = this.board[move.to[0]][move.to[1]];
+            this.move(from, to);
+            await new Promise(resolve => setTimeout(resolve, this.animTime * 1000 + 100));
+        }
+        this.state = currentState;
     }
 
     play(selected) {
