@@ -102,16 +102,12 @@ export class MySceneGraph {
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
         this.scene.onGraphLoaded();
         this.game.init(this.gamePieces)
+        this.scene.interface.setGameMovie();
 
         setTimeout(() => {
             this.camAnimations['player1'].start(this.scene.animTime, this.scene.camera)
             this.game.start()
         }, 3000);
-
-        setTimeout(() => {
-            console.log("GAME MOVIE!!!!!")
-            this.game.getGameMovie();
-        }, 10000);
     }
 
     /**

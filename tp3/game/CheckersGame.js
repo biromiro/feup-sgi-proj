@@ -110,19 +110,23 @@ export class CheckersGame {
             let match = id.match(/^piece([0-9]+)/)
             if (!match) continue;
             if ((match[1] >=1 && match[1] <= 12) || (match[1] >= 21 && match[1] <= 32)){
+                this.graph.components[id].children = this.graph.components[id].children.filter(c => c.id.slice(-7) !== "checker")
+                this.graph.components[id].children = this.graph.components[id].children.filter(c => c.id.slice(-5) !== "queen")
                 this.graph.components[id].children.push({ id: id + "_checker", type: "component"})
-                this.graph.primitives[id + "_checker"] = new Piece(
-                    this.graph.scene,
-                    id + "_checker",
-                    pickable
-                );
-
-                this.graph.primitives[id + "_queen"] = new Piece(
-                    this.graph.scene,
-                    id + "_queen",
-                    pickable,
-                    true
-                );
+                if (!this.graph.primitives[id + "_checker"]) {
+                    this.graph.primitives[id + "_checker"] = new Piece(
+                        this.graph.scene,
+                        id + "_checker",
+                        pickable
+                    );
+    
+                    this.graph.primitives[id + "_queen"] = new Piece(
+                        this.graph.scene,
+                        id + "_queen",
+                        pickable,
+                        true
+                    );
+                }
 
                 this.graph.components[id + "_checker"] = new SceneComponent(
                     id + "_checker",
@@ -139,6 +143,9 @@ export class CheckersGame {
                     [{id: id + "_queen", type: "primitive"}], 
                     false
                 );
+            } else {
+                this.graph.components[id].children = this.graph.components[id].children.filter(c => c.id.slice(-7) !== "checker")
+                this.graph.components[id].children = this.graph.components[id].children.filter(c => c.id.slice(-5) !== "queen")
             }
             if (match[1] >= 1 && match[1] <= 12)
                 this.graph.components[id + "_checker"].materials = ["checker_black"]
@@ -420,6 +427,8 @@ export class CheckersGame {
             this.selectedTile.removeAnimation();
             this.selectedTile = undefined;
             this.state = states.playing;
+
+            this.turnMoves = []
         }
     }
 
@@ -445,23 +454,32 @@ export class CheckersGame {
 
             this.state = states.animating;
             this.gameMoves.push(...this.turnMoves);
+            this.turnMoves = []
         }
     }
 
     async getGameMovie() {
         if (this.state === states.animating) return;
         const currentState = this.state;
+        const currentPlayer = this.currentPlayer;
+        const gameMoves = this.gameMoves;
+        this.gameMoves = [];
+        console.log("current state is: ", currentState)
+        console.log("current player is:", this.currentPlayer)
         this.state = states.animating;
         this.init(this.gamePickables);
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        for (const move of this.gameMoves) {
-            console.log("moving" + move)
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        for (const move of gameMoves) {
+            console.log("moving" + JSON.stringify(move))
             const from = this.board[move.from[0]][move.from[1]];
             const to = this.board[move.to[0]][move.to[1]];
             this.move(from, to);
             await new Promise(resolve => setTimeout(resolve, this.animTime * 1000 + 100));
+            from.removeAnimation();
         }
         this.state = currentState;
+        this.currentPlayer = currentPlayer;
+        console.log("current player is:", this.currentPlayer)
     }
 
     play(selected) {

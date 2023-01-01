@@ -38,6 +38,10 @@ export class MyInterface extends CGFinterface {
         )).name('Camera').onChange(this.scene.graph.updateCamera.bind(this.scene.graph));
     }
 
+    setGameMovie() {
+        this.gui.add(this.scene.graph.game, 'getGameMovie').name('Watch Game Movie')
+    }
+
     setLightCheckboxes() {
 
         let f0 = this.gui.addFolder('Lights')
