@@ -21,7 +21,7 @@ TODO:
 [X] - rotate camera between player turns
 [X] - game results marker
 [X] - time control marker
-[ ] - game movie
+[X] - game movie
 [ ] - overlay for game start/game end
 
 */
@@ -102,12 +102,15 @@ export class MySceneGraph {
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
         this.scene.onGraphLoaded();
         this.game.init(this.gamePieces)
-        this.scene.interface.setGameMovie();
+        this.scene.interface.setGameFolder();
+    }
 
+    startGame() {
+        this.camAnimations['player1'].start(this.scene.animTime, this.scene.camera)
+        this.game.reset()
         setTimeout(() => {
-            this.camAnimations['player1'].start(this.scene.animTime, this.scene.camera)
             this.game.start()
-        }, 3000);
+        }, 2000)
     }
 
     /**

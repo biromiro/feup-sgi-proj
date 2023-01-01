@@ -37,9 +37,11 @@ export class MyInterface extends CGFinterface {
             view => !this.lockedCameras.includes(view)
         )).name('Camera').onChange(this.scene.graph.updateCamera.bind(this.scene.graph));
     }
-
-    setGameMovie() {
-        this.gui.add(this.scene.graph.game, 'getGameMovie').name('Watch Game Movie')
+    
+    setGameFolder() {
+        let gameFolder = this.gui.addFolder('Game')
+        gameFolder.add(this.scene.graph, 'startGame').name('Start/Restart')
+        gameFolder.add(this.scene.graph.game, 'getGameMovie').name('Watch Movie')
     }
 
     setLightCheckboxes() {

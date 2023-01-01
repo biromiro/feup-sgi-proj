@@ -100,6 +100,35 @@ export class CheckersGame {
         };
     }
 
+    reset() {
+        this.gamePickables = undefined
+        this.state = states.initial;
+        this.selectedTile = null;
+        this.componentToTile = {}
+        this.timeout = 700;
+        this.animTime = 0.5;
+        this.turnTime = 45;
+        this.fullTime = 300;
+        this.currBoard = undefined;
+        this.changedObjects = [];
+        this.turnMoves = [];
+        this.gameMoves = [];
+        this.gameInfo = {
+            'black': {
+                'turn': this.turnTime,
+                'full': this.fullTime,
+                'queens': 0,
+                'taken': 0
+            },
+            'white': {
+                'turn': this.turnTime,
+                'full': this.fullTime,
+                'queens': 0,
+                'taken': 0
+            }
+        }
+    }
+
     init(gamePickables) {
         this.gamePickables = gamePickables;
         this.board = new Array(8);
@@ -435,7 +464,7 @@ export class CheckersGame {
     lock(player) {
         this.genClick(`lockButton${player}`)
         if (this.currentPlayer !== player.toLowerCase()) return
-        if (this.state === states.canLock || this.state === states.onCombo) {
+        if (this.state === states.canLock) {
             setTimeout(() => {
                 this.selectedTile.removeAnimation();
                 this.selectedTile = undefined;
@@ -464,8 +493,6 @@ export class CheckersGame {
         const currentPlayer = this.currentPlayer;
         const gameMoves = this.gameMoves;
         this.gameMoves = [];
-        console.log("current state is: ", currentState)
-        console.log("current player is:", this.currentPlayer)
         this.state = states.animating;
         this.init(this.gamePickables);
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -479,7 +506,6 @@ export class CheckersGame {
         }
         this.state = currentState;
         this.currentPlayer = currentPlayer;
-        console.log("current player is:", this.currentPlayer)
     }
 
     play(selected) {
