@@ -3,6 +3,7 @@
 */
 
 import { MyAnimation } from "./MyAnimation.js";
+import { MyKeyframe } from "./MyKeyframe.js"
 
 export class MyCameraAnimation extends MyAnimation {
 
@@ -12,6 +13,8 @@ export class MyCameraAnimation extends MyAnimation {
         this.targetCamera = targetCamera;
         this.duration = duration;
         this.ongoing = false;
+        console.log(this.currCamera)
+
     }
 
     start(currTime) {
@@ -52,6 +55,15 @@ export class MyCameraAnimation extends MyAnimation {
 
         this.currTarget = [xT, yT, zT];
 
+        let up = this.currCamera._up;
+        let newUp = this.targetCamera._up;
+
+        let xU = up[0] + (newUp[0] - up[0]) * delta;
+        let yU = up[1] + (newUp[1] - up[1]) * delta;
+        let zU = up[2] + (newUp[2] - up[2]) * delta;
+
+        this._currUp = [xU, yU, zU];
+
         this.currFov = this.currCamera.fov + (this.targetCamera.fov - this.currCamera.fov) * delta;
         this.currNear = this.currCamera.near + (this.targetCamera.near - this.currCamera.near) * delta;
         this.currFar = this.currCamera.far + (this.targetCamera.far - this.currCamera.far) * delta;
@@ -65,6 +77,7 @@ export class MyCameraAnimation extends MyAnimation {
         this.currCamera.fov = this.currFov;
         this.currCamera.near = this.currNear;
         this.currCamera.far = this.currFar;
+        this.currCamera._up = this._currUp;
         this.currCamera.setTarget(vec3.fromValues(...this.currTarget));
         this.currCamera.setPosition(vec3.fromValues(...this.currPosition));
 

@@ -501,7 +501,7 @@ export class CheckersGame {
             const from = this.board[move.from[0]][move.from[1]];
             const to = this.board[move.to[0]][move.to[1]];
             this.move(from, to);
-            await new Promise(resolve => setTimeout(resolve, this.animTime * 1000 + 100));
+            await new Promise(resolve => setTimeout(resolve, this.animTime * 1000 + 300));
             from.removeAnimation();
         }
         this.state = currentState;

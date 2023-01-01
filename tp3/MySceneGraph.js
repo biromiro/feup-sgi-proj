@@ -23,7 +23,6 @@ TODO:
 [X] - time control marker
 [X] - game movie
 [ ] - overlay for game start/game end
-
 */
 
 
@@ -80,6 +79,7 @@ export class MySceneGraph {
         this.reader.open('scenes/' + filename, this);
 
         this.game = new CheckersGame(this);
+        this.environment = ''
     }
 
     /*
@@ -101,16 +101,22 @@ export class MySceneGraph {
 
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
         this.scene.onGraphLoaded();
-        this.game.init(this.gamePieces)
         this.scene.interface.setGameFolder();
+        this.scene.interface.setEnvironmentDropdown();
     }
 
     startGame() {
+        if (!this.environment) return
         this.camAnimations['player1'].start(this.scene.animTime, this.scene.camera)
         this.game.reset()
+        this.game.init(this.gamePieces)
         setTimeout(() => {
             this.game.start()
         }, 2000)
+    }
+
+    updateEnvironment() {
+        
     }
 
     /**

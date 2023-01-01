@@ -32,6 +32,13 @@ export class MyInterface extends CGFinterface {
         return true;
     }
 
+    setEnvironmentDropdown() {
+        this.gui
+        .add(this.scene.graph, 'environment', ['Autumn', 'Winter', 'Spring', 'Summer'])
+        .name('Environment')
+        .onChange(this.scene.graph.updateEnvironment.bind(this.scene.graph));
+    }
+
     setCameraDropdown() {
         this.gui.add(this.scene.graph, 'currentView', Object.keys(this.scene.graph.views).filter(
             view => !this.lockedCameras.includes(view)
