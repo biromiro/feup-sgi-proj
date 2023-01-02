@@ -18,6 +18,7 @@ import { MyKeyframe } from "./animations/MyKeyframe.js";
 import { MyKeyframeAnimation } from "./animations/MyKeyframeAnimation.js";
 import { CheckersGame } from "./game/CheckersGame.js";
 import { MyCameraAnimation } from "./animations/MyCameraAnimation.js";
+import { CGFOBJModel } from "./CGFOBJModel.js";
 
 /*
 TODO:
@@ -90,8 +91,8 @@ export class MySceneGraph {
      * If any error occurs, the reader calls onXMLError on this object, with an error message
      */
     this.reader.open("scenes/" + filename, this);
-
     this.game = new CheckersGame(this);
+    this.piece = new CGFOBJModel(this.scene, "models/piece.obj");
     this.environment = "";
   }
 
@@ -1956,6 +1957,8 @@ export class MySceneGraph {
             this.scene.multMatrix(animation);
           }
         }
+
+        component.modelMatrix = modelMatrix_;
 
         if (component.id == "gameMarkerBlack_of_table") {
           inheritance.gameInfo = this.game.getInfo("black");

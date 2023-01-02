@@ -4,6 +4,7 @@ import { Piece } from "../sceneObjects/Piece.js";
 import { SceneComponent } from "../sceneObjects/SceneComponent.js";
 import { MyKeyframe } from "../animations/MyKeyframe.js";
 import { MyKeyframeAnimation } from "../animations/MyKeyframeAnimation.js";
+import { AuxBoard } from "./AuxBoard.js";
 
 const states = {
   initial: "initial",
@@ -138,9 +139,9 @@ export class CheckersGame {
     this.gamePickables = gamePickables;
     this.board = new Array(8);
     this.auxBoards = [
-      new Tile(undefined, undefined, this.graph.components["auxBlack"]),
-      new Tile(undefined, undefined, this.graph.components["auxWhite"]),
-    ];
+      new AuxBoard(this.graph.components["auxBlack_of_table"]),
+      new AuxBoard(this.graph.components["auxWhite_of_table"]),
+    ]
     this.currentPlayer = this.players[0];
 
     for (const pickable of Object.values(gamePickables)) {
@@ -317,13 +318,23 @@ export class CheckersGame {
     clickedObject.animation = "button" + clickedObject.id;
   }
 
-  genDeadPieceAnimation(checker) {
+  genDeadPieceAnimation(checker, targetTile) {
     const checkerObject = checker.checkerObject;
     const target = targetTile.clickableObject;
     const orig = checker.clickableObject;
-    const time = this.animTime + (jump ? 0.1 : 0);
-    const firstMatrix = orig.transformation,
-      finalMatrix = target.transformation;
+    const time = this.animTime + 0.1;
+
+    let firstMatrix = mat4.clone(orig.transformation),
+      finalMatrix = mat4.clone(target.transformation);
+
+    let transformationVector = vec3.fromValues(0, -0.07 + (0.02 * targetTile.pieces), 0)
+
+    checkerObject.transformation = mat4.translate(
+      checkerObject.transformation,
+      checkerObject.transformation,
+      transformationVector
+    );
+
     let firstPosition = vec3.fromValues(
       firstMatrix[12],
       firstMatrix[13],
@@ -334,15 +345,16 @@ export class CheckersGame {
       finalMatrix[13],
       finalMatrix[14]
     );
+
     let midPosition = vec3.fromValues(
       (firstPosition[0] + finalPosition[0]) / 2,
-      (firstPosition[1] + finalPosition[1]) / 2 + (jump ? 0.05 : 0),
+      (firstPosition[1] + finalPosition[1]) / 2 + 0.3,
       (firstPosition[2] + finalPosition[2]) / 2
     );
+
     const diff = vec3.subtract(vec3.create(), firstPosition, finalPosition);
     const currAnimTime = this.graph.scene.animTime;
 
-    const targetTime = currAnimTime + time;
     const keyframes = [];
 
     let matrix = mat4.create();
@@ -354,7 +366,7 @@ export class CheckersGame {
       const vec = this.getLerp(firstPosition, midPosition, i / 3, "out");
       const diff_ = vec3.subtract(vec3.create(), vec, firstPosition);
       matrix_ = mat4.translate(matrix_, matrix_, diff_);
-      keyframes.push(new MyKeyframe(currAnimTime + (time * i) / 7, matrix_));
+      keyframes.push(new MyKeyframe(currAnimTime + (time * i) / 6, matrix_));
     }
 
     for (let i = 1; i <= 3; i++) {
@@ -363,15 +375,16 @@ export class CheckersGame {
       const diff_ = vec3.subtract(vec3.create(), vec, firstPosition);
       matrix_ = mat4.translate(matrix_, matrix_, diff_);
       keyframes.push(
-        new MyKeyframe(currAnimTime + (time * (i + 3)) / 7, matrix_)
+        new MyKeyframe(currAnimTime + (time * (i + 3)) / 6, matrix_)
       );
     }
-
-    keyframes.push(new MyKeyframe(targetTime, mat4.create()));
 
     this.graph.animations["checker" + checkerObject.id] =
       new MyKeyframeAnimation(this.graph.scene, keyframes);
     checkerObject.animation = "checker" + checkerObject.id;
+    
+    targetTile.pieces++;
+
     return "checker" + checkerObject.id;
   }
 
@@ -444,19 +457,12 @@ export class CheckersGame {
     );
     tilePickable.children.push({ id: checkerObject.id, type: "component" });
 
-    this.changedObjects.unshift({
-      type: "move",
-      from: checkerPickable,
-      to: tilePickable,
-      checker: checkerObject.id,
-    });
-
     this.board[checker.row][checker.column] = new Tile(
       checker.row,
       checker.column,
       checkerPickable
     );
-
+    let jumpedCheckerInfo = undefined;
     if (Math.abs(checker.row - tile.row) === 2) {
       const jumpedChecker =
         this.board[(checker.row + tile.row) / 2][
@@ -464,22 +470,26 @@ export class CheckersGame {
         ];
       const jumpedCheckerPickable = jumpedChecker.clickableObject;
 
-      jumpedCheckerPickable.children = jumpedCheckerPickable.children.filter(
-        (child) => child.id !== jumpedChecker.checkerObject.id
-      );
-      console.log(this.auxBoards);
-      /*this.auxBoards[
-        this.currentPlayer === "black" ? 0 : 1
-      ].clickableObject.children.push({
-        id: jumpedChecker.checkerObject.id,
-        type: "component",
-      });*/
+      jumpedCheckerInfo = {
+        'id': jumpedChecker.checkerObject.id,
+        'board': this.currentPlayer === "black" ? 0 : 1
+      }
 
-      /*jumpedChecker.checkerObject.animation = this.genAnimation(
-        jumpedChecker,
-        this.auxBoards[this.currentPlayer === "black" ? 0 : 1],
-        true
-      );*/
+      setTimeout(() => {
+        jumpedCheckerPickable.children = jumpedCheckerPickable.children.filter(
+          (child) => child.id !== jumpedChecker.checkerObject.id
+        );
+  
+        this.auxBoards[this.currentPlayer === "black" ? 0 : 1].clickableObject.children.push({
+          id: jumpedChecker.checkerObject.id,
+          type: "component",
+        });
+  
+        this.genDeadPieceAnimation(
+          jumpedChecker,
+          this.auxBoards[this.currentPlayer === "black" ? 0 : 1],
+        );
+      }, this.animTime * 1000 * 2);
 
       this.changedObjects.unshift({
         from: jumpedCheckerPickable,
@@ -501,6 +511,14 @@ export class CheckersGame {
     } else {
       checker.addAnimation(this.genAnimation(checker, tile, false));
     }
+
+    this.changedObjects.unshift({
+      type: "move",
+      from: checkerPickable,
+      to: tilePickable,
+      checker: checkerObject.id,
+      jumpedChecker: jumpedCheckerInfo
+    });
 
     this.turnMoves.push({
       from: [checker.row, checker.column],
@@ -586,6 +604,15 @@ export class CheckersGame {
           obj.to.children = obj.to.children.filter(
             (child) => child.id !== obj.checker
           );
+          if (obj.jumpedChecker) {
+            this.auxBoards[obj.jumpedChecker.board].pieces--;
+            this.graph.components[obj.jumpedChecker.id].transformation = mat4.create();
+            this.auxBoards[obj.jumpedChecker.board].clickableObject.children = this.auxBoards[
+              obj.jumpedChecker.board
+            ].clickableObject.children.filter(
+              (child) => child.id !== obj.jumpedChecker.id
+            );
+          }
         } else {
           obj.from.children.push({ id: obj.checker, type: "component" });
         }
