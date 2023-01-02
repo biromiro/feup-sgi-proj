@@ -55,7 +55,15 @@ const POSSIBLE_PRIMITIVES = [
   "sphere",
   "torus",
   "patch",
+  "objref"
 ];
+
+const POSSIBLE_ENVIRONMENTS = [
+  "AUTUMN",
+  "WINTER",
+  "SPRING",
+  "SUMMER"
+]
 
 // Possible image types.
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
@@ -93,7 +101,7 @@ export class MySceneGraph {
     this.reader.open("scenes/" + filename, this);
     this.game = new CheckersGame(this);
     this.piece = new CGFOBJModel(this.scene, "models/piece.obj");
-    this.environment = "";
+    this.environment = "AUTUMN";
   }
 
   /*
@@ -875,7 +883,7 @@ export class MySceneGraph {
       const typeName = type.nodeName;
 
       if (!POSSIBLE_PRIMITIVES.includes(typeName)) {
-        return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus)";
+        return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, patch or objref)";
       }
       // Retrieves the primitive coordinates.
       if (typeName == "rectangle") {
@@ -1032,6 +1040,13 @@ export class MySceneGraph {
           controlPoints
         );
         this.primitives[primitiveId] = patchPrim;
+      } else if (typeName == "objref") {
+        const path = this.reader.getString(type, "path");
+        if (path == null)
+          return "unable to parse path of the primitive for ID = " + primitiveId;
+
+        const objrefPrim = new CGFOBJModel(this.scene, path);
+        this.primitives[primitiveId] = objrefPrim;
       }
     }
 
@@ -1442,7 +1457,7 @@ export class MySceneGraph {
         }
 
         const childID = this.reader.getString(child, "id");
-        let type;
+        let type, environment;
         if (childType == "componentref") {
           if (componentIDs.indexOf(childID) == -1)
             return (
@@ -1452,6 +1467,16 @@ export class MySceneGraph {
               componentID
             );
           type = "component";
+          environment = this.reader.getString(child, "environment", false);
+          if (environment) {
+            if (POSSIBLE_ENVIRONMENTS.indexOf(environment) == -1)
+              return (
+                "no such environment with ID " +
+                environment +
+                " to be child of component " +
+                componentID
+              );
+          }
         } else {
           if (this.primitives[childID] == null)
             return (
@@ -1462,7 +1487,7 @@ export class MySceneGraph {
             );
           type = "primitive";
         }
-        childrenArr.push({ id: childID, type: type });
+        childrenArr.push({ id: childID, type: type, environment: environment });
       }
 
       // Animation
@@ -1847,12 +1872,12 @@ export class MySceneGraph {
       this.camAnimations[key].apply();
     }
 
-    if (this.changeMaterial()) {
+    /*if (this.changeMaterial()) {
       for (const component of Object.values(this.components)) {
         component.materialIndex =
           (component.materialIndex + 1) % component.materials.length;
       }
-    }
+    }*/
 
     this.displayComponent(
       { id: this.idRoot, type: "component" },
@@ -1972,7 +1997,8 @@ export class MySceneGraph {
         let i = 0;
         for (const child of component.children) {
           let letterVal = undefined;
-
+          if (child.environment && child.environment !== this.environment)
+            continue;
           if (component.type) {
             //handle type
             letterVal = inheritance.gameInfo[component.type].charAt(i++);

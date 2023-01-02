@@ -28,13 +28,13 @@ export class MyInterface extends CGFinterface {
 
         this.initKeys();
         this.lockedLights = ['trackingLight'];
-        this.lockedCameras = ['player1', 'player2', 'overviewGame'];
+        this.lockedCameras = ['player1', 'player2', 'overviewGame', 'whiteWins', 'blackWins'];
         return true;
     }
 
     setEnvironmentDropdown() {
         this.gui
-        .add(this.scene.graph, 'environment', ['Autumn', 'Winter', 'Spring', 'Summer'])
+        .add(this.scene.graph, 'environment', ['AUTUMN', 'WINTER', 'SPRING', 'SUMMER'])
         .name('Environment')
         .onChange(this.scene.graph.updateEnvironment.bind(this.scene.graph));
     }
