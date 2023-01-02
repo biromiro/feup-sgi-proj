@@ -124,6 +124,10 @@
         <texture id="wing" file="scenes/images/wing.png" />
         <texture id="bee" file="scenes/images/bee.jpg" />
         <texture id="checkers" file="scenes/images/board.jpg" />
+        <texture id="mushrooms" file="scenes/images/mushroom.jpg" />
+        <texture id="waterTex" file="scenes/images/waterTex.jpg" />
+        <texture id="waterMap" file="scenes/images/waterMap.jpg" />
+        <texture id="candyCane" file="scenes/images/candyCane.jpg" />
     </textures>
 
     <materials>
@@ -132,6 +136,42 @@
             <ambient r="1" g="1" b="1" a="1.0" />
             <diffuse r="1" g="1" b="1" a="1.0" />
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+        <material id="summerBlue" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.95" g="0.02" b="0.27" a="1.0" />
+            <diffuse r="0.95" g="0.02" b="0.27" a="1.0" />
+            <specular r="0.95" g="0.02" b="0.27" a="1.0" />
+        </material>
+        <material id="summerYellow" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.95" g="0.68" b="0.18" a="1.0" />
+            <diffuse r="0.95" g="0.68" b="0.18" a="1.0" />
+            <specular r="0.95" g="0.68" b="0.18" a="1.0" />
+        </material>
+        <material id="summerOrange" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.95" g="0.6" b="0.29" a="1.0" />
+            <diffuse r="0.95" g="0.6" b="0.29" a="1.0" />
+            <specular r="0.95" g="0.6" b="0.29" a="1.0" />
+        </material>
+        <material id="summerPeach" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.95" g="0.51" b="0.34" a="1.0" />
+            <diffuse r="0.95" g="0.51" b="0.34" a="1.0" />
+            <specular r="0.95" g="0.51" b="0.34" a="1.0" />
+        </material>
+        <material id="summerDarkPeach" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.75" g="0.40" b="0.31" a="1.0" />
+            <diffuse r="0.75" g="0.40" b="0.31" a="1.0" />
+            <specular r="0.75" g="0.40" b="0.31" a="1.0" />
+        </material>
+        <material id="summerKhaki" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.95" g="0.80" b="0.71" a="1.0" />
+            <diffuse r="0.95" g="0.80" b="0.71" a="1.0" />
+            <specular r="0.95" g="0.80" b="0.71" a="1.0" />
         </material>
         <material id="tile" shininess="0">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
@@ -1175,20 +1215,21 @@
                 <componentref id="tree1" />
                 <componentref id="tree2" />
                 <componentref id="tree3" />
-                <!--<componentref id="sandbox" environment="SPRING"/>-->
                 <componentref id="slide"/>
                 <componentref id="rocks" />
                 <componentref id="hammock" />
                 <componentref id="bees" />
                 <componentref id="beeHive" />
                 <componentref id="gameFinished" />
-                <!--<componentref id="monkeyBar" environment="AUTUMN"/>
-                <componentref id="mushrooms" environment="AUTUMN"/>-->
+                <componentref id="monkeyBar" environment="AUTUMN"/>
+                <componentref id="mushrooms" environment="AUTUMN"/>
+                <componentref id="sled" environment="WINTER"/>
+                <componentref id="candyCane" environment="WINTER"/>
+                <componentref id="snowBase" environment="WINTER"/>
+                <componentref id="sandbox" environment="SPRING"/>
                 <componentref id="bench" environment="SUMMER"/>
                 <componentref id="ferrisWheel" environment="SUMMER"/>
-                <!--<componentref id="sled" environment="WINTER"/>
-                <componentref id="candyCane" environment="WINTER"/>
-                <componentref id="snowBase" environment="WINTER"/>-->
+                <componentref id="pool" environment="SUMMER"/>
             </children>
         </component>
 
@@ -1200,9 +1241,12 @@
                 <scale x="2.5" y="2.5" z="2.5" />
             </transformation>
             <materials>
-                <material id="baseMaterial" />
+                <material id="lightBrown" />
+                <material id="winterBrown" />
+                <material id="springBrown" />
+                <material id="summerPeach" />
             </materials>
-            <texture id="none"/>
+            <texture id="wood"/>
             <children>
                 <primitiveref id="sled" />
             </children>
@@ -1217,9 +1261,9 @@
                 <scale x="0.1" y="0.1" z="0.1" />
             </transformation>
             <materials>
-                <material id="baseMaterial" />
+                <material id="springRed" />
             </materials>
-            <texture id="none"/>
+            <texture id="candyCane"/>
             <children>
                 <primitiveref id="candyCane" />
             </children>
@@ -1228,11 +1272,11 @@
         <!-- ferrisWheel -->
         <component id="ferrisWheel">
             <transformation>
-                <translate x="2" y="1.6" z="3.5" />
+                <translate x="0" y="1.6" z="3.5" />
                 <rotate axis="y" angle="-80" />
             </transformation>
             <materials>
-                <material id="baseMaterial" />
+                <material id="steelGray" />
             </materials>
             <texture id="none"/>
             <children>
@@ -1258,14 +1302,15 @@
         <!-- bench -->
         <component id="bench">
             <transformation>
-                <translate x="4" y="-1" z="1" />
+                <translate x="3" y="-1" z="0" />
                 <rotate axis="y" angle="30" />
                 <scale x="0.05" y="0.05" z="0.05" />
             </transformation>
             <materials>
                 <material id="lightBrown" />
-                <material id="springBrown" />
                 <material id="winterBrown" />
+                <material id="springBrown" />
+                <material id="summerPeach" />
             </materials>
             <texture id="none"/>
             <children>
@@ -1282,10 +1327,11 @@
             </transformation>
             <materials>
                 <material id="lightBrown" />
-                <material id="springBrown" />
                 <material id="winterBrown" />
+                <material id="springBrown" />
+                <material id="summerPeach" />
             </materials>
-            <texture id="none"/>
+            <texture id="wood"/>
             <children>
                 <primitiveref id="monkeyBar" />
             </children>
@@ -1301,7 +1347,7 @@
             <materials>
                 <material id="darkBrown" />
             </materials>
-            <texture id="none"/>
+            <texture id="mushrooms"/>
             <children>
                 <primitiveref id="mushrooms" />
             </children>
@@ -1331,8 +1377,9 @@
             </transformation>
             <materials>
                 <material id="lightBrown" />
-                <material id="springBrown" />
                 <material id="winterBrown" />
+                <material id="springBrown" />
+                <material id="summerPeach" />
             </materials>
             <texture id="none"/>
             <children>
@@ -1350,8 +1397,9 @@
             </transformation>
             <materials>
                 <material id="darkBrown" />
-                <material id="lightBrown" />
                 <material id="winterBrown" />
+                <material id="lightBrown" />
+                <material id="summerDarkPeach" />
             </materials>
             <texture id="none"/>
             <children>
@@ -1450,8 +1498,9 @@
             </transformation>
             <materials>
                 <material id="platformMaterial" />
-                <material id="platformMaterialSpring" />
                 <material id="platformMaterialWinter" />
+                <material id="platformMaterialSpring" />
+                <material id="summerOrange" />
             </materials>
             <texture id="break" length_s="0.5" length_t="0.5"/>
             <children>
@@ -2072,8 +2121,9 @@
             </transformation>
             <materials>
                 <material id="lightBrown" />
-                <material id="springBrown" />
                 <material id="winterBrown" />
+                <material id="springBrown" />
+                <material id="summerPeach" />
             </materials>
             <texture id="none" />
             <children>
@@ -2104,8 +2154,9 @@
             </transformation>
             <materials>
                 <material id="darkBrown" />
-                <material id="lightBrown" />
                 <material id="winterBrown" />
+                <material id="lightBrown" />
+                <material id="summerDarkPeach" />
             </materials>
             <texture id="inherit" />
             <children>
@@ -2352,8 +2403,9 @@
             </transformation>
             <materials>
                 <material id="darkAutumnOrange" />
-                <material id="springWhite" />
                 <material id="iceGreen" />
+                <material id="springWhite" />
+                <material id="summerKhaki"/>
             </materials>
             <texture id="inherit" />
             <children>
@@ -2752,8 +2804,9 @@
             </transformation>
             <materials>
                 <material id="lightBrown" />
-                <material id="springBrown" />
                 <material id="winterBrown" />
+                <material id="springBrown" />
+                <material id="summerPeach" />
             </materials>
             <texture id="none" />
             <children>
@@ -2794,8 +2847,9 @@
             </transformation>
             <materials>
                 <material id="darkBrown" />
-                <material id="lightBrown" />
                 <material id="winterBrown" />
+                <material id="lightBrown" />
+                <material id="summerDarkPeach" />
             </materials>
             <texture id="inherit" />
             <children>
@@ -2850,8 +2904,9 @@
             </transformation>
             <materials>
                 <material id="darkAutumnOrange" />
-                <material id="springWhite" />
                 <material id="iceGreen" />
+                <material id="springWhite" />
+                <material id="summerKhaki"/>
             </materials>
             <texture id="inherit" />
             <children>
@@ -2976,8 +3031,9 @@
             </transformation>
             <materials>
                 <material id="autumnYellow" />
-                <material id="springRed" />
                 <material id="winterDarkBlue" />
+                <material id="springRed" />
+                <material id="summerYellow" />
             </materials>
             <texture id="bank" />
             <children>
@@ -3065,8 +3121,9 @@
             </transformation>
             <materials>
                 <material id="lightBrown" />
-                <material id="springBrown" />
                 <material id="winterBrown" />
+                <material id="springBrown" />
+                <material id="summerPeach" />
             </materials>
             <texture id="none" />
             <animation id="upAndDownAnim" />
@@ -3082,8 +3139,9 @@
             </transformation>
             <materials>
                 <material id="darkAutumnOrange" />
-                <material id="springWhite" />
                 <material id="iceGreen" />
+                <material id="springWhite" />
+                <material id="summerKhaki"/>
             </materials>
             <texture id="none" />
             <children>
@@ -3128,8 +3186,9 @@
             </transformation>
             <materials>
                 <material id="autumnOrange" />
-                <material id="springGreen" />
                 <material id="winterLightBlue" />
+                <material id="springGreen" />
+                <material id="summerBlue" />
             </materials>
             <texture id="none" />
             <children>
@@ -3187,8 +3246,9 @@
             </transformation>
             <materials>
                 <material id="autumnYellow" />
-                <material id="springRed" />
                 <material id="winterDarkBlue" />
+                <material id="springRed" />
+                <material id="summerYellow" />
             </materials>
             <texture id="bank" />
             <children>
@@ -3377,8 +3437,9 @@
             </transformation>
             <materials>
                 <material id="darkAutumnOrange" />
-                <material id="springWhite" />
                 <material id="iceGreen" />
+                <material id="springWhite" />
+                <material id="summerKhaki"/>
             </materials>
             <texture id="none" />
             <children>
@@ -3431,8 +3492,9 @@
             </transformation>
             <materials>
                 <material id="lightBrown" />
-                <material id="springBrown" />
                 <material id="winterBrown" />
+                <material id="springBrown" />
+                <material id="summerPeach" />
             </materials>
             <texture id="none" />
             <children>
@@ -3449,8 +3511,8 @@
             </transformation>
             <materials>
                 <material id="lightYellowCubeMap" />
-                <material id="springGreenCubeMap" />
                 <material id="winterLightBlueCubeMap" />
+                <material id="springGreenCubeMap" />
             </materials>
             <texture id="none" />
             <children>
@@ -3551,6 +3613,40 @@
             </children>
         </component>
         <!-- <cubeMap/> -->
+
+        <!-- <pool> -->
+        <component id="pool">
+            <transformation>
+                <translate x="3" y="0" z="3" />
+                <scale x="0.5" y="0.5" z="0.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="poolWater" />
+                <componentref id="supports" />
+                <componentref id="connectors" />
+            </children>
+        </component>
+
+        <component id="poolWater">
+            <transformation>
+                <translate x="2.5" y="-0.8" z="2.5" />
+                <scale x="6" y="1" z="6" />
+                <rotate axis="x" angle="270" />
+            </transformation>
+            <materials>
+                <material id="lightYellow" />
+                <material id="darkerYellow" />
+                <material id="lightKhaki" />
+            </materials>
+            <texture id="waterTex" />
+            <children>
+                <primitiveref id="patchedRectangle" />
+            </children>
+        </component>
         
         <!-- <sandbox> -->
         <component id="sandbox">
@@ -3668,8 +3764,9 @@
             </transformation>
             <materials>
                 <material id="lightBrown" />
-                <material id="springBrown" />
                 <material id="winterBrown" />
+                <material id="springBrown" />
+                <material id="summerPeach" />
             </materials>
             <texture id="none" />
             <children>
@@ -3683,8 +3780,9 @@
             </transformation>
             <materials>
                 <material id="darkAutumnOrange" />
-                <material id="springWhite" />
                 <material id="iceGreen" />
+                <material id="springWhite" />
+                <material id="summerKhaki"/>
             </materials>
             <texture id="none" />
             <children>
@@ -3900,8 +3998,9 @@
             </transformation>
             <materials>
                 <material id="autumnYellow" />
-                <material id="springRed" />
                 <material id="winterDarkBlue" />
+                <material id="springRed" />
+                <material id="summerYellow" />
             </materials>
             <texture id="none"/>
             <children>
@@ -4753,8 +4852,9 @@
             </transformation>
             <materials>
                 <material id="darkBrown" />
-                <material id="lightBrown" />
                 <material id="winterBrown" />
+                <material id="lightBrown" />
+                <material id="summerDarkPeach" />
             </materials>
             <texture id="wood" />
             <children>
@@ -4975,8 +5075,9 @@
             </transformation>
             <materials>
                 <material id="autumnOrange" />
-                <material id="springGreen" />
                 <material id="winterLightBlue" />
+                <material id="springGreen" />
+                <material id="summerBlue" />
             </materials>
             <texture id="waves" />
             <children>

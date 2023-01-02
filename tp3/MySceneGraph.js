@@ -124,7 +124,6 @@ export class MySceneGraph {
     // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
     this.scene.onGraphLoaded();
     this.scene.interface.setGameFolder();
-    this.scene.interface.setEnvironmentDropdown();
   }
 
   startGame() {
@@ -400,6 +399,8 @@ export class MySceneGraph {
     if (Object.keys(this.views).length === 0) {
       return "at least one view must be defined";
     }
+
+    this.scene.interface.setEnvironmentDropdown();
 
     this.updateCamera(this.defaultView);
     this.scene.interface.setCameraDropdown();
@@ -1872,12 +1873,6 @@ export class MySceneGraph {
       this.camAnimations[key].apply();
     }
 
-    /*if (this.changeMaterial()) {
-      for (const component of Object.values(this.components)) {
-        component.materialIndex =
-          (component.materialIndex + 1) % component.materials.length;
-      }
-    }*/
 
     this.displayComponent(
       { id: this.idRoot, type: "component" },
@@ -1936,7 +1931,9 @@ export class MySceneGraph {
       const component = this.components[info.id];
       this.scene.pushMatrix();
       this.scene.multMatrix(component.transformation);
-
+      component.materialIndex = POSSIBLE_ENVIRONMENTS.indexOf(
+        this.environment
+      ) % component.materials.length;
       let modelMatrix_ = mat4.multiply(
         mat4.create(),
         inheritance.modelMatrix,
