@@ -27,7 +27,7 @@ export class CGFOBJModel extends CGFobject {
 		// init with empty object, so that there are no problems while the data is being loaded
 		this.vertices = [];
 		this.normals = [];
-		this.texcoords = [];
+		this.texCoords = [];
 		this.indices = [];
 		
 		this.primitiveType = this.scene.gl.TRIANGLES;
@@ -49,7 +49,7 @@ export class CGFOBJModel extends CGFobject {
 	  var positions = [];
 	  var normals = [];
 	  var vertices = [];
-	  var texcoords = [];
+	  var texCoords = [];
 	  var icount=0;
 	  
 	  this.vcount=0;
@@ -79,7 +79,7 @@ export class CGFOBJModel extends CGFobject {
 			  );
 			  break;
 			case 'vt':
-			  texcoords.push(
+			  texCoords.push(
 				[
 				  parseFloat(parts[1]),
 				  parseFloat(parts[2])
@@ -105,7 +105,7 @@ export class CGFOBJModel extends CGFobject {
 						
 						if (f[1])
 							Array.prototype.push.apply(
-								model.texcoords, texcoords[parseInt(f[1]) - 1]
+								model.texCoords, texCoords[parseInt(f[1]) - 1]
 							);
 						if (f[2])
 							Array.prototype.push.apply(
@@ -159,8 +159,8 @@ export class CGFOBJModel extends CGFobject {
 	  }
 	  console.log("Loaded mesh "+ this.url +" with " + this.vcount + " vertices / "+ this.fcount + " faces");
 
-		if (this.texcoords.length==0)
-			this.texcoords=null;
+		if (this.texCoords.length==0)
+			this.texCoords=null;
 			
 		if (!this.wireframe)
 			this.primitiveType = this.scene.gl.TRIANGLES;

@@ -128,6 +128,8 @@
         <texture id="waterTex" file="scenes/images/waterTex.jpg" />
         <texture id="waterMap" file="scenes/images/waterMap.jpg" />
         <texture id="candyCane" file="scenes/images/candyCane.jpg" />
+        <texture id="colors" file="scenes/images/colors.png" />
+        <texture id="snow" file="scenes/images/waves.jpg" />
     </textures>
 
     <materials>
@@ -1261,7 +1263,7 @@
                 <scale x="0.1" y="0.1" z="0.1" />
             </transformation>
             <materials>
-                <material id="springRed" />
+                <material id="baseMaterial" />
             </materials>
             <texture id="candyCane"/>
             <children>
@@ -1276,9 +1278,9 @@
                 <rotate axis="y" angle="-80" />
             </transformation>
             <materials>
-                <material id="steelGray" />
+                <material id="baseMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="colors"/>
             <children>
                 <primitiveref id="ferrisWheel" />
             </children>
@@ -1293,7 +1295,7 @@
             <materials>
                 <material id="baseMaterial" />
             </materials>
-            <texture id="none"/>
+            <texture id="snow"/>
             <children>
                 <primitiveref id="snowBase" />
             </children>
