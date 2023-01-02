@@ -21,7 +21,7 @@ The checkers game is played on tp2's scene. It adds all the game features and cu
 - Another custom traversal of the component tree for performance optimization, this time in order to carry out the *spritesheets* technique
 - Cubic easing on the pieces' movement animations
 - Press-down animation on the undo/lock buttons
-- Automatic highlighting of chained moves after the first one
+- Automatic highlighting of moved pieces
 
 ### Scene
 
