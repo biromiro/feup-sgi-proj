@@ -27,6 +27,14 @@
             <from x="-4.5" y="2" z="2.2" />
             <to x="4.6" y="-9" z="15.2" />
         </perspective>
+        <perspective id="blackWins" near="0.01" far="500" angle="30">
+            <from x="-3.3" y="0" z="-10" />
+            <to x="-3.3" y="0" z="-5" />
+        </perspective>
+        <perspective id="whiteWins" near="0.01" far="500" angle="30">
+            <from x="2" y="-0.1" z="-8" />
+            <to x="2" y="-0.1" z="-4" />
+        </perspective>
         <perspective id="overviewGame" near="0.01" far="500" angle="50">
             <from x="-2.5" y="1" z="4.9" />
             <to x="-2.5" y="0" z="5" />
@@ -1119,6 +1127,8 @@
         <camanim to="player2" duration="3"/>
         <camanim to="overviewGame" duration="1.5"/>
         <camanim to="defaultCamera" duration="3"/>
+        <camanim to="blackWins" duration="3"/>
+        <camanim to="whiteWins" duration="3"/>
     </animations>
 
     <!--    COMPONENTS    -->
@@ -1149,6 +1159,142 @@
                 <componentref id="hammock" />
                 <componentref id="bees" />
                 <componentref id="beeHive" />
+                <componentref id="gameFinished" />
+            </children>
+        </component>
+
+        <!-- <gameFinished> -->
+
+        <component id="gameFinished">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="gameFinishedBlack" />
+                <componentref id="gameFinishedWhite" />
+            </children>
+        </component>
+
+        <component id="gameFinishedWhite">
+            <transformation>
+                <translate x="2" y="-0.1" z="-4.4" />
+                <scale x="0.3" y="0.3" z="0.3" />
+                <rotate axis="x" angle="90" />
+                <rotate axis="z" angle="180" />
+            </transformation>
+            <materials>
+                <material id="lightBrown" />
+                <material id="springBrown" />
+                <material id="winterBrown" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="gameFinishedBlock" />
+                <componentref id="gameFinishedWhiteText" />
+            </children>
+        </component>
+
+        <component id="gameFinishedBlack">
+            <transformation>
+                <translate x="-3.3" y="0" z="-6.4" />
+                <scale x="0.3" y="0.3" z="0.3" />
+                <rotate axis="x" angle="90" />
+                <rotate axis="z" angle="180" />
+            </transformation>
+            <materials>
+                <material id="darkBrown" />
+                <material id="lightBrown" />
+                <material id="winterBrown" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="gameFinishedBlock" />
+                <componentref id="gameFinishedBlackText" />
+            </children>
+        </component>
+
+        <component id="gameFinishedBlackText">
+            <transformation>
+                <translate x="0.85" y="0" z="-0.25" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="gameFinishedTextBlack" />
+                <componentref id="gameFinishedTextWins" />
+            </children>
+        </component>
+
+        <component id="gameFinishedWhiteText">
+            <transformation>
+                <translate x="0.85" y="0" z="-0.25" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="gameFinishedTextWhite" />
+                <componentref id="gameFinishedTextWins" />
+            </children>
+        </component>
+
+        <component id="gameFinishedBlock">
+            <transformation>
+                <scale x="1.2" y="0.1" z="0.6" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+
+        <component id="gameFinishedTextWhite" text="WHITE">
+            <transformation>
+                <scale x="10" y="10" z="10" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="gameMarkerWord5" />
+            </children>
+        </component>
+        
+        <component id="gameFinishedTextBlack" text="BLACK">
+            <transformation>
+                <scale x="10" y="10" z="10" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="gameMarkerWord5" />
+            </children>
+        </component>
+
+
+        <component id="gameFinishedTextWins" text="WINS">
+            <transformation>
+                <translate x="0.2" y="0" z="0.5" />
+                <scale x="10" y="10" z="10" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="gameMarkerWord4" />
             </children>
         </component>
 
