@@ -132,6 +132,10 @@ export class CheckersGame {
     init(gamePickables) {
         this.gamePickables = gamePickables;
         this.board = new Array(8);
+        this.auxBoards = [
+            new Tile(undefined, undefined, this.graph.components['auxBlack']),
+            new Tile(undefined, undefined, this.graph.components['auxWhite']),
+        ]
         this.currentPlayer = this.players[0];
 
         for (const pickable of Object.values(gamePickables)) {
@@ -347,7 +351,13 @@ export class CheckersGame {
             const jumpedCheckerPickable = jumpedChecker.clickableObject;
 
             jumpedCheckerPickable.children = jumpedCheckerPickable.children.filter(child => child.id !== jumpedChecker.checkerObject.id);
-            
+            console.log(this.auxBoards)
+            this.auxBoards[this.currentPlayer === "black" ? 0 : 1].clickableObject.children.push({
+                id: jumpedChecker.checkerObject.id , type: "component"
+            })
+
+            jumpedChecker.addAnimation(this.genAnimation(jumpedChecker, this.auxBoards[this.currentPlayer === "black" ? 0 : 1], true))
+
             this.changedObjects.unshift({
                 from: jumpedCheckerPickable,
                 to: null,

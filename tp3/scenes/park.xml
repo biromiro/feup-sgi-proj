@@ -1790,6 +1790,8 @@
                 <componentref id="checkers" />
                 <componentref id="tableBaseSupport" />
                 <componentref id="tableGroundBase" />
+                <componentref id="auxBlack" />
+                <componentref id="auxWhite" />
                 <componentref id="gameMarkerBlack" />
                 <componentref id="gameMarkerWhite" />
             </children>
@@ -1822,10 +1824,53 @@
             </children>
         </component>
         
+        <!-- aux board-->
+
+        <component id="auxBlack">
+            <transformation>
+                <translate x="0.65" y="0" z="-0.25" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="auxBoard" />
+            </children>
+        </component>
+
+        <component id="auxWhite">
+            <transformation>
+                <translate x="-0.65" y="0" z="0.45" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="auxBoard" />
+            </children>
+        </component>
+
+        <component id="auxBoard">
+            <transformation>
+                <translate x="0" y="0.05" z="0" />
+                <scale x="2.5" y="1" z="2" />
+            </transformation>
+            <materials>
+                <material id="tile" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="buttonBox" />
+            </children>
+        </component>
+
+
         <!-- game markers -->
         <component id="gameMarkerBlack">
             <transformation>
-                <translate x="0.65" y="0.05" z="0.1" />
+                <translate x="0.65" y="0.05" z="0.15" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1841,7 +1886,7 @@
         <component id="gameMarkerWhite">
             <transformation>
                 <rotate axis="y" angle="180" />
-                <translate x="0.65" y="0.05" z="-0.1" />
+                <translate x="0.65" y="0.05" z="-0.05" />
             </transformation>
             <materials>
                 <material id="inherit" />
