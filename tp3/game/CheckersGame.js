@@ -142,6 +142,16 @@ export class CheckersGame {
       new AuxBoard(this.graph.components["auxBlack_of_table"]),
       new AuxBoard(this.graph.components["auxWhite_of_table"]),
     ]
+
+    this.auxBoards.forEach((auxBoard) => {
+      auxBoard.clickableObject.children = auxBoard.clickableObject.children.filter(
+        (c) => c.id.slice(-7) !== "checker"
+      );
+      auxBoard.clickableObject.children = auxBoard.clickableObject.children.filter(
+        (c) => c.id.slice(-5) !== "queen"
+      );
+    });
+
     this.currentPlayer = this.players[0];
 
     for (const pickable of Object.values(gamePickables)) {
@@ -480,14 +490,14 @@ export class CheckersGame {
           (child) => child.id !== jumpedChecker.checkerObject.id
         );
   
-        this.auxBoards[this.currentPlayer === "black" ? 0 : 1].clickableObject.children.push({
+        this.auxBoards[jumpedChecker.color === "black" ? 1 : 0].clickableObject.children.push({
           id: jumpedChecker.checkerObject.id,
           type: "component",
         });
   
         this.genDeadPieceAnimation(
           jumpedChecker,
-          this.auxBoards[this.currentPlayer === "black" ? 0 : 1],
+          this.auxBoards[jumpedChecker.color === "black" ? 1 : 0],
         );
       }, this.animTime * 1000 * 2);
 
@@ -681,6 +691,9 @@ export class CheckersGame {
       );
       from.removeAnimation();
     }
+
+    this.gameMoves = [...this.turnMoves];
+    this.turnMoves = [];
     this.state = currentState;
     this.currentPlayer = currentPlayer;
   }
