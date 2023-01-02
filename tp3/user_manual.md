@@ -14,6 +14,10 @@ Once you're greeted by the park scene, you may look around, explore, zoom in and
 
 The menu is composed of various folders and options that can help you customize the scene to your liking and kickstart the checkers game, among other features.
 
+#### Environment
+
+In this section, you may pick from among four environments corresponding to the four seasons - *Autumn*, *Winter*, *Spring* and *Summer*, changing the look of the scene and the game.
+
 #### Camera
 
 This is where you may switch between different perspectives on the park at any time during your stay.
@@ -29,13 +33,9 @@ If you so choose, tick any of the boxes in order to make some objects on the sce
 
 These options can be toggled on or off in order to give your scene different lighting profiles according to your liking.
 
-#### Environment
-
-In this section, you may pick from among four environments corresponding to the four seasons - *Autumn*, *Winter*, *Spring* and *Summer*, changing the look of the game.
-
 #### Game
 
-After you choose your favourite environment, you may run the game with the *Start/Restart* button, as well as restart it, as the name implies.
+After choosing your favourite scene settings, you may run the game with the *Start/Restart* button, as well as restart it, as the name implies.
 If, at some point during the game, you wish to look back at all the awesome plays that were made throughout the match, you may press the *Watch Movie* button and do just that.
 
 ### Game Table

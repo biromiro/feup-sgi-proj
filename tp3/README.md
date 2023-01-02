@@ -16,6 +16,8 @@ The checkers game is played on tp2's scene. It adds all the game features and cu
 ### Strong Points
 
 - Game is very well integrated visually on the scene, and very appealing
+- The environments expand on the seasons and give them unique primitives, structures and vibe
+- Environments are encapsulated on the main xml by a new parameter
 - Another custom traversal of the component tree for performance optimization, this time in order to carry out the *spritesheets* technique
 - Cubic easing on the pieces' movement animations
 - Press-down animation on the undo/lock buttons
@@ -39,7 +41,7 @@ The checkers game is played on tp2's scene. It adds all the game features and cu
   - Auxiliary boards
   - Marker boards
 - Wood posters announcing each player's victory
-- 3 distinct seasons ([winter](screenshots/winter_moody.png), [spring](screenshots/spring_moody.png) and [autumn](screenshots/autumn_moody.png))
+- 4 distinct seasons, with unique primitives, structures and vibe: [autumn](screenshots/SGI3_T4_G08_2.png), [winter](screenshots/SGI3_T4_G08_3.png), [spring](screenshots/SGI3_T4_G08_4.png) and [summer](screenshots/SGI3_T4_G08_5.png)
 - Lights on the sandbox to give a [darker/night feel to the scene](screenshots/autumn_moody.png)
 
 ----
