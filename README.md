@@ -42,6 +42,18 @@ The swings, up-and-down, bouncers, beehive and bees are all animated and looping
 
 ----
 
-### [TP3 - ...](tp3)
+### [TP3 - Game Development](tp3)
 
-- (items briefly describing main strong points)
+
+The checkers game is played on tp2's scene. 
+It adds all the game features and customizations, shared between the controls menu and the game table, where the game is being played.
+
+### Strong Points
+
+- Game is very well integrated visually on the scene, and very appealing
+- The environments expand on the seasons and give them unique primitives, structures and vibe
+- Environments are encapsulated on the main xml by a new parameter
+- Another custom traversal of the component tree for performance optimization, this time in order to carry out the *spritesheets* technique
+- Cubic easing on the pieces' movement animations
+- Press-down animation on the undo/lock buttons
+- Automatic highlighting of moved pieces
